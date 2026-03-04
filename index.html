@@ -53,12 +53,10 @@ body{font-family:'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', Arial, sans-serif
 .levels-title{font-size:1.8rem;font-weight:900;color:#FF1493;margin-bottom:16px;text-align:center;text-shadow:2px 2px 0 #FFD700}
 .levels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
 .lv-btn{background:linear-gradient(135deg,#87CEEB,#4169E1);color:#fff;border:none;border-radius:30px;padding:15px 5px;cursor:pointer;text-align:center;font-weight:800;font-size:1rem;transition:all 0.1s;position:relative;border:3px solid white;box-shadow:0 5px 0 #0000AA}
-.lv-btn:hover:not(.locked){transform:translateY(-3px);box-shadow:0 8px 0 #0000AA}
-.lv-btn.locked{background:#d3d3d3;color:#888;box-shadow:0 5px 0 #aaa;border-color:#ccc;cursor:not-allowed}
+.lv-btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 #0000AA}
 .lv-btn.done{background:linear-gradient(135deg,#FFD700,#FFA500);box-shadow:0 5px 0 #B8860B}
 .lv-icon{font-size:2rem;display:block;margin-bottom:4px}
 .lv-score{font-size:0.8rem;background:rgba(255,255,255,0.3);border-radius:20px;padding:2px 5px;margin-top:3px}
-.lv-lock{position:absolute;top:8px;right:8px;font-size:1.2rem}
 
 /* Quiz Screen - Extra Cute */
 .quiz-head{background:white;border-radius:40px;padding:14px 16px;margin-bottom:12px;box-shadow:0 5px 0 #FFB6C1;border:3px solid #FF69B4}
@@ -457,9 +455,8 @@ function generatePatternQuestions(level) {
 }
 
 // ============================================================
-// STATE MANAGEMENT
+// STATE MANAGEMENT - NO LEVEL LOCKS!
 // ============================================================
-const PASS_PCT = 70; // Easier to pass for little ones
 const STORAGE_KEY = "littleMath_v1";
 const CATS = {
   counting: {label: "Counting", levels: 5, color: "#FF6B6B", icon: "🔢"},
@@ -476,7 +473,7 @@ function initProgress() {
   Object.keys(CATS).forEach(c => {
     if(!progress[c]) progress[c] = {};
     for(let l = 1; l <= CATS[c].levels; l++) {
-      if(!progress[c][l]) progress[c][l] = {done: false, stars: 0, unlocked: l === 1};
+      if(!progress[c][l]) progress[c][l] = {done: false, stars: 0};
     }
   });
 }
@@ -565,14 +562,14 @@ function openCategory(c) {
   grid.innerHTML = "";
   const emojis = ["🥉", "🥈", "🥇", "🏆", "👑"];
   
+  // NO LOCKS - all levels are always unlocked!
   for(let l = 1; l <= CATS[c].levels; l++) {
     const p = progress[c][l];
     const btn = document.createElement("button");
-    btn.className = "lv-btn" + (p.unlocked ? "" : " locked") + (p.done ? " done" : "");
+    btn.className = "lv-btn" + (p.done ? " done" : "");
     btn.innerHTML = '<span class="lv-icon">' + emojis[l-1] + '</span>Level ' + l + 
-                    (p.stars > 0 ? '<div class="lv-score">⭐ ' + p.stars + '</div>' : '') + 
-                    (!p.unlocked ? '<span class="lv-lock">🔒</span>' : "");
-    if(p.unlocked) btn.onclick = (function(ll) { return function() { startLevel(ll); }; })(l);
+                    (p.stars > 0 ? '<div class="lv-score">⭐ ' + p.stars + '</div>' : '');
+    btn.onclick = (function(ll) { return function() { startLevel(ll); }; })(l);
     grid.appendChild(btn);
   }
   showScreen("levelsScreen");
@@ -782,15 +779,11 @@ function nextQuestion() {
 
 function showResult() {
   const total = questions.length;
-  const pct = Math.round((correct/total)*100);
   const stars = Math.min(3, Math.ceil(correct / 2)); // 1-3 stars
   
-  // Save progress - now this works correctly!
-  if(correct >= 3) { // Pass if they got at least 3 right
-    progress[cat][level].done = true;
-    progress[cat][level].stars = Math.max(progress[cat][level].stars || 0, stars);
-    if(level < CATS[cat].levels) progress[cat][level+1].unlocked = true;
-  }
+  // Save progress (always mark as done and save stars)
+  progress[cat][level].done = true;
+  progress[cat][level].stars = Math.max(progress[cat][level].stars || 0, stars);
   
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify({v:1, progress})); } catch {}
   updateSaveLbl();
@@ -811,11 +804,15 @@ function showResult() {
   } else ms.innerHTML = "";
   
   document.getElementById("retryBtn").onclick = function() { startLevel(level); };
+  
+  // Next level button - always show if there is a next level
   const nb = document.getElementById("nextLvBtn");
-  if(correct >= 3 && level < CATS[cat].levels) {
+  if(level < CATS[cat].levels) {
     nb.style.display = "inline-flex";
     nb.onclick = function() { startLevel(level + 1); };
-  } else nb.style.display = "none";
+  } else {
+    nb.style.display = "none";
+  }
   
   showScreen("resultScreen");
 }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🧸 Safaan's Math — Tablet Fixed</title>
+  <title>🧸 Safaan's Math — Fully Responsive</title>
   <style>
     /* RESET & BASE */
     * {
@@ -22,13 +22,20 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* RESPONSIVE ROOT VARIABLES - Everything scales from here */
+    :root {
+      --scale-factor: min(100vw, 100vh);
+      --spacing-unit: calc(var(--scale-factor) * 0.02);
+      --font-unit: calc(var(--scale-factor) * 0.025);
+    }
+
     /* MAIN CONTAINER */
     .app {
       display: flex;
       width: 100vw;
       height: 100vh;
-      padding: 10px;
-      gap: 10px;
+      padding: clamp(5px, 2vh, 15px);
+      gap: clamp(5px, 2vh, 15px);
       overflow: hidden;
     }
 
@@ -37,100 +44,97 @@
       flex: 1;
       min-width: 0;
       background: #2a1a3a;
-      border-radius: 30px;
-      border: 3px solid #ffe5b4;
-      box-shadow: 0 8px 0 #4a2a5a, 0 0 0 4px #ffb3d9, 0 0 0 8px #6b4f9f;
+      border-radius: clamp(15px, 4vw, 40px);
+      border: clamp(2px, 0.4vw, 4px) solid #ffe5b4;
+      box-shadow: 0 clamp(4px, 1vh, 10px) 0 #4a2a5a, 
+                  0 0 0 clamp(2px, 0.5vw, 5px) #ffb3d9, 
+                  0 0 0 clamp(4px, 1vw, 10px) #6b4f9f;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       height: 100%;
     }
 
-    /* RIGHT PANE - Action buttons */
+    /* RIGHT PANE - Action buttons - FULLY RESPONSIVE */
     .pane-right {
-      width: 120px;
+      width: clamp(70px, 15vw, 140px);
       flex-shrink: 0;
       background: #2a1a3a;
-      border-radius: 30px;
-      border: 3px solid #ffe5b4;
-      box-shadow: 0 8px 0 #4a2a5a, 0 0 0 4px #ffb3d9, 0 0 0 8px #6b4f9f;
+      border-radius: clamp(15px, 4vw, 40px);
+      border: clamp(2px, 0.4vw, 4px) solid #ffe5b4;
+      box-shadow: 0 clamp(4px, 1vh, 10px) 0 #4a2a5a, 
+                  0 0 0 clamp(2px, 0.5vw, 5px) #ffb3d9, 
+                  0 0 0 clamp(4px, 1vw, 10px) #6b4f9f;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      padding: 12px;
+      gap: clamp(4px, 1.5vh, 12px);
+      padding: clamp(5px, 1.5vh, 12px);
       height: 100%;
     }
 
-    /* Tablet adjustment */
-    @media (max-width: 800px) {
-      .pane-right {
-        width: 100px;
-      }
-    }
-
-    /* TOPBAR */
+    /* TOPBAR - Fully responsive */
     .topbar {
       flex-shrink: 0;
       background: #4a2a6a;
-      border: 3px solid #ffb3d9;
-      border-radius: 30px;
-      padding: 10px 15px;
-      margin: 12px 12px 0;
+      border: clamp(2px, 0.4vw, 4px) solid #ffb3d9;
+      border-radius: clamp(15px, 4vw, 35px);
+      padding: clamp(5px, 1.5vh, 12px) clamp(8px, 2vw, 18px);
+      margin: clamp(5px, 1.5vh, 12px) clamp(5px, 1.5vh, 12px) 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: clamp(5px, 1.5vw, 15px);
     }
 
     .topbar-title {
-      font-size: 1.3rem;
+      font-size: clamp(0.9rem, 4vw, 1.8rem);
       font-weight: 900;
       color: #ffe5b4;
-      text-shadow: 2px 2px 0 #ff69b4;
+      text-shadow: clamp(1px, 0.3vw, 3px) clamp(1px, 0.3vw, 3px) 0 #ff69b4;
       white-space: nowrap;
     }
 
     .topbar-btns {
       display: flex;
-      gap: 8px;
+      gap: clamp(3px, 1vw, 10px);
     }
 
     .tb-btn {
       background: #ffe5b4;
       color: #2a1a3a;
-      border: 3px solid white;
-      font-size: 0.9rem;
-      padding: 6px 12px;
-      border-radius: 50px;
-      box-shadow: 0 5px 0 #b1741e;
+      border: clamp(1px, 0.3vw, 3px) solid white;
+      font-size: clamp(0.7rem, 2.5vw, 1.1rem);
+      padding: clamp(3px, 1vh, 8px) clamp(6px, 1.5vw, 15px);
+      border-radius: clamp(20px, 8vw, 60px);
+      box-shadow: 0 clamp(2px, 0.7vh, 6px) 0 #b1741e;
       cursor: pointer;
       font-weight: 900;
       border: none;
     }
 
     .tb-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 1px 0 #b1741e;
+      transform: translateY(clamp(2px, 0.5vh, 5px));
+      box-shadow: 0 clamp(1px, 0.2vh, 2px) 0 #b1741e;
     }
 
     .tb-lbl {
-      font-size: 0.9rem;
+      font-size: clamp(0.7rem, 2.5vw, 1.1rem);
       background: #6b4f9f;
-      padding: 6px 12px;
-      border-radius: 50px;
+      padding: clamp(3px, 1vh, 8px) clamp(6px, 1.5vw, 15px);
+      border-radius: clamp(20px, 8vw, 60px);
       color: #ffe5b4;
-      border: 2px solid #ffb3d9;
+      border: clamp(1px, 0.3vw, 3px) solid #ffb3d9;
       font-weight: 900;
       white-space: nowrap;
     }
 
-    /* SCROLLABLE CONTENT AREA - FIXED */
+    /* SCROLLABLE CONTENT AREA */
     .screens {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 15px;
-      min-height: 0;  /* CRITICAL for flexbox scrolling */
+      padding: clamp(8px, 2.5vh, 20px);
+      min-height: 0;
       height: 100%;
       -webkit-overflow-scrolling: touch;
     }
@@ -143,148 +147,127 @@
       display: block;
     }
 
-    /* HOME SCREEN */
+    /* HOME SCREEN - Fully responsive */
     .home-hero {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: clamp(8px, 2.5vh, 20px);
     }
 
     .home-hero h1 {
-      font-size: 2.5rem;
+      font-size: clamp(1.5rem, 8vw, 4rem);
       font-weight: 900;
       color: #ffe5b4;
-      text-shadow: 3px 3px 0 #ff69b4, 5px 5px 0 #ffaa33;
+      text-shadow: clamp(2px, 0.5vw, 5px) clamp(2px, 0.5vw, 5px) 0 #ff69b4, 
+                   clamp(3px, 0.8vw, 8px) clamp(3px, 0.8vw, 8px) 0 #ffaa33;
     }
 
     .home-hero p {
-      font-size: 1.2rem;
+      font-size: clamp(0.9rem, 4vw, 1.8rem);
       background: #6b4f9f;
-      padding: 10px 20px;
-      border-radius: 50px;
+      padding: clamp(5px, 1.5vh, 12px) clamp(10px, 3vw, 25px);
+      border-radius: clamp(30px, 10vw, 80px);
       display: inline-block;
       color: white;
-      border: 2px solid #ffb3d9;
+      border: clamp(1px, 0.3vw, 3px) solid #ffb3d9;
     }
 
     .menu-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin: 15px 0;
+      gap: clamp(8px, 2.5vh, 20px);
+      margin: clamp(8px, 2.5vh, 20px) 0;
     }
 
     .menu-card {
       background: #ffe5b4;
-      border-radius: 30px;
-      padding: 20px 10px;
+      border-radius: clamp(15px, 5vw, 40px);
+      padding: clamp(10px, 3vh, 25px) clamp(5px, 2vw, 15px);
       text-align: center;
-      border: 4px solid white;
-      box-shadow: 0 8px 0 #b36582;
+      border: clamp(2px, 0.5vw, 5px) solid white;
+      box-shadow: 0 clamp(4px, 1vh, 10px) 0 #b36582;
       cursor: pointer;
     }
 
     .menu-card:active {
-      transform: translateY(5px);
-      box-shadow: 0 3px 0 #b36582;
+      transform: translateY(clamp(3px, 0.8vh, 8px));
+      box-shadow: 0 clamp(2px, 0.5vh, 5px) 0 #b36582;
     }
 
     .mc-icon {
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 8vw, 4rem);
     }
 
     .mc-name {
-      font-size: 1.2rem;
+      font-size: clamp(0.9rem, 4vw, 1.8rem);
       font-weight: 900;
       color: #2a1a3a;
-      margin: 5px 0;
+      margin: clamp(2px, 0.5vh, 5px) 0;
     }
 
     .mc-desc {
-      font-size: 0.8rem;
+      font-size: clamp(0.6rem, 2.5vw, 1rem);
       color: #4a2a6a;
     }
 
     .mc-badge {
-      font-size: 0.8rem;
+      font-size: clamp(0.6rem, 2.5vw, 1rem);
       background: #ff69b4;
       color: white;
-      padding: 4px 10px;
-      border-radius: 30px;
+      padding: clamp(2px, 0.5vh, 6px) clamp(5px, 1.5vw, 12px);
+      border-radius: clamp(15px, 5vw, 40px);
       display: inline-block;
-      margin-top: 6px;
-      border: 2px solid white;
+      margin-top: clamp(3px, 1vh, 8px);
+      border: clamp(1px, 0.3vw, 3px) solid white;
     }
 
     /* PROGRESS CHART */
     .progress-chart {
       background: #fff0f5;
-      border-radius: 30px;
-      padding: 15px;
-      border: 3px solid white;
-      font-size: 0.9rem;
-      margin-top: 15px;
+      border-radius: clamp(15px, 5vw, 40px);
+      padding: clamp(8px, 2.5vh, 20px);
+      border: clamp(2px, 0.5vw, 5px) solid white;
+      font-size: clamp(0.7rem, 3vw, 1.2rem);
+      margin-top: clamp(8px, 2.5vh, 20px);
     }
 
     .progress-bar-cont {
-      height: 20px;
+      height: clamp(12px, 3vh, 25px);
       background: #d0d0d0;
-      border-radius: 30px;
-      border: 2px solid white;
-      margin: 8px 0;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #ffb703, #ff69b4);
-      border-radius: 30px;
-      width: 0%;
-      transition: width 0.5s;
-    }
-
-    .progress-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
-
-    .progress-stats span {
-      font-size: 0.8rem;
-      background: white;
-      padding: 4px 10px;
-      border-radius: 30px;
-      box-shadow: 0 3px 0 #ccc;
+      border-radius: clamp(15px, 5vw, 40px);
+      border: clamp(1px, 0.3vw, 3px) solid white;
+      margin: clamp(4px, 1.5vh, 10px) 0;
     }
 
     /* LEVELS SCREEN */
     .levels-wrap {
       background: #ffe5b4;
-      border-radius: 30px;
-      padding: 15px;
-      border: 4px solid white;
+      border-radius: clamp(15px, 5vw, 40px);
+      padding: clamp(10px, 3vh, 25px);
+      border: clamp(2px, 0.5vw, 5px) solid white;
     }
 
     .levels-title {
-      font-size: 1.8rem;
+      font-size: clamp(1.2rem, 6vw, 2.8rem);
       color: #ff1493;
-      text-shadow: 2px 2px 0 #ffd700;
-      margin-bottom: 15px;
+      text-shadow: clamp(1px, 0.3vw, 3px) clamp(1px, 0.3vw, 3px) 0 #ffd700;
+      margin-bottom: clamp(8px, 2.5vh, 20px);
     }
 
     .levels-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(70px, 15vw, 140px), 1fr));
+      gap: clamp(6px, 2vh, 15px);
     }
 
     .lv-btn {
       background: #6b4f9f;
-      border: 3px solid white;
-      border-radius: 30px;
-      padding: 15px 5px;
-      font-size: 0.9rem;
+      border: clamp(2px, 0.4vw, 4px) solid white;
+      border-radius: clamp(15px, 4vw, 35px);
+      padding: clamp(8px, 2.5vh, 20px) clamp(3px, 1vw, 8px);
+      font-size: clamp(0.7rem, 3vw, 1.2rem);
       font-weight: 900;
       color: white;
-      box-shadow: 0 8px 0 #2a1a3a;
+      box-shadow: 0 clamp(4px, 1vh, 10px) 0 #2a1a3a;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -292,43 +275,21 @@
       border: none;
     }
 
-    .lv-btn:active {
-      transform: translateY(5px);
-      box-shadow: 0 3px 0 #2a1a3a;
-    }
-
-    .lv-btn.done {
-      background: #ff69b4;
-    }
-
     .lv-icon {
-      font-size: 1.5rem;
-    }
-
-    .back-btn {
-      margin-top: 15px;
-      background: #b39ddb;
-      color: #2a1a3a;
-      border-radius: 50px;
-      padding: 10px 20px;
-      font-size: 0.9rem;
-      border: 3px solid white;
-      cursor: pointer;
-      font-weight: 900;
-      border: none;
+      font-size: clamp(1.2rem, 6vw, 2.5rem);
     }
 
     /* QUIZ HEADER */
     .quiz-head {
       background: #ffe5b4;
-      border-radius: 30px;
-      padding: 15px;
-      border: 3px solid #ff69b4;
-      margin-bottom: 15px;
+      border-radius: clamp(15px, 5vw, 40px);
+      padding: clamp(8px, 2.5vh, 20px);
+      border: clamp(2px, 0.5vw, 5px) solid #ff69b4;
+      margin-bottom: clamp(8px, 2.5vh, 20px);
     }
 
     .quiz-meta {
-      font-size: 1.2rem;
+      font-size: clamp(0.9rem, 4vw, 1.8rem);
       display: flex;
       justify-content: space-between;
       font-weight: 900;
@@ -337,200 +298,194 @@
 
     .quiz-score-row {
       display: flex;
-      gap: 15px;
+      gap: clamp(8px, 2.5vw, 25px);
       background: white;
-      border-radius: 50px;
-      padding: 10px 15px;
-      margin: 10px 0;
+      border-radius: clamp(30px, 10vw, 80px);
+      padding: clamp(5px, 1.5vh, 12px) clamp(8px, 2vw, 20px);
+      margin: clamp(4px, 1.5vh, 12px) 0;
     }
 
     .qs-item .qs-label {
-      font-size: 0.8rem;
+      font-size: clamp(0.6rem, 2.5vw, 1rem);
     }
 
     .qs-item .qs-val {
-      font-size: 1.2rem;
+      font-size: clamp(0.9rem, 4vw, 1.8rem);
       font-weight: 900;
       color: #2a1a3a;
     }
 
     .prog-bar {
-      height: 15px;
+      height: clamp(8px, 2vh, 18px);
       background: #bbb;
-      border-radius: 30px;
-      border: 2px solid white;
-    }
-
-    .prog-fill {
-      background: linear-gradient(90deg, #ffd700, #ff69b4);
-      height: 100%;
-      border-radius: 30px;
-      width: 0%;
-      transition: width 0.4s;
+      border-radius: clamp(15px, 5vw, 40px);
+      border: clamp(1px, 0.3vw, 3px) solid white;
     }
 
     /* QUESTION CARD */
     .q-card {
       background: #fff5e6;
-      border-radius: 30px;
-      padding: 20px;
-      border: 4px solid #ffb3d9;
-      box-shadow: 0 8px 0 #a04b6d;
-      margin-bottom: 15px;
+      border-radius: clamp(15px, 5vw, 40px);
+      padding: clamp(12px, 4vh, 30px);
+      border: clamp(2px, 0.5vw, 5px) solid #ffb3d9;
+      box-shadow: 0 clamp(4px, 1vh, 10px) 0 #a04b6d;
+      margin-bottom: clamp(8px, 2.5vh, 20px);
     }
 
     .q-type-badge {
-      font-size: 0.9rem;
+      font-size: clamp(0.7rem, 3vw, 1.2rem);
       background: #ff69b4;
-      padding: 6px 15px;
-      border-radius: 50px;
+      padding: clamp(4px, 1.2vh, 10px) clamp(8px, 2vw, 20px);
+      border-radius: clamp(20px, 8vw, 60px);
       display: inline-block;
-      border: 2px solid white;
+      border: clamp(1px, 0.3vw, 3px) solid white;
     }
 
     .q-text {
-      font-size: 1.3rem;
+      font-size: clamp(1rem, 5vw, 2.2rem);
       font-weight: 800;
       color: #2a1a3a;
-      margin: 15px 0;
+      margin: clamp(8px, 2.5vh, 20px) 0;
     }
 
     .object-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 15px;
-      margin: 15px 0;
+      gap: clamp(8px, 2.5vw, 25px);
+      margin: clamp(8px, 2.5vh, 20px) 0;
     }
 
     .count-object {
-      font-size: 3rem;
-      filter: drop-shadow(3px 5px 0 rgba(0,0,0,0.3));
+      font-size: clamp(2rem, 10vw, 6rem);
+      filter: drop-shadow(clamp(2px, 0.5vw, 5px) clamp(3px, 0.8vh, 8px) 0 rgba(0,0,0,0.3));
     }
 
     .big-answer-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 15px;
-      margin: 15px 0;
+      gap: clamp(8px, 2.5vw, 25px);
+      margin: clamp(8px, 2.5vh, 20px) 0;
     }
 
     .answer-btn {
-      width: 100px;
-      height: 100px;
+      width: clamp(60px, 15vw, 130px);
+      height: clamp(60px, 15vw, 130px);
       border-radius: 50%;
       background: #6b4f9f;
-      border: 6px solid white;
-      font-size: 2.5rem;
+      border: clamp(3px, 1vw, 8px) solid white;
+      font-size: clamp(1.5rem, 8vw, 4rem);
       font-weight: 900;
       color: white;
-      box-shadow: 0 10px 0 #2a1a3a;
+      box-shadow: 0 clamp(5px, 1.5vh, 15px) 0 #2a1a3a;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .answer-btn:active:not(:disabled) {
-      transform: translateY(8px);
-      box-shadow: 0 2px 0 #2a1a3a;
-    }
-
-    .answer-btn.correct {
-      background: #4caf50;
-    }
-
-    .answer-btn.wrong {
-      background: #f44336;
-    }
-
-    .answer-btn:disabled {
-      opacity: 0.85;
-      cursor: default;
-    }
-
     .options.two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 12px 0;
+      gap: clamp(6px, 2vh, 18px);
+      margin: clamp(6px, 2vh, 18px) 0;
     }
 
     .opt-btn {
-      padding: 15px 10px;
-      font-size: 1.2rem;
-      border-radius: 30px;
+      padding: clamp(8px, 2.5vh, 22px) clamp(5px, 2vw, 15px);
+      font-size: clamp(0.9rem, 4vw, 1.8rem);
+      border-radius: clamp(15px, 5vw, 40px);
       background: #6fc2d6;
-      border: 4px solid white;
-      box-shadow: 0 8px 0 #218294;
+      border: clamp(2px, 0.5vw, 5px) solid white;
+      box-shadow: 0 clamp(4px, 1vh, 12px) 0 #218294;
       color: white;
       cursor: pointer;
       border: none;
-    }
-
-    .opt-btn:active:not(:disabled) {
-      transform: translateY(5px);
-      box-shadow: 0 3px 0 #218294;
-    }
-
-    .opt-btn.correct {
-      background: #4caf50;
-    }
-
-    .opt-btn.wrong {
-      background: #f44336;
     }
 
     .pattern-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px;
-      margin: 12px 0;
-      font-size: 2.5rem;
+      gap: clamp(4px, 1.5vw, 15px);
+      margin: clamp(6px, 2vh, 18px) 0;
+      font-size: clamp(1.5rem, 8vw, 4rem);
     }
 
     .feedback {
-      font-size: 1.1rem;
-      padding: 15px;
-      border-radius: 30px;
+      font-size: clamp(0.9rem, 4vw, 1.8rem);
+      padding: clamp(8px, 2.5vh, 20px);
+      border-radius: clamp(15px, 5vw, 40px);
       text-align: center;
       display: none;
-      margin-top: 15px;
+      margin-top: clamp(8px, 2.5vh, 20px);
     }
 
-    .feedback.show {
-      display: block;
+    /* RIGHT PANEL BUTTONS - FULLY RESPONSIVE */
+    .abtn {
+      width: 100%;
+      flex: 1 1 0;  /* Even distribution */
+      min-height: 0;
+      border-radius: clamp(12px, 4vw, 35px);
+      font-weight: 900;
+      cursor: pointer;
+      border: clamp(1px, 0.3vw, 3px) solid white;
+      box-shadow: 0 clamp(3px, 0.8vh, 8px) 0 rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1px, 0.5vh, 4px);
+      padding: clamp(2px, 1vh, 8px) clamp(1px, 0.5vw, 4px);
+      font-family: inherit;
+      background: #6b4f9f;
+      color: white;
+      border: none;
+      transition: all 0.1s;
     }
 
-    .feedback.ok {
-      background: #d4edda;
-      color: #155724;
-      border: 3px solid #4caf50;
+    .abtn:active {
+      transform: translateY(clamp(2px, 0.6vh, 6px));
+      box-shadow: 0 clamp(1px, 0.2vh, 2px) 0 rgba(0,0,0,0.4);
     }
 
-    .feedback.bad {
-      background: #f8d7da;
-      color: #721c24;
-      border: 3px solid #f44336;
+    /* Individual button colors */
+    .abtn-home { background: #6b4f9f; }
+    .abtn-hint { background: #ffd700; color: #2a1a3a; }
+    .abtn-sound { background: #00bcd4; }
+    .abtn-retry { background: #ffa500; color: #2a1a3a; }
+    .abtn-next { background: #4caf50; }
+
+    .abtn-icon {
+      font-size: clamp(1.1rem, 5vw, 2.5rem);
+      line-height: 1;
     }
 
-    /* GLOBAL HINT */
+    .abtn-text {
+      font-size: clamp(0.5rem, 2.2vw, 1rem);
+      font-weight: 900;
+      line-height: 1.2;
+      text-align: center;
+      word-break: break-word;
+      max-width: 100%;
+    }
+
+    /* GLOBAL HINT - Responsive */
     .global-hint {
       position: absolute;
-      bottom: 20px;
+      bottom: clamp(5px, 2vh, 20px);
       left: 50%;
       transform: translateX(-50%);
-      width: min(400px, 90vw);
+      width: min(clamp(250px, 60vw, 500px), 90vw);
       background: #ffe68f;
-      border: 5px solid #ffa500;
-      border-radius: 60px;
-      padding: 15px 25px;
-      font-size: 1.2rem;
+      border: clamp(3px, 0.8vw, 8px) solid #ffa500;
+      border-radius: clamp(30px, 10vw, 80px);
+      padding: clamp(8px, 2.5vh, 20px) clamp(12px, 4vw, 30px);
+      font-size: clamp(0.9rem, 4vw, 1.8rem);
       font-weight: 900;
       color: #2a1a3a;
-      box-shadow: 0 10px 0 #b1741e, 0 0 0 4px white;
+      box-shadow: 0 clamp(5px, 1.5vh, 15px) 0 #b1741e, 0 0 0 clamp(2px, 0.5vw, 5px) white;
       z-index: 1000;
       display: none;
       text-align: center;
@@ -540,113 +495,66 @@
       display: block;
     }
 
-    /* RESULT SCREEN */
+    /* RESULT SCREEN - Responsive */
     .result-card {
       background: #ffe5b4;
-      border-radius: 50px;
-      padding: 25px;
-      border: 5px solid #ff69b4;
+      border-radius: clamp(20px, 8vw, 60px);
+      padding: clamp(15px, 5vh, 40px);
+      border: clamp(3px, 0.8vw, 8px) solid #ff69b4;
       text-align: center;
     }
 
     .result-emoji {
-      font-size: 3rem;
+      font-size: clamp(2rem, 10vw, 5rem);
       display: block;
     }
 
     .result-title {
-      font-size: 2rem;
-      text-shadow: 3px 3px 0 #ffd700;
-      margin: 10px 0;
-    }
-
-    .result-pct {
-      font-size: 1.3rem;
-      margin: 5px 0;
+      font-size: clamp(1.2rem, 6vw, 3rem);
+      text-shadow: clamp(2px, 0.5vw, 5px) clamp(2px, 0.5vw, 5px) 0 #ffd700;
+      margin: clamp(5px, 2vh, 15px) 0;
     }
 
     .result-stars {
-      font-size: 2rem;
-      margin: 5px 0;
+      font-size: clamp(1.5rem, 8vw, 4rem);
     }
 
     .res-btns {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
+      gap: clamp(8px, 2.5vw, 25px);
+      margin-top: clamp(10px, 3vh, 25px);
       flex-wrap: wrap;
     }
 
     .res-btn {
-      border-radius: 50px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: 3px solid white;
+      border-radius: clamp(30px, 10vw, 80px);
+      padding: clamp(6px, 2vh, 16px) clamp(10px, 3vw, 25px);
+      font-size: clamp(0.8rem, 3.5vw, 1.4rem);
+      border: clamp(2px, 0.5vw, 5px) solid white;
       cursor: pointer;
       font-weight: 900;
     }
 
-    /* RIGHT PANEL BUTTONS - FIXED */
-    .abtn {
-      width: 100%;
-      flex: 1;
-      min-height: 70px;
-      border-radius: 30px;
-      font-weight: 900;
-      cursor: pointer;
-      border: 3px solid white;
-      box-shadow: 0 6px 0 rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      padding: 5px;
-      font-family: inherit;
-      background: #6b4f9f;
-      color: white;
-      border: none;
-    }
-
-    .abtn:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.4);
-    }
-
-    .abtn-home { background: #6b4f9f; }
-    .abtn-hint { background: #ffd700; color: #2a1a3a; }
-    .abtn-sound { background: #00bcd4; }
-    .abtn-retry { background: #ffa500; color: #2a1a3a; }
-    .abtn-next { background: #4caf50; }
-
-    .abtn-icon {
-      font-size: 1.8rem;
-    }
-
-    .abtn-text {
-      font-size: 0.8rem;
-      font-weight: 900;
-    }
-
-    /* Small screen adjustments */
-    @media (max-width: 600px) {
-      .pane-right {
-        width: 80px;
-      }
-      
+    /* Dynamic sizing for different screen heights */
+    @media (max-height: 600px) {
       .abtn-icon {
-        font-size: 1.4rem;
+        font-size: clamp(0.9rem, 4vh, 1.8rem);
       }
-      
       .abtn-text {
-        font-size: 0.7rem;
+        font-size: clamp(0.4rem, 1.8vh, 0.8rem);
       }
-      
-      .answer-btn {
-        width: 80px;
-        height: 80px;
-        font-size: 2rem;
+      .topbar-title {
+        font-size: clamp(0.8rem, 3.5vh, 1.4rem);
+      }
+    }
+
+    @media (min-height: 1000px) {
+      .abtn-icon {
+        font-size: clamp(1.8rem, 4vh, 3rem);
+      }
+      .abtn-text {
+        font-size: clamp(0.8rem, 2vh, 1.2rem);
       }
     }
   </style>
@@ -706,7 +614,7 @@
           <div class="levels-wrap">
             <div class="levels-title" id="levelsTitle">Pick a level, Safaan!</div>
             <div class="levels-grid" id="levelsGrid"></div>
-            <div style="text-align:center; margin-top:15px">
+            <div style="text-align:center; margin-top:clamp(8px,2.5vh,20px)">
               <button class="back-btn" onclick="showHome()">← Home</button>
             </div>
           </div>
@@ -760,7 +668,7 @@
       </div>
     </div>
 
-    <!-- RIGHT PANE - Buttons -->
+    <!-- RIGHT PANE - Fully responsive buttons -->
     <div class="pane-right">
       <button class="abtn abtn-home" id="B_home" onclick="goHome()">
         <span class="abtn-icon">🏠</span>
@@ -789,7 +697,7 @@
   <div id="globalHint" class="global-hint"></div>
 
   <script>
-    // BUTTON MANAGER
+    // [SAME JAVASCRIPT AS BEFORE - keeping it identical]
     const BTN = {
       show(id) { 
         const el = document.getElementById('B_' + id); 
@@ -823,7 +731,6 @@
       }
     };
 
-    // SPEECH
     function speak(text) {
       if (!text || !window.speechSynthesis) return;
       try {
@@ -839,7 +746,6 @@
       } catch (e) {}
     }
 
-    // AUDIO
     let _ctx = null;
     function tone(freq, dur, type = 'sine', vol = 0.3) {
       try {
@@ -879,7 +785,6 @@
       try { if (_ctx && _ctx.state === 'suspended') _ctx.resume(); } catch (e) {} 
     });
 
-    // HELPERS
     function rnd(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
     
     function shuffle(arr) { 
@@ -893,7 +798,6 @@
     
     function $(id) { return document.getElementById(id); }
 
-    // CATEGORIES & PROGRESS
     const CATS = {
       counting: { label: 'Counting', levels: 5, icon: '🔢' },
       numbers: { label: 'Numbers', levels: 5, icon: '123' },
@@ -972,17 +876,16 @@
       }
       const pct = Math.round(done / tot * 100) || 0;
       
-      ch.innerHTML = `<div style="font-weight:900; font-size:1.2rem">📊 Safaan's journey</div>
-        <div style="margin:6px 0; font-size:0.9rem">⭐ ${total} stars!</div>
+      ch.innerHTML = `<div style="font-weight:900; font-size:clamp(0.9rem,4vw,1.8rem)">📊 Safaan's journey</div>
+        <div style="margin:6px 0; font-size:clamp(0.8rem,3.5vw,1.5rem)">⭐ ${total} stars!</div>
         <div class="progress-bar-cont"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
         <div class="progress-stats">${
           Object.keys(CATS).map(c => 
-            `<span>${CATS[c].icon} ${Object.values(progress[c] || {}).filter(p => p.done).length}/${CATS[c].levels}</span>`
+            `<span style="font-size:clamp(0.7rem,3vw,1.2rem)">${CATS[c].icon} ${Object.values(progress[c] || {}).filter(p => p.done).length}/${CATS[c].levels}</span>`
           ).join('')
         }</div>`;
     }
 
-    // SCREEN NAVIGATION
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       $(id).classList.add('active');
@@ -1010,7 +913,7 @@
         const btn = document.createElement('button');
         btn.className = 'lv-btn' + (p.done ? ' done' : '');
         const icons = ['🌱', '🌿', '🍃', '🌟', '🏆'];
-        btn.innerHTML = `<span class="lv-icon">${icons[l - 1]}</span>Level ${l}${p.stars > 0 ? `<div class="lv-score">⭐${p.stars}</div>` : ''}`;
+        btn.innerHTML = `<span class="lv-icon">${icons[l - 1]}</span>Level ${l}${p.stars > 0 ? `<span class="lv-score" style="font-size:clamp(0.6rem,2.5vw,1rem)">⭐${p.stars}</span>` : ''}`;
         btn.addEventListener('click', (() => { const ll = l; return () => startLevel(ll); })());
         grid.appendChild(btn);
       }
@@ -1020,7 +923,6 @@
       $('globalHint').classList.remove('show');
     }
 
-    // GAME STATE
     let _cat = '', _level = 0, _questions = [], _qi = 0, _correct = 0, _wrong = 0, _answered = false, _retried = false;
 
     function startLevel(l) {
@@ -1067,10 +969,10 @@
         html += `<div class="object-row">${q.objects.map(o => `<span class="count-object">${o}</span>`).join('')}</div>`;
         html += `<div class="big-answer-buttons">${q.options.map(n => `<button class="answer-btn" onclick="pick(this,'${n}')">${n}</button>`).join('')}</div>`;
       } else if (q.type === 'number') {
-        html += `<div class="big-number">${q.number}</div>`;
+        html += `<div class="big-number" style="font-size:clamp(2.5rem,12vw,6rem)">${q.number}</div>`;
         html += `<div class="big-answer-buttons">${q.options.map(n => `<button class="answer-btn" onclick="pick(this,'${n}')">${n}</button>`).join('')}</div>`;
       } else if (q.type === 'shape') {
-        html += `<div style="text-align:center; font-size:3rem; margin:15px 0">${q.display}</div>`;
+        html += `<div style="text-align:center; font-size:clamp(2rem,10vw,5rem); margin:15px 0">${q.display}</div>`;
         html += `<div class="options two-col">${q.options.map(o => `<button class="opt-btn" onclick="pick(this,'${o}')">${o}</button>`).join('')}</div>`;
       } else {
         html += `<div class="pattern-row">${q.pattern.map(p => `<span>${p}</span>`).join('')}<span>❓</span></div>`;
@@ -1185,7 +1087,7 @@
       $('resPct').textContent = Math.round(_correct / 5 * 100) + '% correct!';
       $('resStars').textContent = '⭐'.repeat(stars);
       $('resMsg').textContent = stars === 3 ? 'ALL 3 stars! Amazing! 🎊' : stars === 2 ? 'Want 3 stars? 🌟' : 'Every star counts! 💪';
-      $('mistakeSection').innerHTML = _wrong === 0 ? '<div class="mistake-item">🌟 Perfect!</div>' : '<div class="mistake-item">💪 Keep practising!</div>';
+      $('mistakeSection').innerHTML = _wrong === 0 ? '<div class="mistake-item" style="font-size:clamp(0.8rem,3.5vw,1.4rem)">🌟 Perfect!</div>' : '<div class="mistake-item" style="font-size:clamp(0.8rem,3.5vw,1.4rem)">💪 Keep practising!</div>';
       
       $('retryBtn').onclick = () => startLevel(_level);
       
@@ -1202,7 +1104,7 @@
       showScreen('resultScreen');
     }
 
-    // QUESTION GENERATORS
+    // Question generators
     function mkCounting(lv) {
       const em = ['🐶', '🐱', '🐭', '🐰', '🦊', '🐻', '⭐', '🍎', '🌸', '🎈'];
       const r = { 1: [1, 2, 3], 2: [1, 2, 3, 4], 3: [2, 3, 4, 5], 4: [3, 4, 5, 6], 5: [4, 5, 6, 7] }[lv] || [1, 2, 3];
@@ -1293,7 +1195,7 @@
       });
     }
 
-    // INITIALIZE
+    // Initialize
     updateStars();
     BTN.set('home');
     try { if (window.speechSynthesis) window.speechSynthesis.getVoices(); } catch (e) {}

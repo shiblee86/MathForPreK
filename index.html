@@ -2,241 +2,257 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.2, maximum-scale=2.0, user-scalable=yes">
-  <title>🧸 Safaan's Math Adventure · Pre-K Fun</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🧸 Safaan's Math</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
-    body { background: #1a0f2a; font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 12px; }
-    
-    /* Two-column layout */
-    .app-container {
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      gap: 15px;
-      height: calc(100vh - 24px);
+    /* ── RESET & ROOT ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      /* All sizes clamp between a small tablet minimum and a large desktop max */
+      --fs-xs:   clamp(0.7rem,  1.5vw, 1rem);
+      --fs-sm:   clamp(0.85rem, 1.8vw, 1.2rem);
+      --fs-md:   clamp(1rem,    2.2vw, 1.5rem);
+      --fs-lg:   clamp(1.2rem,  2.8vw, 2rem);
+      --fs-xl:   clamp(1.5rem,  3.5vw, 2.5rem);
+      --fs-2xl:  clamp(2rem,    5vw,   3.5rem);
+      --fs-hero: clamp(2.5rem,  7vw,   5rem);
+      --fs-num:  clamp(4rem,    10vw,  8rem);
+      --fs-emoji:clamp(2.5rem,  6vw,   5rem);
+      --fs-obj:  clamp(2rem,    5vw,   4rem);
+      --fs-btn:  clamp(2rem,    5vw,   4rem);
+      --btn-sz:  clamp(70px,    12vw,  130px);
+      --gap:     clamp(8px,     1.5vw, 20px);
+      --pad:     clamp(8px,     1.5vw, 20px);
+      --radius:  clamp(20px,    4vw,   50px);
     }
 
-    /* LEFT SIDE - Scrollable content */
-    .content-area {
-      flex: 2;
+    html, body {
+      height: 100%; width: 100%; overflow: hidden;
+      background: #1a0f2a;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* ── LAYOUT ── */
+    .app {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      padding: var(--pad);
+      gap: var(--gap);
+    }
+
+    /* LEFT: scrollable content pane */
+    .pane-left {
+      flex: 1 1 0;
+      min-width: 0;
       background: #2a1a3a;
-      border-radius: 70px 70px 50px 50px;
-      padding: 20px;
-      box-shadow: 0 20px 0 #4a2a5a, 0 30px 40px rgba(0,0,0,0.8), 0 0 0 6px #ffb3d9, 0 0 0 12px #6b4f9f;
-      border: 4px solid #ffe5b4;
+      border-radius: var(--radius);
+      border: 3px solid #ffe5b4;
+      box-shadow: 0 8px 0 #4a2a5a, 0 0 0 4px #ffb3d9, 0 0 0 8px #6b4f9f;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* RIGHT: action buttons column */
+    .pane-right {
+      flex: 0 0 clamp(90px, 18vw, 160px);
+      background: #2a1a3a;
+      border-radius: var(--radius);
+      border: 3px solid #ffe5b4;
+      box-shadow: 0 8px 0 #4a2a5a, 0 0 0 4px #ffb3d9, 0 0 0 8px #6b4f9f;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      padding: var(--pad);
+      overflow: hidden;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      flex-shrink: 0;
+      background: #4a2a6a;
+      border: 3px solid #ffb3d9;
+      border-radius: var(--radius);
+      padding: clamp(6px,1.2vw,14px) clamp(8px,2vw,20px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--gap);
+      margin: var(--pad) var(--pad) 0;
+    }
+    .topbar-title { font-size: var(--fs-lg); font-weight: 900; color: #ffe5b4; text-shadow: 2px 2px 0 #ff69b4; white-space: nowrap; }
+    .topbar-btns  { display: flex; gap: var(--gap); }
+    .tb-btn {
+      background: #ffe5b4; color: #2a1a3a; border: 3px solid white;
+      font-size: var(--fs-sm); padding: clamp(6px,1vw,12px) clamp(10px,2vw,20px);
+      border-radius: 50px; box-shadow: 0 5px 0 #b1741e; cursor: pointer; font-weight: 900;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .tb-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #b1741e; }
+    .tb-lbl {
+      font-size: var(--fs-sm); background: #6b4f9f; padding: clamp(5px,1vw,10px) clamp(8px,1.5vw,16px);
+      border-radius: 50px; color: #ffe5b4; border: 2px solid #ffb3d9; font-weight: 900; white-space: nowrap;
+    }
+
+    /* ── SCREEN WRAPPER ── */
+    .screens {
+      flex: 1;
       overflow-y: auto;
-      height: 100%;
+      overflow-x: hidden;
+      padding: var(--pad);
       scrollbar-width: thin;
       scrollbar-color: #ffb3d9 #2a1a3a;
     }
+    .screens::-webkit-scrollbar { width: 6px; }
+    .screens::-webkit-scrollbar-thumb { background: #ffb3d9; border-radius: 10px; }
 
-    .content-area::-webkit-scrollbar {
-      width: 12px;
-    }
-
-    .content-area::-webkit-scrollbar-track {
-      background: #2a1a3a;
-      border-radius: 10px;
-      border: 2px solid #ffb3d9;
-    }
-
-    .content-area::-webkit-scrollbar-thumb {
-      background: #ffb3d9;
-      border-radius: 10px;
-      border: 2px solid #ffe5b4;
-    }
-
-    /* RIGHT SIDE - Fixed buttons */
-    .button-area {
-      flex: 0.8;
-      background: #2a1a3a;
-      border-radius: 70px 70px 50px 50px;
-      padding: 20px 15px;
-      box-shadow: 0 20px 0 #4a2a5a, 0 30px 40px rgba(0,0,0,0.8), 0 0 0 6px #ffb3d9, 0 0 0 12px #6b4f9f;
-      border: 4px solid #ffe5b4;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      height: 100%;
-      position: sticky;
-      top: 0;
-    }
-
-    /* Vertical action buttons */
-    .action-btn {
-      width: 100%;
-      min-height: 90px;
-      padding: 15px 10px;
-      border-radius: 60px !important;
-      font-size: 1.6rem !important;
-      font-weight: 900;
-      cursor: pointer;
-      border: 5px solid white;
-      box-shadow: 0 10px 0 rgba(0,0,0,0.4), 0 15px 25px rgba(255,215,0,0.3);
-      transition: all 0.15s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-    }
-
-    .action-btn:active {
-      transform: translateY(8px);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.4);
-    }
-
-    .action-btn.home { background: #6b4f9f; color: white; }
-    .action-btn.hint { background: #ffd700; color: #2a1a3a; }
-    .action-btn.sound { background: #00bcd4; color: white; }
-    .action-btn.retry { background: #ffa500; color: #2a1a3a; display: none; }
-    .action-btn.check { background: #ff69b4; color: white; }
-    .action-btn.next { background: #4caf50; color: white; display: none; }
-
-    .action-btn .btn-icon { font-size: 2.5rem; }
-    .action-btn .btn-text { font-size: 1.2rem; }
-
-    /* Keep all original styles below */
-    .topbar { 
-      background: #4a2a6a; 
-      border: 6px solid #ffb3d9; 
-      border-radius: 60px; 
-      padding: 18px 24px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between; 
-      flex-wrap: wrap; 
-      gap: 16px; 
-      margin-bottom: 30px; 
-      box-shadow: 0 12px 0 #2a1a3a, 0 15px 30px #ffd700; 
-    }
-    .topbar-title { font-size: 2.5rem; font-weight: 900; color: #ffe5b4; text-shadow: 4px 4px 0 #ff69b4, 6px 6px 0 #ffaa33; letter-spacing: 2px; }
-    .topbar-btns { display: flex; gap: 20px; flex-wrap: wrap; }
-    .tb-btn { background: #ffe5b4; color: #2a1a3a; border: 5px solid white !important; font-size: 1.8rem; padding: 18px 32px !important; border-radius: 60px !important; box-shadow: 0 10px 0 #b1741e; cursor: pointer; font-weight: 900; transition: all 0.15s ease; }
-    .tb-btn:active { transform: translateY(8px); box-shadow: 0 2px 0 #b1741e; }
-    .tb-lbl { font-size: 1.8rem; background: #6b4f9f; padding: 16px 30px; border-radius: 60px; color: #ffe5b4; border: 4px solid #ffb3d9; font-weight: 900; }
     .screen { display: none; }
     .screen.active { display: block; }
-    .home-hero h1 { font-size: 4.5rem; font-weight: 900; color: #ffe5b4; text-shadow: 5px 5px 0 #ff69b4, 8px 8px 0 #ffaa33; }
-    .home-hero p { font-size: 2.2rem; background: #6b4f9f; padding: 18px 35px; border-radius: 70px; display: inline-block; color: white; border: 4px solid #ffb3d9; }
-    .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin: 35px 0; }
-    .menu-card { background: #ffe5b4; border-radius: 70px; padding: 45px 20px 35px; text-align: center; border: 8px solid white; box-shadow: 0 18px 0 #b36582, 0 25px 35px black; cursor: pointer; transition: all 0.15s ease; }
-    .menu-card:active { transform: translateY(8px); box-shadow: 0 10px 0 #b36582; }
-    .menu-card .mc-icon { font-size: 7rem; line-height: 1.2; }
-    .mc-name { font-size: 2.8rem; font-weight: 900; color: #2a1a3a; margin: 10px 0; }
-    .mc-desc { font-size: 1.8rem; color: #4a2a6a; }
-    .mc-badge { font-size: 2rem; background: #ff69b4; color: white; padding: 15px 30px; border-radius: 60px; display: inline-block; margin-top: 20px; border: 5px solid white; }
-    .progress-chart { background: #fff0f5; border-radius: 60px; padding: 30px; border: 6px solid white; font-size: 2rem; }
-    .progress-bar-cont { height: 45px; background: #d0d0d0; border-radius: 40px; border: 4px solid white; margin: 15px 0; }
-    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #ffb703, #ff69b4); border-radius: 40px; transition: width 0.5s ease; }
-    .progress-stats span { font-size: 1.8rem; background: white; padding: 10px 20px; border-radius: 50px; display: inline-block; margin: 8px; box-shadow: 0 5px 0 #ccc; }
-    .levels-wrap { background: #ffe5b4; border-radius: 80px; padding: 35px 25px; border: 8px solid white; }
-    .levels-title { font-size: 3.5rem; color: #ff1493; text-shadow: 3px 3px 0 #ffd700; margin-bottom: 30px; }
-    .levels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 25px; }
-    .lv-btn { background: #6b4f9f; border: 6px solid white; border-radius: 70px; padding: 30px 10px; font-size: 2.2rem; font-weight: 900; color: white; box-shadow: 0 15px 0 #2a1a3a; cursor: pointer; transition: all 0.15s ease; display: flex; flex-direction: column; align-items: center; }
-    .lv-btn:active { transform: translateY(8px); box-shadow: 0 7px 0 #2a1a3a; }
+
+    /* ── HOME ── */
+    .home-hero { text-align: center; margin-bottom: var(--gap); }
+    .home-hero h1 { font-size: var(--fs-2xl); font-weight: 900; color: #ffe5b4; text-shadow: 3px 3px 0 #ff69b4, 5px 5px 0 #ffaa33; }
+    .home-hero p  { font-size: var(--fs-md); background: #6b4f9f; padding: clamp(8px,1.5vw,14px) clamp(12px,2.5vw,24px); border-radius: 50px; display: inline-block; color: white; border: 2px solid #ffb3d9; }
+    .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin: var(--gap) 0; }
+    .menu-card {
+      background: #ffe5b4; border-radius: clamp(16px,3vw,40px); padding: clamp(10px,2vw,24px) clamp(8px,1.5vw,16px);
+      text-align: center; border: 4px solid white; box-shadow: 0 8px 0 #b36582; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .menu-card:active { transform: translateY(5px); box-shadow: 0 3px 0 #b36582; }
+    .mc-icon  { font-size: var(--fs-xl); line-height: 1.2; }
+    .mc-name  { font-size: var(--fs-md); font-weight: 900; color: #2a1a3a; margin: 4px 0; }
+    .mc-desc  { font-size: var(--fs-xs); color: #4a2a6a; }
+    .mc-badge { font-size: var(--fs-xs); background: #ff69b4; color: white; padding: 4px 10px; border-radius: 30px; display: inline-block; margin-top: 6px; border: 2px solid white; }
+    .progress-chart { background: #fff0f5; border-radius: clamp(16px,3vw,40px); padding: var(--pad); border: 3px solid white; font-size: var(--fs-sm); margin-top: var(--gap); }
+    .progress-bar-cont { height: clamp(14px,2.5vw,24px); background: #d0d0d0; border-radius: 30px; border: 2px solid white; margin: 8px 0; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg,#ffb703,#ff69b4); border-radius: 30px; transition: width 0.5s; }
+    .progress-stats span { font-size: var(--fs-xs); background: white; padding: 4px 10px; border-radius: 30px; display: inline-block; margin: 3px; box-shadow: 0 3px 0 #ccc; }
+
+    /* ── LEVELS ── */
+    .levels-wrap { background: #ffe5b4; border-radius: clamp(16px,3vw,40px); padding: var(--pad); border: 4px solid white; }
+    .levels-title { font-size: var(--fs-xl); color: #ff1493; text-shadow: 2px 2px 0 #ffd700; margin-bottom: var(--gap); }
+    .levels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(80px,18vw,150px), 1fr)); gap: var(--gap); }
+    .lv-btn {
+      background: #6b4f9f; border: 3px solid white; border-radius: clamp(16px,3vw,40px);
+      padding: clamp(10px,2vw,20px) 8px; font-size: var(--fs-sm); font-weight: 900; color: white;
+      box-shadow: 0 8px 0 #2a1a3a; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .lv-btn:active { transform: translateY(5px); box-shadow: 0 3px 0 #2a1a3a; }
     .lv-btn.done { background: #ff69b4; }
-    .lv-icon { font-size: 5rem; }
-    .lv-score { font-size: 1.8rem; background: rgba(0,0,0,0.2); border-radius: 50px; padding: 10px 20px; margin-top: 10px; }
-    .quiz-head { background: #ffe5b4; border-radius: 70px; padding: 30px; border: 6px solid #ff69b4; margin-bottom: 30px; }
-    .quiz-meta { font-size: 2.2rem; display: flex; justify-content: space-between; font-weight: 900; color: #ff1493; }
-    .quiz-score-row { display: flex; gap: 25px; background: white; border-radius: 80px; padding: 20px; margin: 20px 0; }
-    .qs-item .qs-label { font-size: 1.6rem; }
-    .qs-item .qs-val { font-size: 4rem; font-weight: 900; color: #2a1a3a; }
-    .prog-bar { height: 35px; background: #bbb; border-radius: 40px; border: 4px solid white; }
-    .prog-fill { background: linear-gradient(90deg, #ffd700, #ff69b4); height: 100%; border-radius: 40px; transition: width 0.4s; }
-    .q-card { background: #fff5e6; border-radius: 80px; padding: 35px 25px; border: 8px solid #ffb3d9; box-shadow: 0 20px 0 #a04b6d; margin-bottom: 30px; }
-    .q-type-badge { font-size: 2.2rem; background: #ff69b4; padding: 18px 35px; border-radius: 80px; display: inline-block; border: 5px solid white; }
-    .q-text { font-size: 3rem; font-weight: 800; color: #2a1a3a; margin: 30px 0 25px; }
-    .big-number { font-size: 12rem; line-height: 1.2; color: #ff1493; text-shadow: 8px 8px 0 #ffd700; }
-    .big-answer-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin: 35px 0 20px; }
-    .answer-btn { width: 170px; height: 170px; border-radius: 80px; background: #6b4f9f; border: 10px solid white; font-size: 6rem; font-weight: 900; color: white; box-shadow: 0 18px 0 #2a1a3a; transition: 0.1s; cursor: pointer; }
-    .answer-btn:active { transform: translateY(18px); box-shadow: 0 0px 0 #2a1a3a; }
-    .answer-btn.correct { background: #4caf50 !important; animation: bounce 0.5s; border-color: #fff !important; }
-    .answer-btn.wrong { background: #f44336 !important; border-color: #fff !important; }
+    .lv-icon  { font-size: var(--fs-lg); }
+    .lv-score { font-size: var(--fs-xs); background: rgba(0,0,0,0.2); border-radius: 30px; padding: 3px 8px; margin-top: 4px; }
+    .back-btn {
+      margin-top: var(--gap); background: #b39ddb; color: #2a1a3a; border-radius: 50px;
+      padding: clamp(8px,1.5vw,14px) clamp(14px,2.5vw,24px); font-size: var(--fs-sm);
+      border: 3px solid white; cursor: pointer; font-weight: 900;
+    }
+
+    /* ── QUIZ HEAD ── */
+    .quiz-head {
+      background: #ffe5b4; border-radius: clamp(16px,3vw,36px); padding: clamp(8px,1.5vw,16px);
+      border: 3px solid #ff69b4; margin-bottom: var(--gap); flex-shrink: 0;
+    }
+    .quiz-meta { font-size: var(--fs-md); display: flex; justify-content: space-between; font-weight: 900; color: #ff1493; }
+    .quiz-score-row { display: flex; gap: var(--gap); background: white; border-radius: 50px; padding: clamp(6px,1vw,12px) clamp(10px,2vw,18px); margin: clamp(6px,1vw,10px) 0; }
+    .qs-item .qs-label { font-size: var(--fs-xs); }
+    .qs-item .qs-val   { font-size: var(--fs-lg); font-weight: 900; color: #2a1a3a; }
+    .prog-bar  { height: clamp(10px,2vw,20px); background: #bbb; border-radius: 30px; border: 2px solid white; }
+    .prog-fill { background: linear-gradient(90deg,#ffd700,#ff69b4); height: 100%; border-radius: 30px; transition: width 0.4s; }
+
+    /* ── Q CARD ── */
+    .q-card {
+      background: #fff5e6; border-radius: clamp(16px,3vw,40px); padding: clamp(10px,2vw,20px);
+      border: 4px solid #ffb3d9; box-shadow: 0 8px 0 #a04b6d; margin-bottom: var(--gap);
+    }
+    .q-type-badge {
+      font-size: var(--fs-sm); background: #ff69b4; padding: clamp(5px,1vw,10px) clamp(10px,2vw,20px);
+      border-radius: 50px; display: inline-block; border: 2px solid white;
+    }
+    .q-text { font-size: var(--fs-lg); font-weight: 800; color: #2a1a3a; margin: clamp(8px,1.5vw,16px) 0; }
+    .big-number { font-size: var(--fs-num); line-height: 1; color: #ff1493; text-shadow: 4px 4px 0 #ffd700; text-align: center; margin: clamp(6px,1vw,12px) 0; }
+    .big-answer-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); margin: clamp(8px,1.5vw,16px) 0; }
+    .answer-btn {
+      width: var(--btn-sz); height: var(--btn-sz); border-radius: 50%;
+      background: #6b4f9f; border: clamp(4px,0.8vw,8px) solid white;
+      font-size: var(--fs-btn); font-weight: 900; color: white;
+      box-shadow: 0 clamp(6px,1.2vw,14px) 0 #2a1a3a; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .answer-btn:active:not(:disabled) { transform: translateY(8px); box-shadow: 0 2px 0 #2a1a3a; }
+    .answer-btn.correct { background: #4caf50 !important; }
+    .answer-btn.wrong   { background: #f44336 !important; }
     .answer-btn:disabled, .opt-btn:disabled { cursor: default; opacity: 0.85; }
-    .options.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0; }
-    .opt-btn { padding: 40px 20px; font-size: 3.2rem; border-radius: 80px; background: #6fc2d6; border: 8px solid white; box-shadow: 0 16px 0 #218294; color: white; text-transform: capitalize; cursor: pointer; transition: all 0.15s ease; }
-    .opt-btn:active { transform: translateY(8px); box-shadow: 0 8px 0 #218294; }
-    .opt-btn.correct { background: #4caf50 !important; animation: bounce 0.5s; }
-    .opt-btn.wrong { background: #f44336 !important; }
-    .object-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin: 35px 0; }
-    .count-object { font-size: 6rem; filter: drop-shadow(6px 10px 0 rgba(0,0,0,0.3)); animation: wiggle 3s infinite; }
-    @keyframes wiggle { 0%,100%{transform:rotate(0deg);} 25%{transform:rotate(5deg);} 75%{transform:rotate(-5deg);} }
-    .shape-display { display: flex; justify-content: center; margin: 20px 0; }
-    .shape-display .star { font-size: 10rem; }
-    .feedback { font-size: 3rem; padding: 35px; border-radius: 90px; text-align: center; display: none; }
+    .options.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin: clamp(6px,1.2vw,14px) 0; }
+    .opt-btn {
+      padding: clamp(10px,2vw,22px) clamp(8px,1.5vw,16px); font-size: var(--fs-lg);
+      border-radius: clamp(16px,3vw,40px); background: #6fc2d6; border: 4px solid white;
+      box-shadow: 0 clamp(5px,1vw,12px) 0 #218294; color: white; text-transform: capitalize;
+      cursor: pointer; transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .opt-btn:active:not(:disabled) { transform: translateY(5px); box-shadow: 0 2px 0 #218294; }
+    .opt-btn.correct { background: #4caf50 !important; }
+    .opt-btn.wrong   { background: #f44336 !important; }
+    .object-row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); margin: clamp(8px,1.5vw,16px) 0; }
+    .count-object { font-size: var(--fs-obj); filter: drop-shadow(3px 5px 0 rgba(0,0,0,0.3)); animation: wiggle 3s infinite; }
+    @keyframes wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(5deg)} 75%{transform:rotate(-5deg)} }
+    .pattern-row { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(4px,1vw,12px); margin: clamp(6px,1.2vw,14px) 0; font-size: var(--fs-emoji); }
+    .feedback { font-size: var(--fs-md); padding: clamp(8px,1.5vw,16px); border-radius: clamp(16px,3vw,40px); text-align: center; display: none; margin-top: var(--gap); }
     .feedback.show { display: block; animation: popIn 0.3s; }
-    .feedback.ok { background: #d4edda; color: #155724; border: 6px solid #4caf50; }
-    .feedback.bad { background: #f8d7da; color: #721c24; border: 6px solid #f44336; }
-    @keyframes popIn { 0%{transform:scale(0.8);opacity:0;} 100%{transform:scale(1);opacity:1;} }
-    .hint-box { font-size: 2.5rem; padding: 30px; background: #ffe68f; border: 8px solid #ffa500; border-radius: 60px; display: none; }
+    .feedback.ok  { background: #d4edda; color: #155724; border: 3px solid #4caf50; }
+    .feedback.bad { background: #f8d7da; color: #721c24; border: 3px solid #f44336; }
+    @keyframes popIn { 0%{transform:scale(0.85);opacity:0} 100%{transform:scale(1);opacity:1} }
+    .hint-box { font-size: var(--fs-sm); padding: clamp(8px,1.5vw,16px); background: #ffe68f; border: 3px solid #ffa500; border-radius: clamp(16px,3vw,40px); display: none; margin-top: var(--gap); }
     .hint-box.show { display: block; }
-    @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-20px);} }
-    .pattern-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px 0; font-size: 5rem; }
-    .pattern-item { display: inline-block; }
-    .pattern-item.missing { font-size: 5rem; }
-    .result-card { background: #ffe5b4; border-radius: 90px; padding: 50px 30px; border: 10px solid #ff69b4; animation: celebrationPulse 2s infinite; text-align: center; }
-    @keyframes celebrationPulse { 0%{box-shadow:0 0 20px #ffd700;} 50%{box-shadow:0 0 50px #ff69b4;} 100%{box-shadow:0 0 20px #ffd700;} }
-    .result-emoji { font-size: 12rem; animation: bounce 1s infinite; display: block; }
-    .result-title { font-size: 5rem; text-shadow: 4px 4px 0 #ffd700; margin: 20px 0; }
-    .result-pct { font-size: 4rem; margin: 10px 0; }
-    .result-stars { font-size: 6rem; margin: 10px 0; }
-    .result-msg { font-size: 2.2rem; margin: 20px 0; }
-    .mistake-item { background: white; border-radius: 50px; padding: 20px; margin: 10px 0; font-size: 1.8rem; }
 
-    /* Responsive design */
-    @media (max-width: 900px) {
-      .app-container { flex-direction: column; height: auto; }
-      .content-area { height: 60vh; }
-      .button-area { flex-direction: row; flex-wrap: wrap; height: auto; }
-      .action-btn { flex: 1 1 calc(33.333% - 10px); min-height: 80px; }
-      .action-btn .btn-icon { font-size: 2rem; }
-      .action-btn .btn-text { font-size: 1rem; }
-    }
+    /* ── RESULT ── */
+    .result-card { background: #ffe5b4; border-radius: clamp(20px,4vw,50px); padding: clamp(12px,2.5vw,30px); border: 5px solid #ff69b4; animation: celebPulse 2s infinite; text-align: center; }
+    @keyframes celebPulse { 0%{box-shadow:0 0 10px #ffd700} 50%{box-shadow:0 0 30px #ff69b4} 100%{box-shadow:0 0 10px #ffd700} }
+    .result-emoji { font-size: var(--fs-2xl); animation: bounce 1s infinite; display: block; }
+    .result-title { font-size: var(--fs-xl); text-shadow: 3px 3px 0 #ffd700; margin: clamp(6px,1vw,14px) 0; }
+    .result-pct   { font-size: var(--fs-lg); margin: 4px 0; }
+    .result-stars { font-size: var(--fs-xl); margin: 4px 0; }
+    .result-msg   { font-size: var(--fs-md); margin: clamp(6px,1vw,12px) 0; }
+    .mistake-item { background: white; border-radius: 30px; padding: clamp(6px,1vw,12px); margin: 6px 0; font-size: var(--fs-sm); }
+    .res-btns { display: flex; justify-content: center; gap: var(--gap); margin-top: var(--gap); flex-wrap: wrap; }
+    .res-btn { border-radius: 50px; padding: clamp(8px,1.5vw,16px) clamp(12px,2.5vw,24px); font-size: var(--fs-sm); border: 3px solid white; cursor: pointer; font-weight: 900; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 
-    @media (max-width: 700px) {
-      .action-btn { flex: 1 1 calc(50% - 10px); }
-      .answer-btn { width: 150px; height: 150px; font-size: 5rem; }
-      .menu-grid { grid-template-columns: 1fr 1fr; }
-      .q-text { font-size: 2.5rem; }
+    /* ── RIGHT PANEL BUTTONS ── */
+    .abtn {
+      width: 100%; flex: 1;
+      border-radius: clamp(16px,3vw,40px); font-weight: 900; cursor: pointer;
+      border: 3px solid white; box-shadow: 0 clamp(4px,0.8vw,8px) 0 rgba(0,0,0,0.4);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: clamp(2px,0.5vw,6px); transition: transform 0.1s, box-shadow 0.1s;
+      min-height: 0;  /* allow flex shrink */
     }
-
-    @media (max-width: 500px) {
-      .content-area { padding: 15px; }
-      .topbar { flex-direction: column; text-align: center; }
-      .topbar-title { font-size: 2rem; }
-      .home-hero h1 { font-size: 3rem; }
-      .answer-btn { width: 120px; height: 120px; font-size: 4rem; }
-      .action-btn { flex: 1 1 100%; }
-    }
-
-    /* Touch-friendly */
-    .answer-btn, .opt-btn, .lv-btn, .menu-card, .action-btn {
-      min-width: 44px;
-      min-height: 44px;
-    }
+    .abtn:active  { transform: translateY(5px); box-shadow: 0 1px 0 rgba(0,0,0,0.4); }
+    .abtn:disabled { opacity: 0.4; cursor: default; }
+    .abtn-home  { background: #6b4f9f; color: white; }
+    .abtn-hint  { background: #ffd700; color: #2a1a3a; }
+    .abtn-sound { background: #00bcd4; color: white; }
+    .abtn-retry { background: #ffa500; color: #2a1a3a; }
+    .abtn-next  { background: #4caf50; color: white; }
+    .abtn-icon { font-size: clamp(1.2rem, 3.5vw, 2.2rem); }
+    .abtn-text { font-size: clamp(0.6rem, 1.5vw, 1rem); font-weight: 900; }
   </style>
 </head>
 <body>
-<div id="iframeBanner" style="display:none; background:#ff69b4; color:white; text-align:center;
-  font-size:1.6rem; font-family:'Comic Sans MS',cursive; padding:16px 20px; font-weight:900;
-  border-bottom: 4px solid #ffd700;">
-  🔊 For Safaan to <strong>hear</strong> questions &amp; answers, please
-  <strong>download and open this file in your browser</strong> — speech is blocked in previews!
-</div>
-<script>
-  if (window.self !== window.top) {
-    document.getElementById('iframeBanner').style.display = 'block';
-  }
-</script>
 
-<div class="app-container">
-  <!-- LEFT SIDE - SCROLLABLE CONTENT -->
-  <div class="content-area">
-    <!-- TOP BAR (moved inside) -->
+<div id="iframeBanner" style="display:none;background:#ff69b4;color:white;text-align:center;font-size:1rem;font-family:'Comic Sans MS',cursive;padding:10px;font-weight:900;border-bottom:3px solid #ffd700;">
+  🔊 Download and open in your browser for speech to work!
+</div>
+<script>if(window.self!==window.top)document.getElementById('iframeBanner').style.display='block';</script>
+
+<div class="app">
+
+  <!-- LEFT PANE -->
+  <div class="pane-left">
+
     <div class="topbar">
       <div class="topbar-title">🧸 Safaan's Math</div>
       <div class="topbar-btns">
@@ -247,663 +263,339 @@
       <div class="tb-lbl" id="saveLbl">⭐ 0 stars</div>
     </div>
 
-    <!-- HOME screen -->
-    <div class="screen active" id="homeScreen">
-      <div class="home-hero" style="text-align:center; margin-bottom:30px;">
-        <h1>🧮 Safaan's Math</h1>
-        <p>Let's learn together, Safaan! 🌟</p>
-      </div>
-      <div class="menu-grid">
-        <div class="menu-card" onclick="openCategory('counting')">
-          <div class="mc-icon">🔢🐶</div>
-          <div class="mc-name">Counting</div>
-          <div class="mc-desc">count cute things!</div>
-          <div class="mc-badge">5 fun levels</div>
-        </div>
-        <div class="menu-card" onclick="openCategory('numbers')">
-          <div class="mc-icon">123✨</div>
-          <div class="mc-name">Numbers</div>
-          <div class="mc-desc">find the number</div>
-          <div class="mc-badge">5 fun levels</div>
-        </div>
-        <div class="menu-card" onclick="openCategory('shapes')">
-          <div class="mc-icon">🔴🔺⭐</div>
-          <div class="mc-name">Shapes</div>
-          <div class="mc-desc">circle, star, heart</div>
-          <div class="mc-badge">5 fun levels</div>
-        </div>
-        <div class="menu-card" onclick="openCategory('patterns')">
-          <div class="mc-icon">🎨🔁</div>
-          <div class="mc-name">Patterns</div>
-          <div class="mc-desc">what comes next?</div>
-          <div class="mc-badge">5 fun levels</div>
-        </div>
-      </div>
-      <div class="progress-chart" id="progressChart"></div>
-    </div>
+    <div class="screens">
 
-    <!-- LEVELS -->
-    <div class="screen" id="levelsScreen">
-      <div class="levels-wrap">
-        <div class="levels-title" id="levelsTitle">pick a level, Safaan!</div>
-        <div class="levels-grid" id="levelsGrid"></div>
-        <div style="margin-top:30px; text-align:center">
-          <button class="btn btn-back" onclick="showHome()" style="background:#b39ddb; color:#2a1a3a; border-radius:60px; padding:20px 30px; font-size:1.8rem; border:5px solid white; cursor:pointer;">← home</button>
+      <!-- HOME -->
+      <div class="screen active" id="homeScreen">
+        <div class="home-hero">
+          <h1>🧮 Safaan's Math</h1>
+          <p>Let's learn together, Safaan! 🌟</p>
         </div>
+        <div class="menu-grid">
+          <div class="menu-card" onclick="openCategory('counting')"><div class="mc-icon">🔢🐶</div><div class="mc-name">Counting</div><div class="mc-desc">count cute things!</div><div class="mc-badge">5 levels</div></div>
+          <div class="menu-card" onclick="openCategory('numbers')"><div class="mc-icon">123✨</div><div class="mc-name">Numbers</div><div class="mc-desc">find the number</div><div class="mc-badge">5 levels</div></div>
+          <div class="menu-card" onclick="openCategory('shapes')"><div class="mc-icon">🔴🔺⭐</div><div class="mc-name">Shapes</div><div class="mc-desc">circle, star, heart</div><div class="mc-badge">5 levels</div></div>
+          <div class="menu-card" onclick="openCategory('patterns')"><div class="mc-icon">🎨🔁</div><div class="mc-name">Patterns</div><div class="mc-desc">what comes next?</div><div class="mc-badge">5 levels</div></div>
+        </div>
+        <div class="progress-chart" id="progressChart"></div>
       </div>
-    </div>
 
-    <!-- QUIZ -->
-    <div class="screen" id="quizScreen">
-      <div class="quiz-head">
-        <div class="quiz-meta">
-          <span id="quizLabel">Counting · Lv1</span>
-          <span id="quizQNum">1/5</span>
+      <!-- LEVELS -->
+      <div class="screen" id="levelsScreen">
+        <div class="levels-wrap">
+          <div class="levels-title" id="levelsTitle">Pick a level, Safaan!</div>
+          <div class="levels-grid" id="levelsGrid"></div>
+          <div style="text-align:center;margin-top:var(--gap)">
+            <button class="back-btn" onclick="showHome()">← Home</button>
+          </div>
         </div>
-        <div class="quiz-score-row">
-          <div class="qs-item"><div class="qs-label">⭐ stars</div><div class="qs-val" id="qsCorrect">0</div></div>
-          <div class="qs-item"><div class="qs-label">🤷 oops</div><div class="qs-val" id="qsWrong">0</div></div>
-          <div class="qs-item"><div class="qs-label">👍🏼</div><div class="qs-val" id="qsAcc">0%</div></div>
-        </div>
-        <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
       </div>
-      <div class="q-card" id="qCard"></div>
-      <div class="hint-box" id="hintBox"></div>
-      <div class="feedback" id="feedback"></div>
-    </div>
 
-    <!-- RESULT screen -->
-    <div class="screen" id="resultScreen">
-      <div class="result-card">
-        <span class="result-emoji" id="resEmoji">🏆</span>
-        <div class="result-title" id="resTitle">good job, Safaan!</div>
-        <div class="result-pct" id="resPct"></div>
-        <div class="result-stars" id="resStars"></div>
-        <div class="result-msg" id="resMsg"></div>
-        <div class="mistake-section" id="mistakeSection"></div>
-        <div style="display:flex; justify-content:center; gap:20px; margin-top:20px; flex-wrap:wrap;">
-          <button class="btn btn-back" id="retryBtn" style="background:#b39ddb; color:#2a1a3a; border-radius:60px; padding:20px 30px; font-size:1.8rem; border:5px solid white; cursor:pointer;">🔁 again</button>
-          <button class="btn btn-check" onclick="showHome()" style="background:#ff69b4; color:white; border-radius:60px; padding:20px 30px; font-size:1.8rem; border:5px solid white; cursor:pointer;">🏠 home</button>
-          <button class="btn btn-next" id="nextLvBtn" style="display:none; background:#4caf50; color:white; border-radius:60px; padding:20px 30px; font-size:1.8rem; border:5px solid white; cursor:pointer;">➡ next level</button>
+      <!-- QUIZ -->
+      <div class="screen" id="quizScreen">
+        <div class="quiz-head">
+          <div class="quiz-meta"><span id="quizLabel">Counting · Lv1</span><span id="quizQNum">Q 1/5</span></div>
+          <div class="quiz-score-row">
+            <div class="qs-item"><div class="qs-label">⭐ stars</div><div class="qs-val" id="qsCorrect">0</div></div>
+            <div class="qs-item"><div class="qs-label">🤷 oops</div><div class="qs-val" id="qsWrong">0</div></div>
+            <div class="qs-item"><div class="qs-label">👍🏼 acc</div><div class="qs-val" id="qsAcc">0%</div></div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+        </div>
+        <div class="q-card" id="qCard"></div>
+        <div class="hint-box" id="hintBox"></div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="screen" id="resultScreen">
+        <div class="result-card">
+          <span class="result-emoji" id="resEmoji">🏆</span>
+          <div class="result-title" id="resTitle"></div>
+          <div class="result-pct" id="resPct"></div>
+          <div class="result-stars" id="resStars"></div>
+          <div class="result-msg" id="resMsg"></div>
+          <div id="mistakeSection"></div>
+          <div class="res-btns">
+            <button id="retryBtn" class="res-btn" style="background:#b39ddb;color:#2a1a3a">🔁 again</button>
+            <button onclick="showHome()" class="res-btn" style="background:#ff69b4;color:white">🏠 home</button>
+            <button id="nextLvBtn" class="res-btn" style="background:#4caf50;color:white;display:none">➡ next</button>
+          </div>
         </div>
       </div>
-    </div>
+
+    </div><!-- /screens -->
+  </div><!-- /pane-left -->
+
+  <!-- RIGHT PANE: action buttons -->
+  <div class="pane-right">
+    <button class="abtn abtn-home"  id="B_home"  onclick="goHome()">  <span class="abtn-icon">🏠</span><span class="abtn-text">Home</span></button>
+    <button class="abtn abtn-hint"  id="B_hint"  onclick="doHint()">  <span class="abtn-icon">💡</span><span class="abtn-text">Hint</span></button>
+    <button class="abtn abtn-sound" id="B_sound" onclick="doSpeak()"> <span class="abtn-icon">🔊</span><span class="abtn-text">Question</span></button>
+    <button class="abtn abtn-retry" id="B_retry" onclick="doRetry()"> <span class="abtn-icon">🔄</span><span class="abtn-text">Try Again</span></button>
+    <button class="abtn abtn-next"  id="B_next"  onclick="doNext()">  <span class="abtn-icon">▶️</span><span class="abtn-text">Next</span></button>
   </div>
 
-  <!-- RIGHT SIDE - FIXED BUTTONS -->
-  <div class="button-area">
-    <button class="action-btn home" onclick="goHome()">
-      <span class="btn-icon">🏠</span>
-      <span class="btn-text">Home</span>
-    </button>
-    
-    <button class="action-btn hint" id="rightHintBtn" onclick="showHint()">
-      <span class="btn-icon">💡</span>
-      <span class="btn-text">Hint</span>
-    </button>
-    
-    <button class="action-btn sound" onclick="speakTheQuestion()">
-      <span class="btn-icon">🔊</span>
-      <span class="btn-text">Question</span>
-    </button>
-    
-    <button class="action-btn retry" id="rightRetryBtn" onclick="retryQuestion()">
-      <span class="btn-icon">🔄</span>
-      <span class="btn-text">Try Again</span>
-    </button>
-    
-    <button class="action-btn check" id="rightCheckBtn" onclick="checkAnswer()">
-      <span class="btn-icon">✅</span>
-      <span class="btn-text">Check</span>
-    </button>
-    
-    <button class="action-btn next" id="rightNextBtn" onclick="nextQuestion()">
-      <span class="btn-icon">▶️</span>
-      <span class="btn-text">Next</span>
-    </button>
-  </div>
-</div>
+</div><!-- /app -->
 
 <script>
-// ============================================================
-// SAFAAN'S MATH ADVENTURE — WITH RETRY BUTTON & SECOND CHANCE
-// ============================================================
+'use strict';
 
-// --- SPEECH FUNCTIONS ---
-function speakText(text) {
-  if (!text) return;
-  try {
+// ── BUTTON MANAGER ──────────────────────────────────────────────
+const BTN = {
+  show(id)    { const el=document.getElementById('B_'+id); if(el){el.style.display='flex';el.disabled=false;} },
+  hide(id)    { const el=document.getElementById('B_'+id); if(el) el.style.display='none'; },
+  disable(id) { const el=document.getElementById('B_'+id); if(el) el.disabled=true; },
+  set(state)  {
+    ['home','hint','sound','retry','next'].forEach(id=>BTN.hide(id));
+    BTN.show('home');
+    if(state==='waiting'){ BTN.show('hint'); BTN.show('sound'); }
+    if(state==='retry')  { BTN.show('sound'); BTN.show('retry'); }
+    if(state==='done')   { BTN.show('next'); }
+  }
+};
+
+// ── SPEECH ──────────────────────────────────────────────────────
+function speak(text){
+  if(!text||!window.speechSynthesis) return;
+  try{
     window.speechSynthesis.cancel();
-    setTimeout(() => {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.8;
-      utterance.pitch = 1.3;
-      utterance.volume = 1;
-      utterance.lang = 'en-US';
-      
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v => 
-        v.name.toLowerCase().includes('samantha') ||
-        v.name.toLowerCase().includes('karen') ||
-        (v.lang === 'en-US' && v.name.toLowerCase().includes('female'))
-      ) || voices.find(v => v.lang === 'en-US');
-      
-      if (preferredVoice) utterance.voice = preferredVoice;
-      window.speechSynthesis.speak(utterance);
-    }, 100);
-  } catch (e) {}
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(text);
+      u.rate=0.8; u.pitch=1.3; u.volume=1; u.lang='en-US';
+      const vs=window.speechSynthesis.getVoices();
+      const v=vs.find(v=>v.name.toLowerCase().includes('samantha'))||vs.find(v=>v.lang==='en-US');
+      if(v) u.voice=v;
+      window.speechSynthesis.speak(u);
+    },80);
+  }catch(e){}
 }
+try{if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();}catch(e){}
 
-window.speechSynthesis.onvoiceschanged = function() {
-  window.speechSynthesis.getVoices();
+// ── AUDIO ────────────────────────────────────────────────────────
+let _ctx=null;
+function tone(freq,dur,type='sine',vol=0.3){
+  try{
+    if(!_ctx)_ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=_ctx.createOscillator(),g=_ctx.createGain();
+    o.connect(g);g.connect(_ctx.destination);
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,_ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,_ctx.currentTime+dur);
+    o.start(); o.stop(_ctx.currentTime+dur);
+    if(_ctx.state==='suspended')_ctx.resume();
+  }catch(e){}
+}
+function sndCorrect(){ tone(523,.15); setTimeout(()=>tone(659,.15),150); setTimeout(()=>tone(784,.25),300); }
+function sndWrong(){   tone(300,.2,'sawtooth',.2); setTimeout(()=>tone(250,.2,'sawtooth',.2),200); }
+function sndCelebrate(){ [523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.2,'sine',.25),i*150)); }
+document.addEventListener('click',()=>{ try{if(_ctx&&_ctx.state==='suspended')_ctx.resume();}catch(e){} });
+
+// ── HELPERS ──────────────────────────────────────────────────────
+function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=rnd(0,i);[a[i],a[j]]=[a[j],a[i]];} return a; }
+function $(id){ return document.getElementById(id); }
+
+// ── PROGRESS ─────────────────────────────────────────────────────
+const CATS={
+  counting:{label:'Counting',levels:5,icon:'🔢'},
+  numbers: {label:'Numbers', levels:5,icon:'123'},
+  shapes:  {label:'Shapes',  levels:5,icon:'🔴'},
+  patterns:{label:'Patterns',levels:5,icon:'🎨'}
 };
-
-// --- AUDIO ---
-let audioCtx = null;
-function getAudioCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
+let progress={};
+try{progress=JSON.parse(localStorage.getItem('safaan_v5'))||{};}catch(e){}
+function initProg(){ for(const c in CATS){ if(!progress[c])progress[c]={}; for(let l=1;l<=CATS[c].levels;l++) if(!progress[c][l])progress[c][l]={done:false,stars:0}; } }
+initProg();
+function saveProg(){ try{localStorage.setItem('safaan_v5',JSON.stringify(progress));}catch(e){} }
+function saveProgress(){
+  saveProg();
+  try{ const b=new Blob([JSON.stringify(progress)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='safaan-math-save.json'; a.click(); }catch(e){}
+  $('saveLbl').textContent='✅ saved!'; setTimeout(updateStars,2000);
 }
-
-function playTone(freq, duration, type = 'sine', volume = 0.3) {
-  try {
-    const ctx = getAudioCtx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(volume, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + duration);
-    if (ctx.state === 'suspended') ctx.resume();
-  } catch (e) {}
+function loadFile(e){
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{ try{progress=JSON.parse(ev.target.result);initProg();updateStars();speak('Progress loaded!');}catch(e){alert('Error!');} };
+  r.readAsText(f); e.target.value='';
 }
-
-function playCorrectSound() {
-  playTone(523, 0.15);
-  setTimeout(() => playTone(659, 0.15), 150);
-  setTimeout(() => playTone(784, 0.25), 300);
-}
-
-function playWrongSound() {
-  playTone(300, 0.2, 'sawtooth', 0.2);
-  setTimeout(() => playTone(250, 0.2, 'sawtooth', 0.2), 200);
-}
-
-function playCelebrationSound() {
-  [523, 659, 784, 1047].forEach((f, i) => {
-    setTimeout(() => playTone(f, 0.2, 'sine', 0.25), i * 150);
-  });
-}
-
-document.addEventListener('click', () => {
-  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-}, { once: false });
-
-// --- CELEBRATION ---
-function celebrateCorrect() {
-  playCorrectSound();
-  const cheers = ["Great job, Safaan!", "You did it!", "Awesome!", "Superstar!", "Wonderful!"];
-  speakText(cheers[Math.floor(Math.random() * cheers.length)]);
-}
-
-function celebrateLevelComplete(stars) {
-  playCelebrationSound();
-  if (stars === 3) speakText("Amazing, Safaan! Three stars!");
-  else if (stars === 2) speakText("Good job, Safaan! Two stars!");
-  else speakText("Great trying, Safaan!");
-}
-
-// --- HELPERS ---
-function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-const CATS = {
-  counting: { label: "Counting", levels: 5, icon: "🔢" },
-  numbers:  { label: "Numbers",  levels: 5, icon: "123" },
-  shapes:   { label: "Shapes",   levels: 5, icon: "🔴" },
-  patterns: { label: "Patterns", levels: 5, icon: "🎨" }
-};
-
-let progress = JSON.parse(localStorage.getItem("safaan_math_v1")) || {};
-let cat = "", level = 0, questions = [], qi = 0, correct = 0, wrong = 0, mistakes = [];
-let currentQId = 0;
-let hintCount = 0;
-let retryCount = 0;  // Track if this is first attempt or retry
-
-function initProgress() {
-  Object.keys(CATS).forEach(c => {
-    if (!progress[c]) progress[c] = {};
-    for (let l = 1; l <= CATS[c].levels; l++) {
-      if (!progress[c][l]) progress[c][l] = { done: false, stars: 0 };
-    }
-  });
-}
-initProgress();
-
-function saveProgress() {
-  localStorage.setItem("safaan_math_v1", JSON.stringify(progress));
-  const b = new Blob([JSON.stringify(progress)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(b);
-  a.download = "safaan-math-save.json";
-  a.click();
-  document.getElementById("saveLbl").innerHTML = "✅ saved! ⭐";
-  setTimeout(updateSaveLbl, 2000);
-}
-
-function loadFile(e) {
-  const f = e.target.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    try {
-      progress = JSON.parse(ev.target.result);
-      initProgress(); updateSaveLbl();
-      speakText("Progress loaded, Safaan!");
-    } catch { alert("try again, Safaan!"); }
-  };
-  r.readAsText(f); e.target.value = "";
-}
-
-function updateSaveLbl() {
-  let total = 0;
-  Object.keys(CATS).forEach(c => {
-    for (let l = 1; l <= CATS[c].levels; l++) total += progress[c]?.[l]?.stars || 0;
-  });
-  document.getElementById("saveLbl").innerHTML = "⭐ " + total + " stars";
-  const ch = document.getElementById("progressChart"); if (!ch) return;
-  let completed = 0, tot = 0;
-  Object.keys(CATS).forEach(c => {
-    for (let l = 1; l <= CATS[c].levels; l++) { tot++; if (progress[c]?.[l]?.done) completed++; }
-  });
-  const pct = Math.round((completed / tot) * 100);
-  ch.innerHTML = `<h3 style="font-size:2.2rem;">📊 Safaan's journey</h3>
-    <div style="margin:15px 0">⭐ ${total} stars</div>
+function updateStars(){
+  let total=0;
+  for(const c in CATS) for(let l=1;l<=CATS[c].levels;l++) total+=progress[c]?.[l]?.stars||0;
+  $('saveLbl').textContent='⭐ '+total+' stars';
+  const ch=$('progressChart'); if(!ch) return;
+  let done=0,tot=0;
+  for(const c in CATS) for(let l=1;l<=CATS[c].levels;l++){tot++;if(progress[c]?.[l]?.done)done++;}
+  const pct=Math.round(done/tot*100);
+  ch.innerHTML=`<div style="font-weight:900;font-size:var(--fs-md)">📊 Safaan's journey</div>
+    <div style="margin:6px 0;font-size:var(--fs-sm)">⭐ ${total} stars!</div>
     <div class="progress-bar-cont"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-    <div class="progress-stats">${Object.keys(CATS).map(c => `<span>${CATS[c].icon} ${Object.values(progress[c] || {}).filter(p => p.done).length}/${CATS[c].levels}</span>`).join(' ')}</div>`;
+    <div class="progress-stats">${Object.keys(CATS).map(c=>`<span>${CATS[c].icon} ${Object.values(progress[c]||{}).filter(p=>p.done).length}/${CATS[c].levels}</span>`).join('')}</div>`;
 }
 
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-function showHome() { 
-  updateSaveLbl(); 
-  showScreen("homeScreen"); 
-}
-
-function goHome() {
-  if (confirm("Go back home, Safaan?")) {
-    showHome();
-  }
-}
-
-function openCategory(c) {
-  cat = c;
-  document.getElementById("levelsTitle").innerText = CATS[c].label + " — choose, Safaan!";
-  const grid = document.getElementById("levelsGrid"); grid.innerHTML = "";
-  for (let l = 1; l <= CATS[c].levels; l++) {
-    const p = progress[c][l];
-    const btn = document.createElement("button");
-    btn.className = "lv-btn" + (p.done ? " done" : "");
-    const icons = ['🌱','🌿','🍃','🌟','🏆'];
-    btn.innerHTML = `<span class="lv-icon">${icons[l-1]}</span>Level ${l}${p.stars > 0 ? `<div class="lv-score">⭐${p.stars}</div>` : ''}`;
-    btn.onclick = (ll => () => startLevel(ll))(l);
+// ── SCREENS ──────────────────────────────────────────────────────
+function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $(id).classList.add('active'); }
+function showHome(){ updateStars(); BTN.set('home'); showScreen('homeScreen'); }
+function goHome(){ if(confirm('Go home, Safaan?')) showHome(); }
+function openCategory(c){
+  _cat=c; $('levelsTitle').textContent=CATS[c].label+' — choose, Safaan!';
+  const grid=$('levelsGrid'); grid.innerHTML='';
+  for(let l=1;l<=CATS[c].levels;l++){
+    const p=progress[c][l]; const btn=document.createElement('button');
+    btn.className='lv-btn'+(p.done?' done':'');
+    const icons=['🌱','🌿','🍃','🌟','🏆'];
+    btn.innerHTML=`<span class="lv-icon">${icons[l-1]}</span>Level ${l}${p.stars>0?`<div class="lv-score">⭐${p.stars}</div>`:''}`;
+    btn.addEventListener('click',(()=>{const ll=l;return()=>startLevel(ll);})());
     grid.appendChild(btn);
   }
-  showScreen("levelsScreen");
+  BTN.set('home'); showScreen('levelsScreen');
 }
 
-function startLevel(l) {
-  level = l; qi = 0; correct = 0; wrong = 0; mistakes = []; hintCount = 0;
-  if (cat === 'counting') questions = generateCountingQuestions(level);
-  else if (cat === 'numbers') questions = generateNumberQuestions(level);
-  else if (cat === 'shapes') questions = generateShapeQuestions(level);
-  else questions = generatePatternQuestions(level);
-  document.getElementById("quizLabel").innerText = CATS[cat].label + " • Lv" + l;
-  showScreen("quizScreen");
-  loadQuestion();
+// ── GAME ─────────────────────────────────────────────────────────
+let _cat='',_level=0,_questions=[],_qi=0,_correct=0,_wrong=0,_answered=false,_retried=false;
+
+function startLevel(l){
+  _level=l; _qi=0; _correct=0; _wrong=0;
+  if(_cat==='counting')_questions=mkCounting(l);
+  else if(_cat==='numbers')_questions=mkNumbers(l);
+  else if(_cat==='shapes')_questions=mkShapes(l);
+  else _questions=mkPatterns(l);
+  $('quizLabel').textContent=CATS[_cat].label+' • Lv'+l;
+  showScreen('quizScreen'); loadQ();
 }
 
-function leaveQuiz() { if (confirm("Back home, Safaan?")) showHome(); }
-
-function loadQuestion() {
-  currentQId++;
-  retryCount = 0;  // Reset retry counter for new question
-  const myQId = currentQId;
-
-  const q = questions[qi];
-  document.getElementById("quizQNum").innerText = "Q " + (qi + 1) + "/5";
-  document.getElementById("qsCorrect").innerText = correct;
-  document.getElementById("qsWrong").innerText = wrong;
-  const totalAttempts = correct + wrong;
-  document.getElementById("qsAcc").innerText = totalAttempts > 0 ? Math.round(correct / totalAttempts * 100) + "%" : "0%";
-  document.getElementById("progFill").style.width = (qi / 5 * 100) + "%";
-  document.getElementById("feedback").className = "feedback";
-  document.getElementById("feedback").innerHTML = "";
-  document.getElementById("hintBox").className = "hint-box";
-  document.getElementById("hintBox").innerHTML = "";
-  
-  // Update right side buttons
-  document.getElementById("rightCheckBtn").style.display = "flex";
-  document.getElementById("rightNextBtn").style.display = "none";
-  document.getElementById("rightRetryBtn").style.display = "none";
-  document.getElementById("rightHintBtn").disabled = false;
-
-  renderQuestion(q, myQId);
+function loadQ(){
+  _answered=false; _retried=false;
+  const q=_questions[_qi];
+  $('quizQNum').textContent='Q '+(_qi+1)+'/5';
+  $('qsCorrect').textContent=_correct; $('qsWrong').textContent=_wrong;
+  $('qsAcc').textContent=(_correct+_wrong)>0?Math.round(_correct/(_correct+_wrong)*100)+'%':'0%';
+  $('progFill').style.width=(_qi/5*100)+'%';
+  $('feedback').className='feedback'; $('hintBox').className='hint-box';
+  BTN.set('waiting'); renderQ(q); speak(q.question);
 }
 
-function renderQuestion(q, qId) {
-  const card = document.getElementById("qCard");
-  let html = `<div class="q-type-badge">${CATS[cat].icon} ${CATS[cat].label}</div><div class="q-text">${q.question}</div>`;
-
-  if (q.type === 'counting') {
-    html += `<div class="object-row">${q.objects.map(o => `<span class="count-object">${o}</span>`).join('')}</div>`;
-    html += `<div class="big-answer-buttons">`;
-    q.options.forEach(n => {
-      html += `<button class="answer-btn" data-val="${n}" data-qid="${qId}" onclick="handleAnswer(this,${qId})">${n}</button>`;
-    });
-    html += `</div>`;
-  } else if (q.type === 'number') {
-    html += `<div class="big-number">${q.number}</div>`;
-    html += `<div class="big-answer-buttons">`;
-    q.options.forEach(n => {
-      html += `<button class="answer-btn" data-val="${n}" data-qid="${qId}" onclick="handleAnswer(this,${qId})">${n}</button>`;
-    });
-    html += `</div>`;
-  } else if (q.type === 'shape') {
-    html += `<div class="shape-display"><span style="font-size:10rem">${q.display}</span></div>`;
-    html += `<div class="options two-col">`;
-    q.options.forEach(opt => {
-      html += `<button class="opt-btn" data-val="${opt}" data-qid="${qId}" onclick="handleAnswer(this,${qId})">${opt}</button>`;
-    });
-    html += `</div>`;
-  } else {
-    html += `<div class="pattern-row">${q.pattern.map(p => `<span class="pattern-item">${p}</span>`).join('')}<span class="pattern-item missing">❓</span></div>`;
-    html += `<div class="options two-col">`;
-    q.options.forEach(opt => {
-      html += `<button class="opt-btn" data-val="${opt}" data-qid="${qId}" onclick="handleAnswer(this,${qId})">${opt}</button>`;
-    });
-    html += `</div>`;
+function renderQ(q){
+  const card=$('qCard');
+  let html=`<div class="q-type-badge">${CATS[_cat].icon} ${CATS[_cat].label}</div><div class="q-text">${q.question}</div>`;
+  if(q.type==='counting'){
+    html+=`<div class="object-row">${q.objects.map(o=>`<span class="count-object">${o}</span>`).join('')}</div>`;
+    html+=`<div class="big-answer-buttons">${q.options.map(n=>`<button class="answer-btn" onclick="pick(this,'${n}')">${n}</button>`).join('')}</div>`;
+  }else if(q.type==='number'){
+    html+=`<div class="big-number">${q.number}</div>`;
+    html+=`<div class="big-answer-buttons">${q.options.map(n=>`<button class="answer-btn" onclick="pick(this,'${n}')">${n}</button>`).join('')}</div>`;
+  }else if(q.type==='shape'){
+    html+=`<div style="text-align:center;font-size:var(--fs-2xl);margin:var(--gap) 0">${q.display}</div>`;
+    html+=`<div class="options two-col">${q.options.map(o=>`<button class="opt-btn" onclick="pick(this,'${o}')">${o}</button>`).join('')}</div>`;
+  }else{
+    html+=`<div class="pattern-row">${q.pattern.map(p=>`<span>${p}</span>`).join('')}<span>❓</span></div>`;
+    html+=`<div class="options two-col">${q.options.map(o=>`<button class="opt-btn" onclick="pick(this,'${o}')">${o}</button>`).join('')}</div>`;
   }
-
-  card.innerHTML = html;
+  card.innerHTML=html;
 }
 
-function handleAnswer(btn, qId) {
-  if (qId !== currentQId) return;
-  
-  const q = questions[qi];
-  const selected = btn.getAttribute('data-val');
-  const correct_ans = String(q.answer);
-  const isCorrect = selected.trim() === correct_ans.trim();
-
-  const container = btn.closest('.big-answer-buttons, .options');
-  
-  if (isCorrect) {
-    // Correct answer!
-    currentQId = -1;  // Lock question
-    correct++;
-    
-    // Highlight correct answer
-    if (container) {
-      container.querySelectorAll('button').forEach(b => {
-        b.disabled = true;
-        if (String(b.getAttribute('data-val')).trim() === correct_ans.trim()) {
-          b.classList.add('correct');
-        }
+function pick(btn,val){
+  if(_answered) return;
+  const q=_questions[_qi]; const ans=String(q.answer); const ok=(val===ans);
+  if(ok){
+    _answered=true; _correct++;
+    btn.closest('.big-answer-buttons,.options').querySelectorAll('button').forEach(b=>{
+      b.disabled=true; if(b.getAttribute('onclick').includes("'"+ans+"'")) b.classList.add('correct');
+    });
+    $('feedback').innerHTML='🌟 Yes! Amazing, Safaan!'; $('feedback').className='feedback show ok';
+    sndCorrect();
+    speak(['Great job!','You did it!','Awesome!','Superstar!','Wonderful!'][rnd(0,4)]);
+    updateScore(); BTN.set('done');
+  }else{
+    btn.classList.add('wrong'); btn.disabled=true;
+    if(!_retried){
+      _retried=true;
+      $('feedback').innerHTML='🔄 Oops! Try again, Safaan!'; $('feedback').className='feedback show bad';
+      BTN.set('retry'); speak('Try again! One more chance!');
+    }else{
+      _answered=true; _wrong++;
+      btn.closest('.big-answer-buttons,.options').querySelectorAll('button').forEach(b=>{
+        b.disabled=true; if(b.getAttribute('onclick').includes("'"+ans+"'")) b.classList.add('correct');
       });
-    }
-    
-    celebrateCorrect();
-    updateScoreAndFeedback(true, false);
-    
-  } else {
-    // Wrong answer
-    if (retryCount === 0) {
-      // First wrong attempt - give retry chance
-      retryCount++;
-      
-      // Highlight wrong answer in red
-      btn.classList.add('wrong');
-      
-      // Show retry message
-      const fb = document.getElementById("feedback");
-      fb.innerHTML = "🔄 Oops! Try again, Safaan! You have one more chance!";
-      fb.className = "feedback show bad";
-      
-      // Show retry button, hide check button
-      document.getElementById("rightCheckBtn").style.display = "none";
-      document.getElementById("rightRetryBtn").style.display = "flex";
-      
-      // Don't disable other buttons yet - let them try again
-      if (container) {
-        container.querySelectorAll('button').forEach(b => {
-          if (b !== btn) {
-            // Keep other buttons enabled for retry
-          }
-        });
-      }
-      
-      speakText("Try again, Safaan! You have one more chance!");
-      
-    } else {
-      // Second wrong attempt - game over for this question
-      currentQId = -1;  // Lock question
-      wrong++;
-      
-      // Show correct answer
-      if (container) {
-        container.querySelectorAll('button').forEach(b => {
-          b.disabled = true;
-          if (String(b.getAttribute('data-val')).trim() === correct_ans.trim()) {
-            b.classList.add('correct');
-          }
-        });
-      }
-      
-      playWrongSound();
-      
-      // Show message and speak correct answer
-      const fb = document.getElementById("feedback");
-      fb.innerHTML = `💙 The correct answer is ${correct_ans}! Let's try the next one!`;
-      fb.className = "feedback show bad";
-      
-      speakText(`The correct answer is ${correct_ans}`);
-      
-      // Update wrong count and proceed
-      updateScoreAndFeedback(false, true);
+      $('feedback').innerHTML=`💙 Answer: <strong>${ans}</strong>! Keep going!`; $('feedback').className='feedback show bad';
+      sndWrong(); speak('The answer is '+ans); updateScore(); BTN.set('done');
     }
   }
 }
 
-function updateScoreAndFeedback(isCorrect, showNext = true) {
-  document.getElementById("qsCorrect").innerText = correct;
-  document.getElementById("qsWrong").innerText = wrong;
-  const total = correct + wrong;
-  if (total > 0) document.getElementById("qsAcc").innerText = Math.round(correct / total * 100) + "%";
-
-  // Update right side buttons
-  if (showNext) {
-    document.getElementById("rightCheckBtn").style.display = "none";
-    document.getElementById("rightRetryBtn").style.display = "none";
-    document.getElementById("rightNextBtn").style.display = "flex";
-    document.getElementById("rightHintBtn").disabled = true;
-  }
+function updateScore(){
+  $('qsCorrect').textContent=_correct; $('qsWrong').textContent=_wrong;
+  const t=_correct+_wrong; if(t>0) $('qsAcc').textContent=Math.round(_correct/t*100)+'%';
 }
 
-function retryQuestion() {
-  // Hide retry button, show check button again
-  document.getElementById("rightRetryBtn").style.display = "none";
-  document.getElementById("rightCheckBtn").style.display = "flex";
-  
-  // Clear feedback
-  document.getElementById("feedback").className = "feedback";
-  document.getElementById("feedback").innerHTML = "";
-  
-  // Remove wrong class from any wrong answers
-  document.querySelectorAll('.answer-btn.wrong, .opt-btn.wrong').forEach(btn => {
-    btn.classList.remove('wrong');
+function doNext(){ _qi++; if(_qi>=5) showResult(); else loadQ(); }
+function doRetry(){
+  $('feedback').className='feedback';
+  document.querySelectorAll('.answer-btn.wrong,.opt-btn.wrong').forEach(b=>{b.classList.remove('wrong');b.disabled=false;});
+  BTN.set('waiting'); speak('Try again, Safaan! You can do it!');
+}
+function doHint(){
+  const q=_questions[_qi]; $('hintBox').textContent='💡 '+(q.hint||'Count slowly!');
+  $('hintBox').className='hint-box show'; BTN.disable('hint'); if(q.hint) speak(q.hint);
+}
+function doSpeak(){ const q=_questions[_qi]; if(q) speak(q.question); }
+
+function showResult(){
+  const stars=_correct>=5?3:_correct>=3?2:1;
+  progress[_cat][_level].done=true; progress[_cat][_level].stars=Math.max(progress[_cat][_level].stars||0,stars);
+  saveProg(); updateStars(); sndCelebrate(); BTN.set('home');
+  $('resEmoji').textContent=stars===3?'🏆':stars===2?'🌟':'⭐';
+  $('resTitle').textContent=stars===3?'SUPERSTAR, SAFAAN! 🎉':stars===2?'Great job, Safaan!':'Good try, Safaan!';
+  $('resPct').textContent=Math.round(_correct/5*100)+'% correct!';
+  $('resStars').textContent='⭐'.repeat(stars);
+  $('resMsg').textContent=stars===3?'ALL 3 stars! Amazing! 🎊':stars===2?'Want 3 stars? 🌟':'Every star counts! 💪';
+  $('mistakeSection').innerHTML=_wrong===0?'<div class="mistake-item">🌟 Perfect!</div>':'<div class="mistake-item">💪 Keep practising!</div>';
+  $('retryBtn').onclick=()=>startLevel(_level);
+  const nb=$('nextLvBtn');
+  if(_level<CATS[_cat].levels){nb.style.display='inline-block';nb.onclick=()=>startLevel(_level+1);}else nb.style.display='none';
+  speak(stars===3?'Amazing, Safaan! Three stars!':stars===2?'Good job! Two stars!':'Great trying!');
+  showScreen('resultScreen');
+}
+
+// ── GENERATORS ───────────────────────────────────────────────────
+function mkCounting(lv){
+  const em=['🐶','🐱','🐭','🐰','🦊','🐻','⭐','🍎','🌸','🎈'];
+  const r={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]}[lv]||[1,2,3];
+  return Array(5).fill(0).map(()=>{
+    const n=r[rnd(0,r.length-1)],e=em[rnd(0,em.length-1)];
+    const w=[...new Set([n+1,n-1,n+2].filter(x=>x>0&&x<=9&&x!==n))].slice(0,2);
+    return {type:'counting',question:`How many ${e} are there, Safaan?`,objects:Array(n).fill(e),answer:String(n),options:shuffle([String(n),...w.map(String)]),hint:'Count with your finger!'};
   });
-  
-  speakText("Try again, Safaan! You can do it!");
+}
+function mkNumbers(lv){
+  const r={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]}[lv]||[1,2,3];
+  return Array(5).fill(0).map(()=>{
+    const n=r[rnd(0,r.length-1)];
+    const w=[...new Set([n+1,n-1,n+2].filter(x=>x>0&&x<=9&&x!==n))].slice(0,2);
+    return {type:'number',question:'Which number is this, Safaan?',number:n,answer:String(n),options:shuffle([String(n),...w.map(String)]),hint:'Say the number out loud!'};
+  });
+}
+function mkShapes(lv){
+  const byLv={1:['circle','square'],2:['circle','square','triangle'],3:['circle','square','triangle','star'],4:['circle','square','triangle','star','heart'],5:['circle','square','triangle','star','heart','diamond']};
+  const list=byLv[lv]||byLv[1];
+  const emo={circle:'🔴',square:'🟨',triangle:'🔺',star:'⭐',heart:'❤️',diamond:'💎'};
+  return Array(5).fill(0).map(()=>{
+    const sh=list[rnd(0,list.length-1)],w=list.filter(s=>s!==sh).slice(0,2);
+    return {type:'shape',question:'What shape is this, Safaan?',display:emo[sh]||'🔴',answer:sh,options:shuffle([sh,...w]),hint:`It's a ${sh}!`};
+  });
+}
+function mkPatterns(lv){
+  const pool=[{p:['🔴','🔵','🔴','🔵'],n:'🔴'},{p:['🟡','🟢','🟡','🟢'],n:'🟡'},{p:['🐶','🐱','🐶','🐱'],n:'🐶'},{p:['⭐','⭐','🌙','⭐','⭐'],n:'🌙'},{p:['🔴','🔴','🔵','🔴','🔴'],n:'🔵'},{p:['🍎','🍊','🍎','🍊'],n:'🍎'},{p:['🐸','🐸','🐢','🐸','🐸'],n:'🐢'}];
+  return Array(5).fill(0).map(()=>{
+    const pat=pool[rnd(0,pool.length-1)],wp=[...new Set(pat.p)].filter(x=>x!==pat.n);
+    return {type:'pattern',question:'What comes next, Safaan?',pattern:pat.p,answer:pat.n,options:shuffle([pat.n,wp[0]||'🌸',wp[1]||'🎈']),hint:`Say it: ${pat.p.join(' ')} ...?`};
+  });
 }
 
-function checkAnswer() {
-  if (currentQId === -1) return;
-  const fb = document.getElementById("feedback");
-  fb.innerHTML = "👆 Tap one of the big buttons, Safaan!";
-  fb.className = "feedback show bad";
-}
-
-function showHint() {
-  const q = questions[qi];
-  hintCount++;
-  document.getElementById("hintBox").innerHTML = "💡 " + (q.hint || "Count slowly, Safaan!");
-  document.getElementById("hintBox").className = "hint-box show";
-  document.getElementById("rightHintBtn").disabled = true;
-  if (q.hint) speakText(q.hint);
-}
-
-function speakTheQuestion() {
-  const q = questions[qi];
-  if (!q) return;
-  speakText(q.question);
-}
-
-function speakTheAnswer() {
-  const q = questions[qi];
-  if (!q) return;
-  const ans = String(q.answer);
-  if (q.type === 'counting' || q.type === 'number') {
-    speakText(`The answer is ${ans}. ${ans}!`);
-  } else if (q.type === 'shape') {
-    speakText(`It's a ${ans}!`);
-  } else {
-    speakText(`The answer is ${ans}!`);
-  }
-}
-
-function nextQuestion() {
-  qi++;
-  if (qi >= 5) showResult();
-  else loadQuestion();
-}
-
-function showResult() {
-  const total = questions.length;
-  const stars = correct >= 5 ? 3 : correct >= 3 ? 2 : 1;
-
-  progress[cat][level].done = true;
-  progress[cat][level].stars = Math.max(progress[cat][level].stars || 0, stars);
-  localStorage.setItem("safaan_math_v1", JSON.stringify(progress));
-  updateSaveLbl();
-  celebrateLevelComplete(stars);
-
-  const pct = Math.round((correct / total) * 100);
-  document.getElementById("resEmoji").innerText = stars === 3 ? "🏆" : stars === 2 ? "🌟" : "⭐";
-  document.getElementById("resTitle").innerText = stars === 3 ? "SUPERSTAR, SAFAAN! 🎉" : stars === 2 ? "Great job, Safaan!" : "Good try, Safaan!";
-  document.getElementById("resPct").innerHTML = pct + "% correct!";
-  document.getElementById("resStars").innerHTML = "⭐".repeat(stars);
-  document.getElementById("resMsg").innerHTML = stars === 3 ? "You got ALL 3 stars, Safaan! Amazing! 🎊"
-    : stars === 2 ? "Awesome, Safaan! Want to try for 3 stars? 🌟"
-    : "Good trying, Safaan! Every star counts! 💪";
-  document.getElementById("mistakeSection").innerHTML = mistakes.length === 0
-    ? '<div class="mistake-item">🌟🌟🌟 Perfect — no mistakes, Safaan!</div>'
-    : '<div class="mistake-item">💪 Keep practicing — you\'ll get it next time, Safaan! 🌟</div>';
-
-  document.getElementById("retryBtn").onclick = () => startLevel(level);
-  const nb = document.getElementById("nextLvBtn");
-  if (level < CATS[cat].levels) {
-    nb.style.display = "inline-block";
-    nb.onclick = () => startLevel(level + 1);
-  } else {
-    nb.style.display = "none";
-  }
-  showScreen("resultScreen");
-}
-
-function generateCountingQuestions(lv) {
-  const emojis = ["🐶","🐱","🐭","🐰","🦊","🐻","⭐","🍎","🌸","🎈"];
-  const ranges = { 1:[1,2,3], 2:[1,2,3,4], 3:[2,3,4,5], 4:[3,4,5,6], 5:[4,5,6,7] };
-  const arr = ranges[lv] || [1,2,3]; const qs = [];
-  for (let i = 0; i < 5; i++) {
-    const num = arr[Math.floor(Math.random() * arr.length)];
-    const em = emojis[Math.floor(Math.random() * emojis.length)];
-    let wrongs = [num+1, num-1, num+2, num-2].filter(n => n > 0 && n <= 9 && n !== num);
-    wrongs = [...new Set(wrongs)].slice(0, 2);
-    const opts = shuffle([num, ...wrongs]);
-    qs.push({ type:'counting', question:`How many ${em} are there, Safaan?`, objects: Array(num).fill(em), answer: num, options: opts, hint:`Count with your finger: touch each one!` });
-  }
-  return qs;
-}
-
-function generateNumberQuestions(lv) {
-  const ranges = { 1:[1,2,3], 2:[1,2,3,4], 3:[2,3,4,5], 4:[3,4,5,6], 5:[4,5,6,7] };
-  const arr = ranges[lv] || [1,2,3]; const qs = [];
-  for (let i = 0; i < 5; i++) {
-    const num = arr[Math.floor(Math.random() * arr.length)];
-    let wrongs = [num+1, num-1, num+2].filter(n => n > 0 && n <= 9 && n !== num);
-    wrongs = [...new Set(wrongs)].slice(0, 2);
-    qs.push({ type:'number', question:`Which number is this, Safaan?`, number: num, options: shuffle([num, ...wrongs]), answer: num, hint:`Say the number out loud!` });
-  }
-  return qs;
-}
-
-function generateShapeQuestions(lv) {
-  const shapesByLevel = {
-    1: ["circle","square"],
-    2: ["circle","square","triangle"],
-    3: ["circle","square","triangle","star"],
-    4: ["circle","square","triangle","star","heart"],
-    5: ["circle","square","triangle","star","heart","diamond"]
-  };
-  const list = shapesByLevel[lv] || shapesByLevel[1]; const qs = [];
-  const shapeEmoji = { circle:'🔴', square:'🟨', triangle:'🔺', star:'⭐', heart:'❤️', diamond:'💎' };
-  for (let i = 0; i < 5; i++) {
-    const sh = list[Math.floor(Math.random() * list.length)];
-    const wrongs = list.filter(s => s !== sh).slice(0, 2);
-    qs.push({ type:'shape', question:`What shape is this, Safaan?`, shape: sh, display: shapeEmoji[sh] || '🔴', options: shuffle([sh, ...wrongs]), answer: sh, hint:`It's a ${sh}!` });
-  }
-  return qs;
-}
-
-function generatePatternQuestions(lv) {
-  const pool = [
-    { p:["🔴","🔵","🔴","🔵"], n:"🔴" },
-    { p:["🟡","🟢","🟡","🟢"], n:"🟡" },
-    { p:["🐶","🐱","🐶","🐱"], n:"🐶" },
-    { p:["⭐","⭐","🌙","⭐","⭐"], n:"🌙" },
-    { p:["🔴","🔴","🔵","🔴","🔴"], n:"🔵" },
-    { p:["🍎","🍊","🍎","🍊"], n:"🍎" },
-    { p:["🐸","🐸","🐢","🐸","🐸"], n:"🐢" }
-  ];
-  const qs = [];
-  for (let i = 0; i < 5; i++) {
-    const pat = pool[Math.floor(Math.random() * pool.length)];
-    const extras = ["🌸","🎈","🔷"];
-    const wrongPool = [...new Set([...pat.p])].filter(x => x !== pat.n);
-    const w1 = wrongPool[0] || extras[0];
-    const w2 = wrongPool[1] || extras[1];
-    qs.push({ type:'pattern', question:`What comes next, Safaan?`, pattern: pat.p, options: shuffle([pat.n, w1, w2]), answer: pat.n, hint:`Say the pattern out loud: ${pat.p.join(' ')} ...?` });
-  }
-  return qs;
-}
-
-// --- INIT ---
-updateSaveLbl();
-window.speechSynthesis.getVoices();
+// ── INIT ─────────────────────────────────────────────────────────
+updateStars();
+BTN.set('home');
+try{if(window.speechSynthesis)window.speechSynthesis.getVoices();}catch(e){}
 </script>
 </body>
 </html>

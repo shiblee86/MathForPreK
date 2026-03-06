@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🧸 Safaan's Math</title>
+  <title>🧸 Safaan's Math (scroll fixed)</title>
   <style>
     /* ── RESET & ROOT ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      /* All sizes clamp between a small tablet minimum and a large desktop max */
       --fs-xs:   clamp(0.7rem,  1.5vw, 1rem);
       --fs-sm:   clamp(0.85rem, 1.8vw, 1.2rem);
       --fs-md:   clamp(1rem,    2.2vw, 1.5rem);
@@ -35,13 +34,13 @@
       user-select: none;
     }
 
-    /* ── LAYOUT ── */
     .app {
       display: flex;
       width: 100vw;
       height: 100vh;
       padding: var(--pad);
       gap: var(--gap);
+      position: relative;  /* for absolute hint placement */
     }
 
     /* LEFT: scrollable content pane */
@@ -98,7 +97,7 @@
       border-radius: 50px; color: #ffe5b4; border: 2px solid #ffb3d9; font-weight: 900; white-space: nowrap;
     }
 
-    /* ── SCREEN WRAPPER ── */
+    /* ── SCREEN WRAPPER (scrollable) ── */
     .screens {
       flex: 1;
       overflow-y: auto;
@@ -106,6 +105,7 @@
       padding: var(--pad);
       scrollbar-width: thin;
       scrollbar-color: #ffb3d9 #2a1a3a;
+      position: relative;  /* to contain absolute? no, we want hint outside */
     }
     .screens::-webkit-scrollbar { width: 6px; }
     .screens::-webkit-scrollbar-thumb { background: #ffb3d9; border-radius: 10px; }
@@ -113,7 +113,7 @@
     .screen { display: none; }
     .screen.active { display: block; }
 
-    /* ── HOME ── */
+    /* all existing card styles unchanged (keeping everything same) */
     .home-hero { text-align: center; margin-bottom: var(--gap); }
     .home-hero h1 { font-size: var(--fs-2xl); font-weight: 900; color: #ffe5b4; text-shadow: 3px 3px 0 #ff69b4, 5px 5px 0 #ffaa33; }
     .home-hero p  { font-size: var(--fs-md); background: #6b4f9f; padding: clamp(8px,1.5vw,14px) clamp(12px,2.5vw,24px); border-radius: 50px; display: inline-block; color: white; border: 2px solid #ffb3d9; }
@@ -132,7 +132,6 @@
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg,#ffb703,#ff69b4); border-radius: 30px; transition: width 0.5s; }
     .progress-stats span { font-size: var(--fs-xs); background: white; padding: 4px 10px; border-radius: 30px; display: inline-block; margin: 3px; box-shadow: 0 3px 0 #ccc; }
 
-    /* ── LEVELS ── */
     .levels-wrap { background: #ffe5b4; border-radius: clamp(16px,3vw,40px); padding: var(--pad); border: 4px solid white; }
     .levels-title { font-size: var(--fs-xl); color: #ff1493; text-shadow: 2px 2px 0 #ffd700; margin-bottom: var(--gap); }
     .levels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(80px,18vw,150px), 1fr)); gap: var(--gap); }
@@ -152,7 +151,6 @@
       border: 3px solid white; cursor: pointer; font-weight: 900;
     }
 
-    /* ── QUIZ HEAD ── */
     .quiz-head {
       background: #ffe5b4; border-radius: clamp(16px,3vw,36px); padding: clamp(8px,1.5vw,16px);
       border: 3px solid #ff69b4; margin-bottom: var(--gap); flex-shrink: 0;
@@ -164,7 +162,6 @@
     .prog-bar  { height: clamp(10px,2vw,20px); background: #bbb; border-radius: 30px; border: 2px solid white; }
     .prog-fill { background: linear-gradient(90deg,#ffd700,#ff69b4); height: 100%; border-radius: 30px; transition: width 0.4s; }
 
-    /* ── Q CARD ── */
     .q-card {
       background: #fff5e6; border-radius: clamp(16px,3vw,40px); padding: clamp(10px,2vw,20px);
       border: 4px solid #ffb3d9; box-shadow: 0 8px 0 #a04b6d; margin-bottom: var(--gap);
@@ -205,10 +202,31 @@
     .feedback.ok  { background: #d4edda; color: #155724; border: 3px solid #4caf50; }
     .feedback.bad { background: #f8d7da; color: #721c24; border: 3px solid #f44336; }
     @keyframes popIn { 0%{transform:scale(0.85);opacity:0} 100%{transform:scale(1);opacity:1} }
-    .hint-box { font-size: var(--fs-sm); padding: clamp(8px,1.5vw,16px); background: #ffe68f; border: 3px solid #ffa500; border-radius: clamp(16px,3vw,40px); display: none; margin-top: var(--gap); }
-    .hint-box.show { display: block; }
 
-    /* ── RESULT ── */
+    /* ★★★ HINT BOX — moved outside screens to be always visible ★★★ */
+    .global-hint {
+      position: absolute;
+      bottom: calc(var(--pad) * 2);    /* sits above bottom edge */
+      left: calc(var(--pad) + clamp(90px, 18vw, 160px) + var(--gap) + var(--pad)); /* left pane + gap + left pane padding approx */
+      right: calc(var(--pad) + clamp(90px, 18vw, 160px) + var(--gap) + var(--pad)); /* symmetrical, but we'll adjust with transform later */
+      transform: translateX(calc( (clamp(90px, 18vw, 160px) + var(--gap)) * -0.5 )); /* fine tune to stay within left pane */
+      max-width: min(400px, 80vw);
+      background: #ffe68f;
+      border: 4px solid #ffa500;
+      border-radius: clamp(20px, 5vw, 60px);
+      padding: clamp(12px, 2.5vw, 24px);
+      font-size: var(--fs-lg);
+      font-weight: 900;
+      color: #2a1a3a;
+      box-shadow: 0 8px 0 #b1741e, 0 0 0 4px white;
+      z-index: 100;
+      display: none;  /* hidden by default */
+      text-align: center;
+      word-break: break-word;
+    }
+    .global-hint.show { display: block; animation: popIn 0.2s; }
+
+    /* result etc unchanged */
     .result-card { background: #ffe5b4; border-radius: clamp(20px,4vw,50px); padding: clamp(12px,2.5vw,30px); border: 5px solid #ff69b4; animation: celebPulse 2s infinite; text-align: center; }
     @keyframes celebPulse { 0%{box-shadow:0 0 10px #ffd700} 50%{box-shadow:0 0 30px #ff69b4} 100%{box-shadow:0 0 10px #ffd700} }
     .result-emoji { font-size: var(--fs-2xl); animation: bounce 1s infinite; display: block; }
@@ -221,14 +239,13 @@
     .res-btn { border-radius: 50px; padding: clamp(8px,1.5vw,16px) clamp(12px,2.5vw,24px); font-size: var(--fs-sm); border: 3px solid white; cursor: pointer; font-weight: 900; }
     @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 
-    /* ── RIGHT PANEL BUTTONS ── */
     .abtn {
       width: 100%; flex: 1;
       border-radius: clamp(16px,3vw,40px); font-weight: 900; cursor: pointer;
       border: 3px solid white; box-shadow: 0 clamp(4px,0.8vw,8px) 0 rgba(0,0,0,0.4);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: clamp(2px,0.5vw,6px); transition: transform 0.1s, box-shadow 0.1s;
-      min-height: 0;  /* allow flex shrink */
+      min-height: 0;
     }
     .abtn:active  { transform: translateY(5px); box-shadow: 0 1px 0 rgba(0,0,0,0.4); }
     .abtn:disabled { opacity: 0.4; cursor: default; }
@@ -250,7 +267,7 @@
 
 <div class="app">
 
-  <!-- LEFT PANE -->
+  <!-- LEFT PANE (scrollable) -->
   <div class="pane-left">
 
     <div class="topbar">
@@ -263,7 +280,7 @@
       <div class="tb-lbl" id="saveLbl">⭐ 0 stars</div>
     </div>
 
-    <div class="screens">
+    <div class="screens" id="scrollScreens">
 
       <!-- HOME -->
       <div class="screen active" id="homeScreen">
@@ -291,7 +308,7 @@
         </div>
       </div>
 
-      <!-- QUIZ -->
+      <!-- QUIZ (no hint box inside anymore) -->
       <div class="screen" id="quizScreen">
         <div class="quiz-head">
           <div class="quiz-meta"><span id="quizLabel">Counting · Lv1</span><span id="quizQNum">Q 1/5</span></div>
@@ -303,7 +320,7 @@
           <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
         </div>
         <div class="q-card" id="qCard"></div>
-        <div class="hint-box" id="hintBox"></div>
+        <!-- original hintBox removed from here -->
         <div class="feedback" id="feedback"></div>
       </div>
 
@@ -337,6 +354,9 @@
   </div>
 
 </div><!-- /app -->
+
+<!-- GLOBAL HINT (always on screen, not inside scrollable area) -->
+<div id="globalHint" class="global-hint"></div>
 
 <script>
 'use strict';
@@ -461,6 +481,8 @@ function startLevel(l){
   else if(_cat==='shapes')_questions=mkShapes(l);
   else _questions=mkPatterns(l);
   $('quizLabel').textContent=CATS[_cat].label+' • Lv'+l;
+  // hide any leftover hint
+  $('globalHint').classList.remove('show');
   showScreen('quizScreen'); loadQ();
 }
 
@@ -471,7 +493,8 @@ function loadQ(){
   $('qsCorrect').textContent=_correct; $('qsWrong').textContent=_wrong;
   $('qsAcc').textContent=(_correct+_wrong)>0?Math.round(_correct/(_correct+_wrong)*100)+'%':'0%';
   $('progFill').style.width=(_qi/5*100)+'%';
-  $('feedback').className='feedback'; $('hintBox').className='hint-box';
+  $('feedback').className='feedback'; 
+  $('globalHint').classList.remove('show');  // hide hint on new question
   BTN.set('waiting'); renderQ(q); speak(q.question);
 }
 
@@ -506,6 +529,7 @@ function pick(btn,val){
     sndCorrect();
     speak(['Great job!','You did it!','Awesome!','Superstar!','Wonderful!'][rnd(0,4)]);
     updateScore(); BTN.set('done');
+    $('globalHint').classList.remove('show'); // hide hint if any
   }else{
     btn.classList.add('wrong'); btn.disabled=true;
     if(!_retried){
@@ -519,6 +543,7 @@ function pick(btn,val){
       });
       $('feedback').innerHTML=`💙 Answer: <strong>${ans}</strong>! Keep going!`; $('feedback').className='feedback show bad';
       sndWrong(); speak('The answer is '+ans); updateScore(); BTN.set('done');
+      $('globalHint').classList.remove('show');
     }
   }
 }
@@ -533,10 +558,15 @@ function doRetry(){
   $('feedback').className='feedback';
   document.querySelectorAll('.answer-btn.wrong,.opt-btn.wrong').forEach(b=>{b.classList.remove('wrong');b.disabled=false;});
   BTN.set('waiting'); speak('Try again, Safaan! You can do it!');
+  $('globalHint').classList.remove('show');
 }
 function doHint(){
-  const q=_questions[_qi]; $('hintBox').textContent='💡 '+(q.hint||'Count slowly!');
-  $('hintBox').className='hint-box show'; BTN.disable('hint'); if(q.hint) speak(q.hint);
+  const q=_questions[_qi]; 
+  const hintDiv = $('globalHint');
+  hintDiv.textContent = '💡 ' + (q.hint || 'Count slowly!');
+  hintDiv.classList.add('show');
+  BTN.disable('hint'); 
+  if(q.hint) speak(q.hint);
 }
 function doSpeak(){ const q=_questions[_qi]; if(q) speak(q.question); }
 
@@ -554,10 +584,11 @@ function showResult(){
   const nb=$('nextLvBtn');
   if(_level<CATS[_cat].levels){nb.style.display='inline-block';nb.onclick=()=>startLevel(_level+1);}else nb.style.display='none';
   speak(stars===3?'Amazing, Safaan! Three stars!':stars===2?'Good job! Two stars!':'Great trying!');
+  $('globalHint').classList.remove('show');
   showScreen('resultScreen');
 }
 
-// ── GENERATORS ───────────────────────────────────────────────────
+// ── GENERATORS (identical) ─────────────────────────────────────
 function mkCounting(lv){
   const em=['🐶','🐱','🐭','🐰','🦊','🐻','⭐','🍎','🌸','🎈'];
   const r={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]}[lv]||[1,2,3];

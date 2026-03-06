@@ -17,7 +17,8 @@
       width: 100%;
       min-height: 100vh;
       background: #1a0f2a;
-      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif;
+      /* Regular font - no cursive */
+      font-family: 'Segoe UI', Roboto, Arial, Helvetica, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -132,11 +133,19 @@
       cursor: pointer;
       font-weight: 900;
       padding: clamp(4px, 1vh, 10px);
+      font-family: inherit;
     }
 
-    .action-btn:active {
+    .action-btn:active:not(:disabled) {
       transform: translateY(clamp(3px, 0.8vh, 6px));
       box-shadow: 0 clamp(1px, 0.3vh, 2px) 0 rgba(0,0,0,0.4);
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+      transform: none;
+      box-shadow: 0 clamp(4px, 1vh, 8px) 0 rgba(0,0,0,0.4);
     }
 
     .action-btn.home { background: #6b4f9f; }
@@ -464,6 +473,9 @@
       text-transform: capitalize;
     }
 
+    .opt-btn.correct { background: #4caf50; }
+    .opt-btn.wrong { background: #f44336; }
+
     .pattern-row {
       display: flex;
       flex-wrap: wrap;
@@ -692,7 +704,6 @@
 
   <script>
     // ===== SAFAAAN'S PERSONALIZED MATH ADVENTURE =====
-    // All your original JavaScript remains exactly the same
     function playSound(id) {
       try { document.getElementById(id).cloneNode(true).play(); } catch(e){}
     }
@@ -735,6 +746,7 @@
     try { progress = JSON.parse(localStorage.getItem("safaan_math_v1")) || {}; } catch(e) {}
     let cat="", level=0, questions=[], qi=0, correct=0, wrong=0, mistakes=[];
     let answered=false, hintCount=0;
+    let hasMadeMistake = false; // Track if user made a mistake on current question
 
     function initProgress(){
       Object.keys(CATS).forEach(c=>{
@@ -933,6 +945,7 @@
       wrong=0;
       mistakes=[];
       answered=false;
+      hasMadeMistake = false;
       hintCount=0;
       
       if(cat==='counting') questions=generateCountingQuestions(level);
@@ -947,6 +960,7 @@
 
     function loadQuestion(){
       answered=false;
+      hasMadeMistake = false;
       let q=questions[qi];
       
       document.getElementById("quizQNum").innerText="Game "+(qi+1)+"/5";
@@ -957,6 +971,10 @@
       document.getElementById("progFill").style.width=((qi)/5*100)+"%";
       document.getElementById("feedback").className="feedback";
       document.getElementById("hintBox").className="hint-box";
+      
+      // Enable hint and retry buttons
+      document.getElementById("B_hint").disabled = false;
+      document.getElementById("B_retry").disabled = false;
       
       renderQuestion(q);
     }
@@ -991,45 +1009,104 @@
     }
 
     function selectNumber(num,correctAns){
-      if(answered)return;
-      answered=true;
+      if(answered) return;
       
       if(num===correctAns){ 
+        answered=true;
         correct++; 
         celebrateCorrect();
         document.querySelectorAll('.answer-btn').forEach(b=>{
           if(parseInt(b.textContent)===num)b.classList.add('correct');
-        }); 
-      } else { 
-        wrong++; 
-        mistakes.push({q:`Count to ${correctAns}`,exp:`Let's count together, Safaan!`}); 
-        playSound('soundWrong');
-        document.querySelectorAll('.answer-btn').forEach(b=>{
-          if(parseInt(b.textContent)===num)b.classList.add('wrong');
-          if(parseInt(b.textContent)===correctAns)b.classList.add('correct');
         });
+        
+        // Disable retry button since question is answered correctly
+        document.getElementById("B_retry").disabled = true;
+        
+      } else { 
+        // First wrong attempt - don't mark as answered yet, allow retry
+        if (!hasMadeMistake) {
+          hasMadeMistake = true;
+          
+          // Mark this button as wrong
+          document.querySelectorAll('.answer-btn').forEach(b=>{
+            if(parseInt(b.textContent)===num)b.classList.add('wrong');
+          });
+          
+          playSound('soundWrong');
+          document.getElementById("feedback").innerHTML="🔄 Oops! Try again, Safaan!";
+          document.getElementById("feedback").className="feedback show bad";
+          
+          // Retry button is already enabled
+        } else {
+          // Second wrong attempt - now count as wrong and show answer
+          answered=true;
+          wrong++;
+          mistakes.push({q:`Count to ${correctAns}`,exp:`Let's count together, Safaan!`});
+          
+          document.querySelectorAll('.answer-btn').forEach(b=>{
+            if(parseInt(b.textContent)===num)b.classList.add('wrong');
+            if(parseInt(b.textContent)===correctAns)b.classList.add('correct');
+          });
+          
+          playSound('soundWrong');
+          document.getElementById("feedback").innerHTML=`💙 The answer is ${correctAns}, Safaan!`;
+          document.getElementById("feedback").className="feedback show bad";
+          
+          updateScoreAndFeedback(false);
+          document.getElementById("B_retry").disabled = true;
+        }
       }
-      updateScoreAndFeedback(num===correctAns);
+      
+      // Update score if answered
+      if (answered) {
+        updateScoreAndFeedback(num===correctAns);
+      }
     }
 
     function selectOption(idx,opt,correctAns){
-      if(answered)return;
-      answered=true;
+      if(answered) return;
       
       if(opt===correctAns){
+        answered=true;
         correct++;
         celebrateCorrect();
         document.querySelectorAll('.opt-btn')[idx].classList.add('correct');
+        
+        // Disable retry button
+        document.getElementById("B_retry").disabled = true;
+        
       } else {
-        wrong++;
-        mistakes.push({q:`Find the ${correctAns}`,exp:`Good try, Safaan!`});
-        playSound('soundWrong');
-        document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
-        document.querySelectorAll('.opt-btn').forEach((b,i)=>{
-          if(b.textContent===correctAns)b.classList.add('correct');
-        });
+        if (!hasMadeMistake) {
+          hasMadeMistake = true;
+          
+          document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
+          
+          playSound('soundWrong');
+          document.getElementById("feedback").innerHTML="🔄 Oops! Try again, Safaan!";
+          document.getElementById("feedback").className="feedback show bad";
+          
+        } else {
+          answered=true;
+          wrong++;
+          mistakes.push({q:`Find the ${correctAns}`,exp:`Good try, Safaan!`});
+          
+          document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
+          document.querySelectorAll('.opt-btn').forEach((b,i)=>{
+            if(b.textContent===correctAns)b.classList.add('correct');
+          });
+          
+          playSound('soundWrong');
+          document.getElementById("feedback").innerHTML=`💙 The answer is ${correctAns}, Safaan!`;
+          document.getElementById("feedback").className="feedback show bad";
+          
+          updateScoreAndFeedback(false);
+          document.getElementById("B_retry").disabled = true;
+        }
       }
-      updateScoreAndFeedback(opt===correctAns);
+      
+      if (answered) {
+        updateScoreAndFeedback(opt===correctAns);
+      }
     }
 
     function updateScoreAndFeedback(isCorrect){
@@ -1037,10 +1114,6 @@
       document.getElementById("qsWrong").innerText=wrong;
       let acc= (correct+wrong)>0 ? Math.round((correct/(correct+wrong))*100) : 0;
       document.getElementById("qsAcc").innerText=acc+"%";
-      
-      let fb=document.getElementById("feedback");
-      fb.innerHTML=isCorrect ? "✅ Great job, Safaan!" : "💙 Try again, Safaan!";
-      fb.className="feedback show "+(isCorrect?"ok":"bad");
     }
 
     function speakQuestion(){
@@ -1058,9 +1131,32 @@
     }
 
     function retryQuestion(){
-      if(answered) return;
-      document.getElementById("feedback").innerHTML="Try again, Safaan! You can do it!";
-      document.getElementById("feedback").className="feedback show bad";
+      // Only allow retry if a mistake was made but question not yet answered
+      if (answered) {
+        document.getElementById("feedback").innerHTML="Already answered, Safaan! Try next question.";
+        document.getElementById("feedback").className="feedback show bad";
+        return;
+      }
+      
+      if (!hasMadeMistake) {
+        document.getElementById("feedback").innerHTML="You haven't tried yet, Safaan! Pick an answer.";
+        document.getElementById("feedback").className="feedback show bad";
+        return;
+      }
+      
+      // Reset the wrong styling
+      document.querySelectorAll('.answer-btn.wrong, .opt-btn.wrong').forEach(b => {
+        b.classList.remove('wrong');
+      });
+      
+      // Clear feedback
+      document.getElementById("feedback").className="feedback";
+      document.getElementById("feedback").innerHTML="";
+      
+      // Reset the mistake flag so user can try again
+      hasMadeMistake = false;
+      
+      speakText("Try again, Safaan! You can do it!");
     }
 
     function nextQuestion(){
@@ -1070,7 +1166,7 @@
     }
 
     function showResult(){
-      let stars=Math.min(3,Math.ceil(correct/2));
+      let stars=Math.min(3,Math.ceil((correct+1)/2)); // Slightly easier to get stars
       progress[cat][level].done=true;
       progress[cat][level].stars=Math.max(progress[cat][level].stars||0,stars);
       localStorage.setItem("safaan_math_v1",JSON.stringify(progress));

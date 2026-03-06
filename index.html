@@ -2,250 +2,333 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🧸 Safaan's Math — Step 1: Fix Scrolling</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+  <title>🧸 Safaan's Math Adventure · Pre-K Fun</title>
   <style>
-    /* RESET & BASE */
+    /* —————————————————— RECURSIVE DESIGN —————————————————— */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
-      height: 100%;
       width: 100%;
-      overflow: hidden;
+      min-height: 100vh;
       background: #1a0f2a;
-      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    }
-
-    /* MAIN CONTAINER */
-    .app {
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif;
       display: flex;
-      width: 100vw;
-      height: 100vh;
-      padding: 8px;
-      gap: 8px;
-      overflow: hidden;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(8px, 2vw, 20px);
     }
 
-    /* LEFT PANE - This needs to scroll properly */
-    .pane-left {
-      flex: 1;
-      min-width: 0;
+    /* MAIN WRAPPER - scales with viewport */
+    .wrap {
+      width: min(1200px, 100%);
       background: #2a1a3a;
-      border-radius: 25px;
-      border: 3px solid #ffe5b4;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      height: 100%;
+      border-radius: clamp(30px, 6vw, 70px);
+      padding: clamp(16px, 3vw, 30px);
+      box-shadow: 0 clamp(10px, 2vw, 20px) 0 #4a2a5a, 
+                  0 0 0 clamp(3px, 0.8vw, 6px) #ffb3d9, 
+                  0 0 0 clamp(6px, 1.5vw, 12px) #6b4f9f;
+      border: clamp(2px, 0.5vw, 4px) solid #ffe5b4;
     }
 
-    /* TOPBAR - Fixed at top */
+    /* TOPBAR - fully responsive */
     .topbar {
-      flex-shrink: 0;
       background: #4a2a6a;
-      border: 3px solid #ffb3d9;
-      border-radius: 25px;
-      padding: 8px 12px;
-      margin: 8px 8px 0;
+      border: clamp(3px, 0.8vw, 6px) solid #ffb3d9;
+      border-radius: clamp(30px, 6vw, 60px);
+      padding: clamp(12px, 2.5vw, 24px) clamp(16px, 3vw, 30px);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: clamp(10px, 2vw, 20px);
+      margin-bottom: clamp(20px, 4vw, 40px);
+      box-shadow: 0 clamp(6px, 1.5vw, 12px) 0 #2a1a3a;
     }
 
     .topbar-title {
-      font-size: 1.1rem;
+      font-size: clamp(1.5rem, 5vw, 3rem);
       font-weight: 900;
       color: #ffe5b4;
-      text-shadow: 1px 1px 0 #ff69b4;
+      text-shadow: clamp(2px, 0.5vw, 4px) clamp(2px, 0.5vw, 4px) 0 #ff69b4,
+                   clamp(3px, 0.8vw, 6px) clamp(3px, 0.8vw, 6px) 0 #ffaa33;
+    }
+
+    .topbar-btns {
+      display: flex;
+      gap: clamp(8px, 1.5vw, 15px);
+      flex-wrap: wrap;
+    }
+
+    .tb-btn {
+      background: #ffe5b4;
+      color: #2a1a3a;
+      border: clamp(2px, 0.5vw, 4px) solid white;
+      font-size: clamp(1rem, 3.5vw, 1.8rem);
+      padding: clamp(8px, 2vw, 18px) clamp(12px, 3vw, 28px);
+      border-radius: clamp(30px, 8vw, 60px);
+      box-shadow: 0 clamp(4px, 1vw, 8px) 0 #b1741e;
+      cursor: pointer;
+      font-weight: 900;
+      min-height: clamp(40px, 8vw, 70px);
+      min-width: clamp(60px, 12vw, 100px);
     }
 
     .tb-lbl {
-      font-size: 0.9rem;
+      font-size: clamp(1rem, 3.5vw, 1.8rem);
       background: #6b4f9f;
-      padding: 4px 10px;
-      border-radius: 40px;
+      padding: clamp(8px, 2vw, 16px) clamp(12px, 3vw, 24px);
+      border-radius: clamp(30px, 8vw, 60px);
       color: #ffe5b4;
-      border: 2px solid #ffb3d9;
+      border: clamp(2px, 0.5vw, 4px) solid #ffb3d9;
+      font-weight: 900;
+      white-space: nowrap;
     }
 
-    /* SCROLLABLE CONTENT AREA - THIS IS THE KEY FIX */
-    .screens {
+    /* MAIN LAYOUT - recursive flex */
+    .main-layout {
+      display: flex;
+      flex-direction: row;
+      gap: clamp(10px, 2vw, 25px);
+    }
+
+    /* LEFT CONTENT AREA - scrollable */
+    .content-area {
       flex: 1;
+      min-width: 0;
+      max-height: min(800px, 70vh);
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 12px;
-      min-height: 0;  /* CRITICAL: allows flex child to shrink */
-      height: 100%;
+      padding-right: clamp(5px, 1vw, 15px);
       -webkit-overflow-scrolling: touch;
     }
 
-    .screen {
-      display: none;
+    /* RIGHT BUTTON AREA - fixed width */
+    .button-area {
+      width: clamp(80px, 15vw, 140px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.5vh, 15px);
     }
 
-    .screen.active {
-      display: block;
+    /* Right side buttons - recursive sizing */
+    .action-btn {
+      width: 100%;
+      flex: 1;
+      min-height: clamp(50px, 10vh, 80px);
+      background: #6b4f9f;
+      border: clamp(2px, 0.5vw, 4px) solid white;
+      border-radius: clamp(15px, 4vw, 30px);
+      box-shadow: 0 clamp(4px, 1vh, 8px) 0 rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 900;
+      padding: clamp(4px, 1vh, 10px);
     }
 
-    /* HOME SCREEN CONTENT */
+    .action-btn:active {
+      transform: translateY(clamp(3px, 0.8vh, 6px));
+      box-shadow: 0 clamp(1px, 0.3vh, 2px) 0 rgba(0,0,0,0.4);
+    }
+
+    .action-btn.home { background: #6b4f9f; }
+    .action-btn.hint { background: #ffd700; color: #2a1a3a; }
+    .action-btn.sound { background: #00bcd4; }
+    .action-btn.retry { background: #ffa500; color: #2a1a3a; }
+    .action-btn.next { background: #4caf50; }
+
+    .action-icon {
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+    }
+
+    .action-text {
+      font-size: clamp(0.6rem, 2vw, 1rem);
+      text-align: center;
+    }
+
+    /* screens */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* HOME screen - recursive */
     .home-hero {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: clamp(15px, 3vh, 30px);
     }
 
     .home-hero h1 {
-      font-size: 2rem;
+      font-size: clamp(2rem, 8vw, 5rem);
+      font-weight: 900;
       color: #ffe5b4;
-      text-shadow: 2px 2px 0 #ff69b4;
+      text-shadow: clamp(2px, 0.8vw, 5px) clamp(2px, 0.8vw, 5px) 0 #ff69b4,
+                   clamp(3px, 1.2vw, 8px) clamp(3px, 1.2vw, 8px) 0 #ffaa33;
     }
 
     .home-hero p {
-      font-size: 1rem;
+      font-size: clamp(1rem, 4vw, 2.2rem);
       background: #6b4f9f;
-      padding: 8px 16px;
-      border-radius: 40px;
+      padding: clamp(8px, 2vh, 18px) clamp(15px, 4vw, 35px);
+      border-radius: clamp(30px, 8vw, 70px);
       display: inline-block;
       color: white;
+      border: clamp(2px, 0.5vw, 4px) solid #ffb3d9;
     }
 
     .menu-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 15px 0;
+      grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+      gap: clamp(12px, 2.5vw, 25px);
+      margin: clamp(15px, 3vh, 35px) 0;
     }
 
     .menu-card {
       background: #ffe5b4;
-      border-radius: 20px;
-      padding: 15px 8px;
+      border-radius: clamp(20px, 6vw, 70px);
+      padding: clamp(15px, 4vh, 45px) clamp(8px, 2vw, 20px);
       text-align: center;
-      border: 3px solid white;
-      box-shadow: 0 5px 0 #b36582;
+      border: clamp(3px, 0.8vw, 8px) solid white;
+      box-shadow: 0 clamp(8px, 2vh, 18px) 0 #b36582;
+      cursor: pointer;
+    }
+
+    .menu-card:active {
+      transform: translateY(clamp(4px, 1vh, 8px));
+      box-shadow: 0 clamp(3px, 0.8vh, 5px) 0 #b36582;
     }
 
     .mc-icon {
-      font-size: 2rem;
+      font-size: clamp(2.5rem, 10vw, 7rem);
     }
 
     .mc-name {
-      font-size: 1.1rem;
+      font-size: clamp(1.2rem, 5vw, 2.8rem);
       font-weight: 900;
       color: #2a1a3a;
+      margin: clamp(3px, 1vh, 10px) 0;
     }
 
     .mc-desc {
-      font-size: 0.8rem;
+      font-size: clamp(0.8rem, 3.5vw, 1.8rem);
       color: #4a2a6a;
     }
 
     .mc-badge {
-      font-size: 0.7rem;
+      font-size: clamp(0.8rem, 3.5vw, 2rem);
       background: #ff69b4;
       color: white;
-      padding: 3px 8px;
-      border-radius: 20px;
+      padding: clamp(4px, 1.5vh, 15px) clamp(8px, 2.5vw, 30px);
+      border-radius: clamp(20px, 8vw, 60px);
       display: inline-block;
-      margin-top: 5px;
+      margin-top: clamp(5px, 1.5vh, 20px);
+      border: clamp(2px, 0.5vw, 5px) solid white;
     }
 
-    /* PROGRESS CHART - This was getting cut off */
+    /* progress chart */
     .progress-chart {
       background: #fff0f5;
-      border-radius: 20px;
-      padding: 15px;
-      border: 3px solid white;
-      margin-top: 15px;
-      margin-bottom: 20px; /* Add space at bottom */
+      border-radius: clamp(20px, 6vw, 60px);
+      padding: clamp(15px, 3vh, 30px);
+      border: clamp(3px, 0.8vw, 6px) solid white;
+      font-size: clamp(0.9rem, 3.5vw, 2rem);
+      margin-top: clamp(10px, 2vh, 30px);
     }
 
     .progress-bar-cont {
-      height: 18px;
+      height: clamp(20px, 4vh, 45px);
       background: #d0d0d0;
-      border-radius: 20px;
-      border: 2px solid white;
-      margin: 10px 0;
+      border-radius: clamp(20px, 6vw, 40px);
+      border: clamp(2px, 0.5vw, 4px) solid white;
+      margin: clamp(8px, 2vh, 20px) 0;
     }
 
     .progress-bar-fill {
       height: 100%;
       background: linear-gradient(90deg, #ffb703, #ff69b4);
-      border-radius: 20px;
-      width: 40%;
+      border-radius: clamp(20px, 6vw, 40px);
+      transition: width 0.5s;
     }
 
     .progress-stats {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: clamp(5px, 1.5vw, 15px);
     }
 
     .progress-stats span {
-      font-size: 0.8rem;
+      font-size: clamp(0.7rem, 3vw, 1.8rem);
       background: white;
-      padding: 4px 10px;
-      border-radius: 20px;
+      padding: clamp(4px, 1.5vh, 10px) clamp(8px, 2vw, 20px);
+      border-radius: clamp(20px, 6vw, 50px);
+      box-shadow: 0 clamp(2px, 0.5vh, 5px) 0 #ccc;
     }
 
-    /* RIGHT PANE BUTTONS - Make sure they're visible */
-    .pane-right {
-      width: 100px;
-      flex-shrink: 0;
-      background: #2a1a3a;
-      border-radius: 25px;
-      border: 3px solid #ffe5b4;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 10px;
+    /* LEVELS screen */
+    .levels-wrap {
+      background: #ffe5b4;
+      border-radius: clamp(25px, 8vw, 80px);
+      padding: clamp(15px, 4vh, 35px);
+      border: clamp(3px, 0.8vw, 8px) solid white;
     }
 
-    .abtn {
-      width: 100%;
-      height: 0;
-      flex: 1 1 auto;
-      min-height: 60px; /* Minimum touch target */
-      border-radius: 20px;
+    .levels-title {
+      font-size: clamp(1.5rem, 7vw, 3.5rem);
+      color: #ff1493;
+      text-shadow: clamp(1px, 0.5vw, 3px) clamp(1px, 0.5vw, 3px) 0 #ffd700;
+      margin-bottom: clamp(10px, 3vh, 30px);
+    }
+
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(120px, 100%), 1fr));
+      gap: clamp(8px, 2vw, 25px);
+    }
+
+    .lv-btn {
+      background: #6b4f9f;
+      border: clamp(2px, 0.5vw, 6px) solid white;
+      border-radius: clamp(20px, 6vw, 70px);
+      padding: clamp(10px, 3vh, 30px) clamp(3px, 1vw, 10px);
+      font-size: clamp(0.8rem, 3.5vw, 2.2rem);
       font-weight: 900;
+      color: white;
+      box-shadow: 0 clamp(6px, 1.5vh, 15px) 0 #2a1a3a;
       cursor: pointer;
-      border: 2px solid white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      background: #6b4f9f;
-      color: white;
     }
 
-    .abtn-home { background: #6b4f9f; }
-    .abtn-hint { background: #ffd700; color: #2a1a3a; }
-    .abtn-sound { background: #00bcd4; }
-    .abtn-retry { background: #ffa500; color: #2a1a3a; }
-    .abtn-next { background: #4caf50; }
-
-    .abtn-icon {
-      font-size: 1.4rem;
+    .lv-icon {
+      font-size: clamp(1.5rem, 7vw, 5rem);
     }
 
-    .abtn-text {
-      font-size: 0.7rem;
+    .lv-score {
+      font-size: clamp(0.7rem, 3vw, 1.8rem);
+      background: rgba(0,0,0,0.2);
+      border-radius: 30px;
+      padding: clamp(3px, 1vh, 10px) clamp(5px, 1.5vw, 20px);
+      margin-top: clamp(3px, 1vh, 10px);
     }
 
-    /* EXERCISE SCREEN STYLES */
+    /* QUIZ screen */
     .quiz-head {
       background: #ffe5b4;
-      border-radius: 20px;
-      padding: 12px;
-      border: 3px solid #ff69b4;
-      margin-bottom: 15px;
+      border-radius: clamp(20px, 6vw, 70px);
+      padding: clamp(12px, 3vh, 30px);
+      border: clamp(2px, 0.5vw, 6px) solid #ff69b4;
+      margin-bottom: clamp(10px, 2.5vh, 30px);
     }
 
     .quiz-meta {
-      font-size: 1.1rem;
+      font-size: clamp(0.9rem, 4vw, 2.2rem);
       display: flex;
       justify-content: space-between;
       font-weight: 900;
@@ -254,200 +337,778 @@
 
     .quiz-score-row {
       display: flex;
-      gap: 15px;
+      gap: clamp(8px, 2vw, 25px);
       background: white;
-      border-radius: 40px;
-      padding: 8px 15px;
-      margin: 8px 0;
+      border-radius: clamp(30px, 10vw, 80px);
+      padding: clamp(8px, 2vh, 20px) clamp(12px, 3vw, 30px);
+      margin: clamp(5px, 1.5vh, 20px) 0;
+      flex-wrap: wrap;
     }
 
+    .qs-item .qs-label {
+      font-size: clamp(0.7rem, 3vw, 1.6rem);
+    }
+
+    .qs-item .qs-val {
+      font-size: clamp(1.2rem, 5vw, 4rem);
+      font-weight: 900;
+      color: #2a1a3a;
+    }
+
+    .prog-bar {
+      height: clamp(15px, 3vh, 35px);
+      background: #bbb;
+      border-radius: clamp(20px, 6vw, 40px);
+      border: clamp(1px, 0.3vw, 4px) solid white;
+    }
+
+    .prog-fill {
+      background: linear-gradient(90deg, #ffd700, #ff69b4);
+      height: 100%;
+      border-radius: clamp(20px, 6vw, 40px);
+    }
+
+    /* Question card */
     .q-card {
       background: #fff5e6;
-      border-radius: 20px;
-      padding: 20px;
-      border: 3px solid #ffb3d9;
-      box-shadow: 0 5px 0 #a04b6d;
-      margin-bottom: 15px;
+      border-radius: clamp(20px, 8vw, 80px);
+      padding: clamp(15px, 4vh, 35px);
+      border: clamp(2px, 0.5vw, 8px) solid #ffb3d9;
+      box-shadow: 0 clamp(8px, 2vh, 20px) 0 #a04b6d;
+      margin-bottom: clamp(10px, 2.5vh, 30px);
+    }
+
+    .q-type-badge {
+      font-size: clamp(0.8rem, 4vw, 2.2rem);
+      background: #ff69b4;
+      padding: clamp(5px, 2vh, 18px) clamp(10px, 3vw, 35px);
+      border-radius: clamp(30px, 10vw, 80px);
+      display: inline-block;
+      border: clamp(2px, 0.5vw, 5px) solid white;
     }
 
     .q-text {
-      font-size: 1.2rem;
+      font-size: clamp(1.2rem, 5vw, 3rem);
       font-weight: 800;
       color: #2a1a3a;
-      margin: 15px 0;
+      margin: clamp(10px, 3vh, 30px) 0;
     }
 
+    /* Objects and answers */
     .object-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      margin: 15px 0;
+      gap: clamp(5px, 1.5vw, 25px);
+      margin: clamp(10px, 3vh, 35px) 0;
     }
 
     .count-object {
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 10vw, 6rem);
+      filter: drop-shadow(clamp(2px, 0.5vw, 6px) clamp(3px, 0.8vh, 10px) 0 rgba(0,0,0,0.3));
+    }
+
+    .big-number {
+      font-size: clamp(4rem, 20vw, 12rem);
+      line-height: 1;
+      color: #ff1493;
+      text-shadow: clamp(3px, 1vw, 8px) clamp(3px, 1vw, 8px) 0 #ffd700;
+      text-align: center;
     }
 
     .big-answer-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 15px;
-      margin: 15px 0;
+      gap: clamp(10px, 3vw, 30px);
+      margin: clamp(10px, 3vh, 35px) 0;
     }
 
     .answer-btn {
-      width: 80px;
-      height: 80px;
+      width: clamp(60px, 20vw, 170px);
+      height: clamp(60px, 20vw, 170px);
       border-radius: 50%;
       background: #6b4f9f;
-      border: 5px solid white;
-      font-size: 2rem;
+      border: clamp(3px, 1vw, 10px) solid white;
+      font-size: clamp(1.5rem, 8vw, 6rem);
+      font-weight: 900;
       color: white;
-      box-shadow: 0 8px 0 #2a1a3a;
+      box-shadow: 0 clamp(6px, 2vh, 18px) 0 #2a1a3a;
       cursor: pointer;
+    }
+
+    .answer-btn:active:not(:disabled) {
+      transform: translateY(clamp(4px, 1.5vh, 12px));
+      box-shadow: 0 clamp(1px, 0.5vh, 3px) 0 #2a1a3a;
+    }
+
+    .answer-btn.correct { background: #4caf50; }
+    .answer-btn.wrong { background: #f44336; }
+
+    .options.two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(8px, 2.5vw, 30px);
+      margin: clamp(8px, 2.5vh, 30px) 0;
+    }
+
+    .opt-btn {
+      padding: clamp(10px, 3vh, 40px) clamp(5px, 2vw, 20px);
+      font-size: clamp(1rem, 5vw, 3.2rem);
+      border-radius: clamp(20px, 8vw, 80px);
+      background: #6fc2d6;
+      border: clamp(2px, 0.5vw, 8px) solid white;
+      box-shadow: 0 clamp(5px, 1.5vh, 16px) 0 #218294;
+      color: white;
+      cursor: pointer;
+      text-transform: capitalize;
+    }
+
+    .pattern-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(3px, 1vw, 15px);
+      margin: clamp(6px, 2vh, 20px) 0;
+      font-size: clamp(1.5rem, 8vw, 4rem);
+    }
+
+    .feedback, .hint-box {
+      font-size: clamp(1rem, 5vw, 3rem);
+      padding: clamp(8px, 2.5vh, 35px);
+      border-radius: clamp(20px, 8vw, 90px);
+      margin-top: clamp(8px, 2vh, 20px);
+    }
+
+    .hint-box {
+      background: #ffe68f;
+      border: clamp(3px, 0.8vw, 8px) solid #ffa500;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.ok { background: #d4edda; color: #155724; border: clamp(2px, 0.5vw, 5px) solid #4caf50; }
+    .feedback.bad { background: #f8d7da; color: #721c24; border: clamp(2px, 0.5vw, 5px) solid #f44336; }
+
+    /* RESULT screen */
+    .result-card {
+      background: #ffe5b4;
+      border-radius: clamp(30px, 10vw, 90px);
+      padding: clamp(20px, 5vh, 50px);
+      border: clamp(4px, 1vw, 10px) solid #ff69b4;
+      text-align: center;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #ffd700; }
+      50% { box-shadow: 0 0 30px #ff69b4; }
+      100% { box-shadow: 0 0 10px #ffd700; }
+    }
+
+    .result-emoji {
+      font-size: clamp(3rem, 15vw, 12rem);
+      display: block;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .result-title {
+      font-size: clamp(1.5rem, 7vw, 5rem);
+      text-shadow: clamp(2px, 0.8vw, 4px) clamp(2px, 0.8vw, 4px) 0 #ffd700;
+    }
+
+    .result-stars {
+      font-size: clamp(2rem, 8vw, 6rem);
+    }
+
+    .res-btns {
+      display: flex;
+      justify-content: center;
+      gap: clamp(8px, 2vw, 25px);
+      margin-top: clamp(15px, 3vh, 30px);
+      flex-wrap: wrap;
+    }
+
+    .res-btn {
+      border-radius: clamp(30px, 8vw, 80px);
+      padding: clamp(8px, 2.5vh, 20px) clamp(15px, 4vw, 30px);
+      font-size: clamp(1rem, 4vw, 2rem);
+      border: clamp(2px, 0.5vw, 5px) solid white;
+      cursor: pointer;
+      font-weight: 900;
+      min-height: clamp(40px, 8vh, 70px);
+    }
+
+    /* Responsive breakpoints */
+    @media (max-width: 600px) {
+      .main-layout {
+        flex-direction: column;
+      }
+      
+      .button-area {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .action-btn {
+        width: clamp(70px, 20vw, 100px);
+        height: clamp(60px, 15vh, 80px);
+      }
+      
+      .content-area {
+        max-height: 60vh;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <!-- LEFT PANE -->
-    <div class="pane-left">
-      <div class="topbar">
-        <div class="topbar-title">🧸 Safaan's Math</div>
-        <div class="tb-lbl" id="saveLbl">⭐ 0 stars</div>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="topbar-title">🧸 Safaan's Math</div>
+      <div class="topbar-btns">
+        <button class="tb-btn" onclick="saveProgress()">💾 save</button>
+        <button class="tb-btn" onclick="document.getElementById('loadFile').click()">📂 load</button>
+        <input type="file" id="loadFile" accept=".json" style="display:none" onchange="loadFile(event)">
       </div>
+      <div class="tb-lbl" id="saveLbl">⭐ 0 stars</div>
+    </div>
 
-      <!-- SCROLLABLE CONTENT - This will now scroll properly -->
-      <div class="screens" id="scrollScreens">
+    <div class="main-layout">
+      <!-- LEFT CONTENT - Scrollable -->
+      <div class="content-area" id="scrollArea">
         <!-- HOME SCREEN -->
         <div class="screen active" id="homeScreen">
           <div class="home-hero">
             <h1>🧮 Safaan's Math</h1>
             <p>Let's learn together, Safaan! 🌟</p>
           </div>
-          
           <div class="menu-grid">
-            <div class="menu-card">
+            <div class="menu-card" onclick="openCategory('counting')">
               <div class="mc-icon">🔢🐶</div>
               <div class="mc-name">Counting</div>
               <div class="mc-desc">count cute things!</div>
               <div class="mc-badge">5 levels</div>
             </div>
-            <div class="menu-card">
+            <div class="menu-card" onclick="openCategory('numbers')">
               <div class="mc-icon">123✨</div>
               <div class="mc-name">Numbers</div>
               <div class="mc-desc">find the number</div>
               <div class="mc-badge">5 levels</div>
             </div>
-            <div class="menu-card">
+            <div class="menu-card" onclick="openCategory('shapes')">
               <div class="mc-icon">🔴🔺⭐</div>
               <div class="mc-name">Shapes</div>
               <div class="mc-desc">circle, star, heart</div>
               <div class="mc-badge">5 levels</div>
             </div>
-            <div class="menu-card">
+            <div class="menu-card" onclick="openCategory('patterns')">
               <div class="mc-icon">🎨🔁</div>
               <div class="mc-name">Patterns</div>
               <div class="mc-desc">what comes next?</div>
               <div class="mc-badge">5 levels</div>
             </div>
           </div>
-
-          <!-- PROGRESS CHART - This will now be fully visible when scrolling -->
-          <div class="progress-chart" id="progressChart">
-            <div style="font-weight:900; font-size:1.1rem">📊 Safaan's journey</div>
-            <div style="margin:8px 0">⭐ 0 stars!</div>
-            <div class="progress-bar-cont">
-              <div class="progress-bar-fill" style="width:0%"></div>
-            </div>
-            <div class="progress-stats">
-              <span>🔢 0/5</span>
-              <span>123 0/5</span>
-              <span>🔴 0/5</span>
-              <span>🎨 0/5</span>
-            </div>
-          </div>
-          
-          <!-- Extra bottom padding to ensure scrolling works -->
-          <div style="height: 20px;"></div>
+          <div class="progress-chart" id="progressChart"></div>
         </div>
 
-        <!-- QUIZ SCREEN (Exercise) -->
+        <!-- LEVELS SCREEN -->
+        <div class="screen" id="levelsScreen">
+          <div class="levels-wrap">
+            <div class="levels-title" id="levelsTitle">pick a level, Safaan!</div>
+            <div class="levels-grid" id="levelsGrid"></div>
+            <div style="margin-top: clamp(15px, 4vh, 30px); text-align:center">
+              <button class="res-btn" style="background:#b39ddb; color:#2a1a3a;" onclick="showHome()">← home</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUIZ SCREEN -->
         <div class="screen" id="quizScreen">
           <div class="quiz-head">
             <div class="quiz-meta">
-              <span>Counting · Lv2</span>
-              <span>Q 1/5</span>
+              <span id="quizLabel">Counting · Lv1</span>
+              <span id="quizQNum">1/5</span>
             </div>
             <div class="quiz-score-row">
-              <div class="qs-item">
-                <div class="qs-label">⭐ stars</div>
-                <div class="qs-val">1</div>
-              </div>
-              <div class="qs-item">
-                <div class="qs-label">🤷 oops</div>
-                <div class="qs-val">0</div>
-              </div>
-              <div class="qs-item">
-                <div class="qs-label">👍🏼 acc</div>
-                <div class="qs-val">100%</div>
-              </div>
+              <div class="qs-item"><div class="qs-label">⭐ stars</div><div class="qs-val" id="qsCorrect">0</div></div>
+              <div class="qs-item"><div class="qs-label">🤷 oops</div><div class="qs-val" id="qsWrong">0</div></div>
+              <div class="qs-item"><div class="qs-label">👍🏼</div><div class="qs-val" id="qsAcc">0%</div></div>
             </div>
+            <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
           </div>
+          <div class="q-card" id="qCard"></div>
+          <div class="hint-box" id="hintBox"></div>
+          <div class="feedback" id="feedback"></div>
+        </div>
 
-          <div class="q-card">
-            <div class="q-type-badge">🔢 Counting</div>
-            <div class="q-text">How many 🐰 are there, Safaan?</div>
-            <div class="object-row">
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-              <span class="count-object">🐰</span>
-            </div>
-            <div class="big-answer-buttons">
-              <button class="answer-btn">2</button>
-              <button class="answer-btn">4</button>
-              <button class="answer-btn">3</button>
+        <!-- RESULT SCREEN -->
+        <div class="screen" id="resultScreen">
+          <div class="result-card">
+            <span class="result-emoji" id="resEmoji">🏆</span>
+            <div class="result-title" id="resTitle">good job, Safaan!</div>
+            <div class="result-stars" id="resStars">⭐⭐⭐</div>
+            <div class="result-msg" id="resMsg">you're a math superstar, Safaan! ⭐</div>
+            <div id="mistakeSection"></div>
+            <div class="res-btns">
+              <button class="res-btn" style="background:#b39ddb; color:#2a1a3a;" id="retryBtn">🔁 again</button>
+              <button class="res-btn" style="background:#ff69b4; color:white;" onclick="showHome()">🏠 home</button>
+              <button class="res-btn" style="background:#4caf50; color:white;" id="nextLvBtn" style="display:none">➡ next</button>
             </div>
           </div>
-          
-          <!-- Extra bottom padding for scrolling -->
-          <div style="height: 30px;"></div>
         </div>
       </div>
-    </div>
 
-    <!-- RIGHT PANE - Buttons -->
-    <div class="pane-right">
-      <button class="abtn abtn-home">
-        <span class="abtn-icon">🏠</span>
-        <span class="abtn-text">Home</span>
-      </button>
-      <button class="abtn abtn-hint">
-        <span class="abtn-icon">💡</span>
-        <span class="abtn-text">Hint</span>
-      </button>
-      <button class="abtn abtn-sound">
-        <span class="abtn-icon">🔊</span>
-        <span class="abtn-text">Question</span>
-      </button>
-      <button class="abtn abtn-retry">
-        <span class="abtn-icon">🔄</span>
-        <span class="abtn-text">Try Again</span>
-      </button>
-      <button class="abtn abtn-next">
-        <span class="abtn-icon">▶️</span>
-        <span class="abtn-text">Next</span>
-      </button>
+      <!-- RIGHT BUTTONS - Fixed position column -->
+      <div class="button-area">
+        <button class="action-btn home" id="B_home" onclick="goHome()">
+          <span class="action-icon">🏠</span>
+          <span class="action-text">Home</span>
+        </button>
+        <button class="action-btn hint" id="B_hint" onclick="showHint()">
+          <span class="action-icon">💡</span>
+          <span class="action-text">Hint</span>
+        </button>
+        <button class="action-btn sound" id="B_sound" onclick="speakQuestion()">
+          <span class="action-icon">🔊</span>
+          <span class="action-text">Question</span>
+        </button>
+        <button class="action-btn retry" id="B_retry" onclick="retryQuestion()">
+          <span class="action-icon">🔄</span>
+          <span class="action-text">Try Again</span>
+        </button>
+        <button class="action-btn next" id="B_next" onclick="nextQuestion()">
+          <span class="action-icon">▶️</span>
+          <span class="action-text">Next</span>
+        </button>
+      </div>
     </div>
   </div>
+
+  <script>
+    // ===== SAFAAAN'S PERSONALIZED MATH ADVENTURE =====
+    // All your original JavaScript remains exactly the same
+    function playSound(id) {
+      try { document.getElementById(id).cloneNode(true).play(); } catch(e){}
+    }
+
+    function speakText(text) {
+      if (!window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.8;
+        utterance.pitch = 1.2;
+        window.speechSynthesis.speak(utterance);
+      } catch(e) {}
+    }
+
+    function celebrateCorrect() {
+      playSound('soundCorrect');
+      const cheers = ["Great job, Safaan!", "You did it!", "Awesome!", "Superstar!", "Wonderful!"];
+      speakText(cheers[Math.floor(Math.random() * cheers.length)]);
+    }
+
+    function celebrateLevelComplete(stars) {
+      playSound('soundCelebrate');
+      if (stars === 3) speakText("Amazing, Safaan! Three stars!");
+      else if (stars === 2) speakText("Good job, Safaan! Two stars!");
+      else speakText("Great trying, Safaan!");
+    }
+
+    function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+    function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+    const CATS = {
+      counting:{label:"Counting",levels:5,icon:"🔢"},
+      numbers:{label:"Numbers",levels:5,icon:"123"},
+      shapes:{label:"Shapes",levels:5,icon:"🔴"},
+      patterns:{label:"Patterns",levels:5,icon:"🎨"}
+    };
+    
+    let progress = {};
+    try { progress = JSON.parse(localStorage.getItem("safaan_math_v1")) || {}; } catch(e) {}
+    let cat="", level=0, questions=[], qi=0, correct=0, wrong=0, mistakes=[];
+    let answered=false, hintCount=0;
+
+    function initProgress(){
+      Object.keys(CATS).forEach(c=>{
+        if(!progress[c])progress[c]={};
+        for(let l=1;l<=CATS[c].levels;l++){
+          if(!progress[c][l])progress[c][l]={done:false,stars:0};
+        }
+      });
+    }
+    initProgress();
+
+    function saveProgress(){
+      localStorage.setItem("safaan_math_v1", JSON.stringify(progress));
+      const b=new Blob([JSON.stringify(progress)],{type:"application/json"});
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(b);
+      a.download="safaan-math-save.json";
+      a.click();
+      document.getElementById("saveLbl").innerHTML="✅ saved! ⭐";
+      setTimeout(updateSaveLbl,2000);
+    }
+
+    function loadFile(e){
+      const f=e.target.files[0];if(!f)return;
+      const r=new FileReader();
+      r.onload=ev=>{
+        try{
+          progress=JSON.parse(ev.target.result);
+          initProgress();
+          updateSaveLbl();
+          speakText("Progress loaded, Safaan!");
+        } catch(e){ alert("try again, Safaan!"); }
+      };
+      r.readAsText(f);
+      e.target.value="";
+    }
+
+    function updateSaveLbl(){
+      let total=0;
+      Object.keys(CATS).forEach(c=>{
+        for(let l=1;l<=CATS[c].levels;l++){
+          total+=progress[c]?.[l]?.stars||0;
+        }
+      });
+      document.getElementById("saveLbl").innerHTML="⭐ "+total+" stars";
+      
+      let ch=document.getElementById("progressChart");
+      if(!ch)return;
+      
+      let completed=0,tot=0;
+      Object.keys(CATS).forEach(c=>{
+        for(let l=1;l<=CATS[c].levels;l++){
+          tot++;
+          if(progress[c]?.[l]?.done)completed++;
+        }
+      });
+      let pct=tot?Math.round((completed/tot)*100):0;
+      
+      ch.innerHTML=`<div style="font-weight:900; font-size:clamp(1rem,4vw,2.2rem);">📊 Safaan's journey</div>
+        <div style="margin:clamp(5px,1.5vh,15px) 0; font-size:clamp(0.9rem,3.5vw,2rem);">⭐ ${total} stars</div>
+        <div class="progress-bar-cont"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+        <div class="progress-stats">${
+          Object.keys(CATS).map(c=>`<span>${CATS[c].icon} ${Object.values(progress[c]||{}).filter(p=>p.done).length}/${CATS[c].levels}</span>`).join(' ')
+        }</div>`;
+    }
+
+    function showScreen(id){
+      document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+    
+    function showHome(){
+      updateSaveLbl();
+      showScreen("homeScreen");
+    }
+    
+    function goHome(){
+      if(confirm("Back home, Safaan?")) showHome();
+    }
+
+    function openCategory(c){
+      cat=c;
+      document.getElementById("levelsTitle").innerText=CATS[c].label+" — choose, Safaan!";
+      let grid=document.getElementById("levelsGrid");
+      grid.innerHTML="";
+      
+      for(let l=1;l<=CATS[c].levels;l++){
+        let p=progress[c][l];
+        let btn=document.createElement("button");
+        btn.className="lv-btn"+(p.done?" done":"");
+        const icons=['🌱','🌿','🍃','🌟','🏆'];
+        btn.innerHTML='<span class="lv-icon">'+icons[l-1]+'</span>Level '+l+(p.stars>0?'<span class="lv-score">⭐'+p.stars+'</span>':'');
+        btn.onclick=(ll=>()=>startLevel(ll))(l);
+        grid.appendChild(btn);
+      }
+      showScreen("levelsScreen");
+    }
+
+    function generateCountingQuestions(level){
+      const emojis=["🐶","🐱","🐭","🐰","🦊","🐻","⭐","🍎"];
+      const nums={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]};
+      let arr=nums[level]||[1,2,3];
+      let qs=[];
+      for(let i=0;i<5;i++){
+        let num=arr[Math.floor(Math.random()*arr.length)];
+        let em=emojis[Math.floor(Math.random()*emojis.length)];
+        qs.push({
+          type:'counting',
+          question:`How many ${em} , Safaan?`,
+          count:num,
+          emoji:em,
+          objects:Array(num).fill(em),
+          answer:num,
+          hint:`Count with your finger: 1, 2, 3...`
+        });
+      }
+      return qs;
+    }
+    
+    function generateNumberQuestions(level){
+      const nums={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]};
+      let arr=nums[level]||[1,2,3];
+      let qs=[];
+      for(let i=0;i<5;i++){
+        let num=arr[Math.floor(Math.random()*arr.length)];
+        let w1=num+1>7?num-1:num+1;
+        let w2=num+2>7?num-2:num+2;
+        qs.push({
+          type:'number',
+          question:`Which number is this, Safaan?`,
+          number:num,
+          options:shuffle([num,w1,w2]),
+          answer:num,
+          hint:`It's like a ${num}`
+        });
+      }
+      return qs;
+    }
+    
+    function generateShapeQuestions(level){
+      let shapes={
+        1:["circle","square"],
+        2:["circle","square","triangle"],
+        3:["circle","square","triangle","star"],
+        4:["circle","square","triangle","star","heart"],
+        5:["circle","square","triangle","star","heart","diamond"]
+      };
+      let list=shapes[level]||shapes[1];
+      let qs=[];
+      for(let i=0;i<5;i++){
+        let sh=list[Math.floor(Math.random()*list.length)];
+        let wrong=list.filter(s=>s!==sh).slice(0,2);
+        if(wrong.length<2)wrong.push("circle");
+        qs.push({
+          type:'shape',
+          question:`What shape is this, Safaan?`,
+          shape:sh,
+          display:sh=='circle'?'🔴':sh=='square'?'🟨':sh=='triangle'?'🔺':sh=='star'?'⭐':sh=='heart'?'❤️':'💎',
+          options:[sh,...wrong].slice(0,3),
+          answer:sh,
+          hint:`It's a ${sh}`
+        });
+      }
+      return qs;
+    }
+    
+    function generatePatternQuestions(level){
+      let pats={
+        1:[{p:["🔴","🔵"],n:"🔴"},{p:["🟡","🟢"],n:"🟡"}],
+        2:[{p:["🔴","🔴","🔵"],n:"🔵"}],
+        3:[{p:["🐶","🐱","🐶"],n:"🐱"}],
+        4:[{p:["🔴","🔵","🔴","🔵"],n:"🔴"}],
+        5:[{p:["⭐","⭐","🌙","⭐","⭐"],n:"🌙"}]
+      };
+      let arr=pats[level]||pats[1];
+      let qs=[];
+      for(let i=0;i<5;i++){
+        let p=arr[Math.floor(Math.random()*arr.length)];
+        let opts=[p.n,p.p[0],p.p[1]||p.p[0]];
+        qs.push({
+          type:'pattern',
+          question:`What comes next, Safaan?`,
+          pattern:p.p,
+          options:shuffle(opts),
+          answer:p.n,
+          hint:`Say the pattern out loud!`
+        });
+      }
+      return qs;
+    }
+
+    function startLevel(l){
+      level=l;
+      qi=0;
+      correct=0;
+      wrong=0;
+      mistakes=[];
+      answered=false;
+      hintCount=0;
+      
+      if(cat==='counting') questions=generateCountingQuestions(level);
+      else if(cat==='numbers') questions=generateNumberQuestions(level);
+      else if(cat==='shapes') questions=generateShapeQuestions(level);
+      else questions=generatePatternQuestions(level);
+      
+      document.getElementById("quizLabel").innerText=CATS[cat].label+" • Lv"+l;
+      showScreen("quizScreen");
+      loadQuestion();
+    }
+
+    function loadQuestion(){
+      answered=false;
+      let q=questions[qi];
+      
+      document.getElementById("quizQNum").innerText="Game "+(qi+1)+"/5";
+      document.getElementById("qsCorrect").innerText=correct;
+      document.getElementById("qsWrong").innerText=wrong;
+      let acc= (correct+wrong)>0 ? Math.round((correct/(correct+wrong))*100) : 0;
+      document.getElementById("qsAcc").innerText=acc+"%";
+      document.getElementById("progFill").style.width=((qi)/5*100)+"%";
+      document.getElementById("feedback").className="feedback";
+      document.getElementById("hintBox").className="hint-box";
+      
+      renderQuestion(q);
+    }
+
+    function renderQuestion(q){
+      let card=document.getElementById("qCard");
+      let html=`<div class="q-type-badge">${CATS[cat].icon} ${CATS[cat].label}</div><div class="q-text">${q.question}</div>`;
+      
+      if(cat==='counting'){
+        html+=`<div class="object-row">${q.objects.map(o=>`<span class="count-object">${o}</span>`).join('')}</div><div class="big-answer-buttons">`;
+        let answers=[q.answer,q.answer+1,q.answer-1].filter(n=>n>0&&n<8);
+        answers=[...new Set(answers)];
+        shuffle(answers);
+        answers.forEach(n=>{html+=`<button class="answer-btn" onclick="selectNumber(${n},${q.answer})">${n}</button>`;});
+        html+=`</div>`;
+      }else if(cat==='numbers'){
+        html+=`<div class="big-number">${q.number}</div><div class="big-answer-buttons">`;
+        q.options.forEach(n=>{html+=`<button class="answer-btn" onclick="selectNumber(${n},${q.answer})">${n}</button>`;});
+        html+=`</div>`;
+      }else if(cat==='shapes'){
+        html+=`<div style="text-align:center; font-size:clamp(2rem,10vw,6rem); margin:15px 0">${q.display}</div>`;
+        html+=`<div class="options two-col">`;
+        q.options.forEach((opt,i)=>{html+=`<button class="opt-btn" onclick="selectOption(${i},'${opt}','${q.answer}')">${opt}</button>`;});
+        html+=`</div>`;
+      }else{
+        html+=`<div class="pattern-row">${q.pattern.map(p=>`<span>${p}</span>`).join('')}<span>❓</span></div>`;
+        html+=`<div class="options two-col">`;
+        q.options.forEach((opt,i)=>{html+=`<button class="opt-btn" onclick="selectOption(${i},'${opt}','${q.answer}')">${opt}</button>`;});
+        html+=`</div>`;
+      }
+      card.innerHTML=html;
+    }
+
+    function selectNumber(num,correctAns){
+      if(answered)return;
+      answered=true;
+      
+      if(num===correctAns){ 
+        correct++; 
+        celebrateCorrect();
+        document.querySelectorAll('.answer-btn').forEach(b=>{
+          if(parseInt(b.textContent)===num)b.classList.add('correct');
+        }); 
+      } else { 
+        wrong++; 
+        mistakes.push({q:`Count to ${correctAns}`,exp:`Let's count together, Safaan!`}); 
+        playSound('soundWrong');
+        document.querySelectorAll('.answer-btn').forEach(b=>{
+          if(parseInt(b.textContent)===num)b.classList.add('wrong');
+          if(parseInt(b.textContent)===correctAns)b.classList.add('correct');
+        });
+      }
+      updateScoreAndFeedback(num===correctAns);
+    }
+
+    function selectOption(idx,opt,correctAns){
+      if(answered)return;
+      answered=true;
+      
+      if(opt===correctAns){
+        correct++;
+        celebrateCorrect();
+        document.querySelectorAll('.opt-btn')[idx].classList.add('correct');
+      } else {
+        wrong++;
+        mistakes.push({q:`Find the ${correctAns}`,exp:`Good try, Safaan!`});
+        playSound('soundWrong');
+        document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
+        document.querySelectorAll('.opt-btn').forEach((b,i)=>{
+          if(b.textContent===correctAns)b.classList.add('correct');
+        });
+      }
+      updateScoreAndFeedback(opt===correctAns);
+    }
+
+    function updateScoreAndFeedback(isCorrect){
+      document.getElementById("qsCorrect").innerText=correct;
+      document.getElementById("qsWrong").innerText=wrong;
+      let acc= (correct+wrong)>0 ? Math.round((correct/(correct+wrong))*100) : 0;
+      document.getElementById("qsAcc").innerText=acc+"%";
+      
+      let fb=document.getElementById("feedback");
+      fb.innerHTML=isCorrect ? "✅ Great job, Safaan!" : "💙 Try again, Safaan!";
+      fb.className="feedback show "+(isCorrect?"ok":"bad");
+    }
+
+    function speakQuestion(){
+      let q=questions[qi];
+      if(q) speakText(q.question + (q.hint ? " Hint: " + q.hint : ""));
+    }
+
+    function showHint(){
+      let q=questions[qi];
+      hintCount++;
+      document.getElementById("hintBox").innerHTML="💡 "+ (q.hint||"Count slowly, Safaan!");
+      document.getElementById("hintBox").className="hint-box show";
+      document.getElementById("B_hint").disabled=true;
+      speakText(q.hint);
+    }
+
+    function retryQuestion(){
+      if(answered) return;
+      document.getElementById("feedback").innerHTML="Try again, Safaan! You can do it!";
+      document.getElementById("feedback").className="feedback show bad";
+    }
+
+    function nextQuestion(){
+      qi++;
+      if(qi>=5) showResult();
+      else loadQuestion();
+    }
+
+    function showResult(){
+      let stars=Math.min(3,Math.ceil(correct/2));
+      progress[cat][level].done=true;
+      progress[cat][level].stars=Math.max(progress[cat][level].stars||0,stars);
+      localStorage.setItem("safaan_math_v1",JSON.stringify(progress));
+      updateSaveLbl();
+      celebrateLevelComplete(stars);
+      
+      document.getElementById("resEmoji").innerText=stars===3?"🏆":stars===2?"🌟":"⭐";
+      document.getElementById("resTitle").innerText=stars===3?"SUPERSTAR, SAFAAAN!":stars===2?"Great job, Safaan!":"Good try, Safaan!";
+      document.getElementById("resStars").innerHTML="⭐".repeat(stars);
+      document.getElementById("resMsg").innerHTML=stars===3?"You got all stars, Safaan! Amazing!" 
+        : stars===2?"Awesome, Safaan! Want 3 stars?" 
+        : "Good trying, Safaan! Every star counts!";
+      
+      document.getElementById("mistakeSection").innerHTML=mistakes.length
+        ? '<div class="mistake-item">Keep practicing, Safaan! 🌟</div>'
+        : '<div class="mistake-item">Perfect, Safaan! No mistakes! 🌟🌟🌟</div>';
+      
+      document.getElementById("retryBtn").onclick=()=>startLevel(level);
+      let nb=document.getElementById("nextLvBtn");
+      if(level<CATS[cat].levels){
+        nb.style.display="inline-block";
+        nb.onclick=()=>startLevel(level+1);
+      }
+      else nb.style.display="none";
+      
+      showScreen("resultScreen");
+    }
+
+    // Initialize
+    updateSaveLbl();
+    
+    // Audio elements
+    const audioHTML = `
+      <audio id="soundCorrect" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
+      <audio id="soundWrong" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
+      <audio id="soundCelebrate" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
+    `;
+    document.body.insertAdjacentHTML('beforeend', audioHTML);
+  </script>
 </body>
 </html>

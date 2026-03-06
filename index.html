@@ -1,241 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Little Math Adventures - Pre-K (Ages 3-5)</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', Arial, sans-serif;background:linear-gradient(135deg,#FFB6C1 0%,,#87CEEB 50%,,#FFD700 100%);min-height:100vh;padding:16px}
-.wrap{max-width:720px;margin:0 auto}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.2, maximum-scale=2.0, user-scalable=yes">
+  <title>🌟 Puffy math · Pre-K tablet fun</title>
+  <style>
+    /* —————————————————— DARK & DREAMY —————————————————— */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none; /* prevent accidental highlighting while tapping */
+      -webkit-tap-highlight-color: transparent; /* remove grey flash on tap */
+    }
 
-/* Top Bar - Super Simple */
-.topbar{background:rgba(255,255,255,0.3);backdrop-filter:blur(10px);border:3px solid white;border-radius:30px;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;position:sticky;top:8px;z-index:100}
-.topbar-title{font-size:1.3rem;font-weight:900;color:#fff;text-shadow:2px 2px 0 #FF69B4}
-.topbar-btns{display:flex;gap:8px}
-.tb-btn{padding:8px 16px;border:none;border-radius:30px;font-weight:800;font-size:0.9rem;cursor:pointer;transition:transform 0.1s;border:2px solid white}
-.tb-btn:hover{transform:scale(1.1)}
-.tb-save{background:#FFD700;color:#8B4513}
-.tb-load{background:#98FB98;color:#006400}
-.tb-lbl{font-size:0.8rem;color:#fff;background:rgba(0,0,0,0.2);padding:4px 12px;border-radius:20px}
+    body {
+      background: #140b1c;  /* deep night */
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
 
-/* Screens */
-.screen{display:none}
-.screen.active{display:block}
+    .wrap {
+      max-width: 1000px;    /* wide enough for tablet landscape */
+      width: 100%;
+      margin: 0 auto;
+      background: #20152b;
+      border-radius: 70px 70px 50px 50px;
+      padding: 24px 20px;
+      box-shadow: 0 20px 0 #3d254a, 0 30px 40px rgba(0,0,0,0.8), 0 0 0 6px #feaccc, 0 0 0 12px #583c5a;
+      border: 3px solid #ffd966;
+    }
 
-/* Home Screen - Big & Colorful */
-.home-hero{text-align:center;padding:10px 0 14px}
-.home-hero h1{font-size:2.5rem;font-weight:900;color:#fff;text-shadow:3px 3px 0 #FF1493, 5px 5px 0 #FFD700;margin-bottom:5px}
-.home-hero p{color:white;font-size:1.2rem;background:rgba(0,0,0,0.1);padding:8px 20px;border-radius:30px;display:inline-block}
+    /* all screens */
+    .screen { display: none; }
+    .screen.active { display: block; }
 
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-top:14px}
-.menu-card{background:white;border-radius:30px;padding:22px 16px;text-align:center;cursor:pointer;box-shadow:0 8px 0 rgba(0,0,0,0.1),0 12px 24px rgba(0,0,0,0.2);transition:all 0.1s;border:4px solid transparent}
-.menu-card:hover{transform:translateY(-5px);box-shadow:0 13px 0 rgba(0,0,0,0.1),0 17px 24px rgba(0,0,0,0.2)}
-.menu-card.counting{border-color:#FF6B6B}
-.menu-card.numbers{border-color:#4ECDC4}
-.menu-card.shapes{border-color:#FFD93D}
-.menu-card.patterns{border-color:#96CEB4}
-.mc-icon{font-size:3rem;margin-bottom:10px}
-.mc-name{font-weight:900;font-size:1.3rem;color:#2D3561;margin-bottom:6px}
-.mc-desc{font-size:0.9rem;color:#666;line-height:1.4}
-.mc-badge{display:inline-block;margin-top:10px;background:#FF69B4;color:#fff;border-radius:30px;padding:5px 15px;font-size:0.9rem;font-weight:800}
+    /* ========== BIG, CHUNKY, TAP-FRIENDLY EVERYTHING ========== */
+    button, .menu-card, .lv-btn, .answer-btn, .opt-btn, .tb-btn, .btn {
+      min-height: 70px;            /* fat tap zone */
+      touch-action: manipulation;
+      cursor: pointer;
+      font-weight: 900;
+      transition: all 0.1s ease;
+      border: 4px solid white;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.3), 0 12px 20px rgba(255,215,0,0.2);
+    }
 
-/* Progress Chart - Kid Friendly */
-.progress-chart{background:rgba(255,255,255,0.9);border-radius:30px;padding:15px;margin-top:15px;text-align:left;border:4px solid white}
-.progress-chart h3{color:#FF1493;font-size:1.2rem;margin-bottom:10px}
-.progress-bar-cont{background:#e0e0e0;border-radius:20px;height:25px;margin:8px 0;border:2px solid white}
-.progress-bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#FFD700,#FF69B4);width:0%}
-.progress-stats{display:flex;justify-content:space-around;margin-top:8px;font-size:1rem;color:#2D3561;font-weight:800}
-.progress-stats span{background:white;padding:5px 10px;border-radius:20px;box-shadow:0 2px 0 #ccc}
+    button:active, .menu-card:active, .lv-btn:active, .answer-btn:active, .opt-btn:active {
+      transform: translateY(6px);   /* physical press */
+      box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+    }
 
-/* Levels Screen */
-.levels-wrap{background:rgba(255,255,255,0.95);border-radius:40px;padding:20px;box-shadow:0 8px 0 rgba(0,0,0,0.1);margin-top:12px;border:4px solid white}
-.levels-title{font-size:1.8rem;font-weight:900;color:#FF1493;margin-bottom:16px;text-align:center;text-shadow:2px 2px 0 #FFD700}
-.levels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
-.lv-btn{background:linear-gradient(135deg,#87CEEB,#4169E1);color:#fff;border:none;border-radius:30px;padding:15px 5px;cursor:pointer;text-align:center;font-weight:800;font-size:1rem;transition:all 0.1s;position:relative;border:3px solid white;box-shadow:0 5px 0 #0000AA}
-.lv-btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 #0000AA}
-.lv-btn.done{background:linear-gradient(135deg,#FFD700,#FFA500);box-shadow:0 5px 0 #B8860B}
-.lv-icon{font-size:2rem;display:block;margin-bottom:4px}
-.lv-score{font-size:0.8rem;background:rgba(255,255,255,0.3);border-radius:20px;padding:2px 5px;margin-top:3px}
+    /* special for buttons that should feel extra soft */
+    .btn, .tb-btn {
+      border-radius: 50px !important;
+      font-size: 1.6rem !important;   /* bigger text */
+      padding: 18px 28px !important;
+    }
 
-/* Quiz Screen - Extra Cute */
-.quiz-head{background:white;border-radius:40px;padding:14px 16px;margin-bottom:12px;box-shadow:0 5px 0 #FFB6C1;border:3px solid #FF69B4}
-.quiz-meta{display:flex;justify-content:space-between;font-size:1rem;color:#FF1493;font-weight:800;margin-bottom:8px}
-.quiz-score-row{display:flex;gap:14px;background:#FFF0F5;border-radius:30px;padding:10px}
-.qs-item{text-align:center;flex:1}
-.qs-label{font-size:0.8rem;color:#FF69B4}
-.qs-val{font-size:2rem;font-weight:900;color:#2D3561}
-.prog-bar{background:#e0e0e0;border-radius:20px;height:15px;margin-top:8px;border:2px solid white}
-.prog-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#FFD700,#FF69B4);transition:width 0.4s}
+    /* TOP BAR — still compact but buttons giant */
+    .topbar {
+      background: #2e1a33;
+      border: 4px solid #ffacc7;
+      border-radius: 60px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 0 #752d75, 0 12px 25px gold;
+    }
 
-/* Question Card - Super Friendly */
-.q-card{background:white;border-radius:40px;padding:22px;box-shadow:0 8px 0 #FFB6C1;margin-bottom:12px;border:4px solid #FF69B4;position:relative}
-.q-type-badge{display:inline-block;background:#FF69B4;color:#fff;border-radius:30px;padding:5px 15px;font-size:1rem;font-weight:800;margin-bottom:15px;border:2px solid white}
+    .topbar-title {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #fff8dd;
+      text-shadow: 3px 3px 0 #ff44a0, 5px 5px 0 #ffaa33;
+      letter-spacing: 2px;
+    }
 
-.q-text{font-size:1.5rem;font-weight:800;color:#2D3561;line-height:1.4;margin-bottom:20px;text-align:center}
+    .topbar-btns {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
 
-/* Number Display */
-.big-number{font-size:5rem;font-weight:900;color:#FF1493;text-align:center;margin:15px 0;text-shadow:3px 3px 0 #FFD700}
-.number-row{display:flex;justify-content:center;align-items:center;gap:20px;margin:20px 0}
-.number-box{width:80px;height:80px;background:#87CEEB;border-radius:30px;display:flex;align-items:center;justify-content:center;font-size:3rem;font-weight:900;color:white;border:4px solid white;box-shadow:0 5px 0 #4169E1}
-.plus-sign{font-size:3rem;font-weight:900;color:#FF69B4;text-shadow:2px 2px 0 #FFD700}
-.equals{font-size:3rem;font-weight:900;color:#FF69B4;text-shadow:2px 2px 0 #FFD700}
+    .tb-btn {
+      background: #fed954;
+      color: #3d0b3d;
+      border: 4px solid white !important;
+      font-size: 1.6rem;
+      padding: 18px 32px !important;
+      box-shadow: 0 8px 0 #b1741e;
+    }
 
-/* Counting Objects */
-.object-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:20px 0}
-.count-object{font-size:2.5rem;transition:all 0.2s;cursor:pointer}
-.count-object:hover{transform:scale(1.2)}
-.object-label{font-size:1.5rem;color:#2D3561;margin:0 10px}
+    .tb-lbl {
+      font-size: 1.6rem;
+      background: #5a2e6b;
+      padding: 14px 28px;
+      border-radius: 50px;
+      color: #ffd966;
+      border: 3px solid #ffb3b3;
+      font-weight: 900;
+    }
 
-/* Shape Display */
-.shape-display{display:flex;justify-content:center;gap:20px;margin:20px 0}
-.circle{width:80px;height:80px;background:#FF6B6B;border-radius:50%;border:4px solid white;box-shadow:0 5px 0 #8B0000}
-.square{width:80px;height:80px;background:#4ECDC4;border:4px solid white;box-shadow:0 5px 0 #2E8B57}
-.triangle{width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:80px solid #FFD93D;filter:drop-shadow(0 5px 0 #B8860B)}
-.star{font-size:4rem;color:#FFD700;text-shadow:0 5px 0 #B8860B}
+    /* HOME hero */
+    .home-hero h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      color: #fff3c9;
+      text-shadow: 4px 4px 0 #f6378b, 7px 7px 0 #ffb347;
+    }
+    .home-hero p {
+      font-size: 2rem;
+      background: rgba(255, 165, 200, 0.4);
+      padding: 16px 32px;
+      border-radius: 70px;
+      display: inline-block;
+      color: white;
+    }
 
-/* Pattern Display */
-.pattern-row{display:flex;justify-content:center;gap:15px;margin:20px 0}
-.pattern-item{font-size:2.5rem;transition:all 0.2s}
-.pattern-item.missing{opacity:0.5;border:3px dashed #FF69B4;border-radius:20px;padding:5px}
+    /* MENU CARDS — massive tap targets */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin: 30px 0;
+    }
 
-/* Big Answer Button */
-.big-answer-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin:20px 0}
-.answer-btn{width:90px;height:90px;border:none;border-radius:30px;background:#87CEEB;color:#fff;font-size:2.5rem;font-weight:900;cursor:pointer;border:4px solid white;box-shadow:0 5px 0 #4169E1;transition:all 0.1s}
-.answer-btn:hover{transform:scale(1.1);background:#98FB98;box-shadow:0 5px 0 #2E8B57}
-.answer-btn:active{transform:translateY(5px);box-shadow:0 0 0 #4169E1}
-.answer-btn.correct{background:#98FB98;box-shadow:0 5px 0 #2E8B57}
-.answer-btn.wrong{background:#FFB6C1;box-shadow:0 5px 0 #8B0000}
+    .menu-card {
+      background: #fef9e8;
+      border-radius: 60px;
+      padding: 40px 16px 30px;
+      text-align: center;
+      border: 6px solid white;
+      box-shadow: 0 14px 0 #b36582, 0 20px 30px black;
+    }
 
-/* Touch-friendly Options */
-.options{display:grid;gap:12px;margin-top:10px}
-.options.two-col{grid-template-columns:1fr 1fr}
-.opt-btn{background:#87CEEB;border:none;border-radius:30px;padding:18px 16px;font-size:1.5rem;font-weight:800;color:#fff;cursor:pointer;text-align:center;border:4px solid white;box-shadow:0 5px 0 #4169E1;transition:all 0.1s}
-.opt-btn:hover{transform:scale(1.05);background:#98FB98;box-shadow:0 5px 0 #2E8B57}
-.opt-btn:active{transform:translateY(5px);box-shadow:0 0 0 #4169E1}
-.opt-btn.correct{background:#98FB98;box-shadow:0 5px 0 #2E8B57}
-.opt-btn.wrong{background:#FFB6C1;box-shadow:0 5px 0 #8B0000}
+    .menu-card .mc-icon {
+      font-size: 6rem;
+      line-height: 1.2;
+    }
+    .mc-name {
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: #230c3b;
+      margin: 8px 0;
+    }
+    .mc-desc {
+      font-size: 1.5rem;
+      color: #303030;
+    }
+    .mc-badge {
+      font-size: 1.8rem;
+      background: #ff66aa;
+      padding: 12px 25px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-top: 16px;
+      border: 3px solid white;
+    }
 
-/* Feedback */
-.feedback{border-radius:30px;padding:20px;font-weight:800;font-size:1.5rem;margin:10px 0;display:none;text-align:center;border:4px solid white}
-.feedback.show{display:block}
-.feedback.ok{background:#98FB98;color:#006400}
-.feedback.bad{background:#FFB6C1;color:#8B0000}
+    /* progress chart */
+    .progress-chart {
+      background: #fbeff1;
+      border-radius: 50px;
+      padding: 25px;
+      border: 5px solid white;
+      font-size: 1.8rem;
+    }
+    .progress-bar-cont {
+      height: 40px;
+      background: #c0c0c0;
+      border-radius: 30px;
+      border: 3px solid white;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ffb703, #fb6f92);
+      border-radius: 30px;
+    }
+    .progress-stats span {
+      font-size: 1.6rem;
+      background: white;
+      padding: 8px 16px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 5px;
+    }
 
-.explanation{background:#FFF9C4;border-radius:30px;padding:15px;font-size:1.1rem;color:#8B4513;font-weight:700;margin:8px 0;display:none;border:3px dashed #FFD700}
-.explanation.show{display:block}
+    /* LEVELS screen */
+    .levels-wrap {
+      background: #edd9ff;
+      border-radius: 70px;
+      padding: 30px 20px;
+      border: 6px solid white;
+    }
+    .levels-title {
+      font-size: 3rem;
+      color: #a13072;
+      text-shadow: 2px 2px 0 #ffd966;
+      margin-bottom: 25px;
+    }
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px;
+    }
+    .lv-btn {
+      background: #5286d9;
+      border: 5px solid white;
+      border-radius: 60px;
+      padding: 25px 8px;
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: white;
+      box-shadow: 0 12px 0 #1f4f9e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .lv-icon { font-size: 4rem; }
+    .lv-score { font-size: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 40px; padding: 8px 16px; margin-top: 8px; }
 
-.hint-box{background:#E6E6FA;border-radius:30px;padding:15px;font-size:1.2rem;color:#4B0082;font-weight:700;margin:8px 0;display:none;border:3px solid #FFD700}
-.hint-box.show{display:block}
+    /* QUIZ screen — huge everything */
+    .quiz-head {
+      background: #ffe8f0;
+      border-radius: 60px;
+      padding: 25px;
+      border: 5px solid #ff80b5;
+      margin-bottom: 25px;
+    }
+    .quiz-meta {
+      font-size: 2rem;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 900;
+      color: #ad2070;
+    }
+    .quiz-score-row {
+      display: flex;
+      gap: 25px;
+      background: #fff0fa;
+      border-radius: 70px;
+      padding: 18px;
+      margin: 16px 0;
+    }
+    .qs-item .qs-label { font-size: 1.4rem; }
+    .qs-item .qs-val { font-size: 3.5rem; font-weight: 900; }
+    .prog-bar { height: 30px; background: #bbb; border-radius: 30px; border: 3px solid white; }
+    .prog-fill { background: #fbbb2d; height: 100%; border-radius: 30px; }
 
-/* Buttons - Big & Chunky */
-.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.btn{padding:15px 20px;border:none;border-radius:40px;font-weight:900;font-size:1.2rem;cursor:pointer;transition:all 0.1s;border:4px solid white;box-shadow:0 5px 0 rgba(0,0,0,0.2)}
-.btn:hover{transform:translateY(-3px);box-shadow:0 8px 0 rgba(0,0,0,0.2)}
-.btn:active{transform:translateY(5px);box-shadow:0 0 0 rgba(0,0,0,0.2)}
-.btn-check{background:#FF69B4;color:#fff;flex:1;box-shadow:0 5px 0 #8B008B}
-.btn-next{background:#4ECDC4;color:#fff;flex:1;display:none;box-shadow:0 5px 0 #2E8B57}
-.btn-hint{background:#FFD700;color:#8B4513;box-shadow:0 5px 0 #B8860B}
-.btn-back{background:#D3D3D3;color:#555;box-shadow:0 5px 0 #808080}
+    /* Question card  */
+    .q-card {
+      background: #ffffffd9;
+      border-radius: 70px;
+      padding: 30px 20px;
+      border: 6px solid #ff98b9;
+      box-shadow: 0 16px 0 #a04b6d;
+      margin-bottom: 30px;
+    }
+    .q-type-badge {
+      font-size: 2rem;
+      background: #ff45a4;
+      padding: 15px 30px;
+      border-radius: 70px;
+      display: inline-block;
+      border: 4px solid white;
+    }
+    .q-text {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #212121;
+      margin: 30px 0 20px;
+    }
 
-/* Result Screen - Celebration! */
-.result-card{background:white;border-radius:50px;padding:28px;text-align:center;box-shadow:0 8px 0 #FFB6C1;margin-top:12px;border:5px solid #FF69B4}
-.result-emoji{font-size:5rem;margin-bottom:10px}
-.result-title{font-size:2.5rem;font-weight:900;color:#FF1493;margin-bottom:8px;text-shadow:2px 2px 0 #FFD700}
-.result-pct{font-size:3rem;font-weight:900;margin:8px 0;color:#4ECDC4}
-.result-stars{font-size:3rem;margin:8px 0;color:#FFD700}
-.result-msg{background:#FFF0F5;border-radius:30px;padding:15px;font-size:1.2rem;color:#2D3561;font-weight:700;margin:12px 0}
-.mistake-section{text-align:left;margin:12px 0;background:#FFF9E6;border-radius:30px;padding:15px}
-.mistake-title{font-weight:900;color:#FF69B4;margin-bottom:8px;font-size:1.2rem}
-.mistake-item{background:white;border-radius:20px;padding:10px;margin-bottom:8px;font-size:1rem;border:2px solid #FFB6C1}
+    /* big number display */
+    .big-number {
+      font-size: 10rem;
+      line-height: 1.2;
+      color: #bd2f7a;
+      text-shadow: 6px 6px 0 #ffcc66;
+    }
 
-/* Celebration Animation */
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-}
-.bounce { animation: bounce 1s infinite; }
+    /* answer buttons — absolutely huge */
+    .big-answer-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      margin: 30px 0 15px;
+    }
+    .answer-btn {
+      width: 150px;
+      height: 150px;
+      border-radius: 70px;
+      background: #5fa7f0;
+      border: 8px solid white;
+      font-size: 5rem;
+      font-weight: 900;
+      color: white;
+      box-shadow: 0 15px 0 #284a7a;
+      transition: 0.07s;
+    }
+    .answer-btn:active { transform: translateY(15px); box-shadow: 0 0px 0 #284a7a; }
 
-@media(max-width:480px){
-  .two-col{grid-template-columns:1fr}
-  .home-hero h1{font-size:1.8rem}
-  .menu-grid{grid-template-columns:repeat(2,1fr)}
-  .big-number{font-size:3rem}
-  .number-box{width:60px;height:60px;font-size:2rem}
-}
-</style>
+    .options.two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin: 25px 0;
+    }
+    .opt-btn {
+      padding: 35px 15px;
+      font-size: 2.8rem;
+      border-radius: 70px;
+      background: #6fc2d6;
+      border: 6px solid white;
+      box-shadow: 0 14px 0 #218294;
+      color: white;
+      text-transform: capitalize;
+    }
+
+    /* objects for counting */
+    .object-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+    }
+    .count-object { font-size: 5rem; filter: drop-shadow(4px 8px 0 rgba(0,0,0,0.3)); }
+
+    /* shapes extra fat */
+    .shape-display div {
+      border-width: 8px !important;
+    }
+    .circle, .square { width: 130px; height: 130px; }
+    .triangle {
+      border-left: 65px solid transparent;
+      border-right: 65px solid transparent;
+      border-bottom: 130px solid #ffd966;
+    }
+    .star { font-size: 8rem; }
+
+    /* feedback & hint */
+    .feedback {
+      font-size: 2.5rem;
+      padding: 30px;
+      border-radius: 80px;
+    }
+    .hint-box {
+      font-size: 2.2rem;
+      padding: 25px;
+      background: #ffe68f;
+      border: 6px solid #fbaF00;
+    }
+    .explanation { font-size: 2rem; }
+
+    /* btn row */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 25px 0 10px;
+    }
+    .btn {
+      flex: 1 1 200px;
+      padding: 25px 20px !important;
+      font-size: 2.2rem !important;
+      border-radius: 70px;
+      border: 5px solid white;
+    }
+    .btn-check { background: #ff80b0; }
+    .btn-next { background: #73d0b4; }
+    .btn-hint { background: #fedb69; color: #341d1d; }
+    .btn-back { background: #cdc7e5; color: #281c36; }
+
+    /* result screen celebration */
+    .result-card {
+      background: #fff5d9;
+      border-radius: 80px;
+      padding: 40px 20px;
+      border: 8px solid #ffb27a;
+    }
+    .result-emoji { font-size: 10rem; }
+    .result-title { font-size: 4.5rem; text-shadow: 3px 3px 0 #ffb347; }
+    .result-pct, .result-stars { font-size: 5rem; }
+
+    @media (max-width: 700px) {
+      .btn { font-size: 2rem; padding: 22px; }
+      .answer-btn { width: 130px; height: 130px; font-size: 4.5rem; }
+      .menu-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
 <div class="wrap">
 
-<!-- Top Bar - Super Simple -->
+<!-- TOP BAR (big buttons) -->
 <div class="topbar">
-  <div class="topbar-title">🧸 Little Math</div>
+  <div class="topbar-title">🧸🌟 Math snug</div>
   <div class="topbar-btns">
-    <button class="tb-btn tb-save" onclick="saveProgress()">💾 Save</button>
-    <button class="tb-btn tb-load" onclick="loadProgress()">📂 Load</button>
+    <button class="tb-btn" onclick="saveProgress()">💾 save</button>
+    <button class="tb-btn" onclick="document.getElementById('loadFile').click()">📂 load</button>
     <input type="file" id="loadFile" accept=".json" style="display:none" onchange="loadFile(event)">
   </div>
   <div class="tb-lbl" id="saveLbl">⭐ 0 stars</div>
 </div>
 
-<!-- HOME SCREEN - Super Friendly -->
+<!-- HOME (big cards) -->
 <div class="screen active" id="homeScreen">
   <div class="home-hero">
-    <h1>🧸 Little Math</h1>
-    <p>Let's learn and play! ⭐</p>
+    <h1>🐼 Little math</h1>
+    <p>tap any big button!</p>
   </div>
   <div class="menu-grid">
-    <div class="menu-card counting" onclick="openCategory('counting')">
-      <div class="mc-icon">🔢</div>
+    <div class="menu-card" onclick="openCategory('counting')">
+      <div class="mc-icon">🔢🐶</div>
       <div class="mc-name">Counting</div>
-      <div class="mc-desc">Count apples, stars, and more!</div>
-      <div class="mc-badge">5 Levels</div>
+      <div class="mc-desc">count cute things</div>
+      <div class="mc-badge">5 levels</div>
     </div>
-    <div class="menu-card numbers" onclick="openCategory('numbers')">
-      <div class="mc-icon">123</div>
+    <div class="menu-card" onclick="openCategory('numbers')">
+      <div class="mc-icon">123✨</div>
       <div class="mc-name">Numbers</div>
-      <div class="mc-desc">Learn numbers 1-10</div>
-      <div class="mc-badge">5 Levels</div>
+      <div class="mc-desc">spot the number</div>
+      <div class="mc-badge">5 levels</div>
     </div>
-    <div class="menu-card shapes" onclick="openCategory('shapes')">
-      <div class="mc-icon">🔴</div>
+    <div class="menu-card" onclick="openCategory('shapes')">
+      <div class="mc-icon">🔴🔺⭐</div>
       <div class="mc-name">Shapes</div>
-      <div class="mc-desc">Circle, square, triangle, star!</div>
-      <div class="mc-badge">5 Levels</div>
+      <div class="mc-desc">circle, star, heart</div>
+      <div class="mc-badge">5 levels</div>
     </div>
-    <div class="menu-card patterns" onclick="openCategory('patterns')">
-      <div class="mc-icon">🎨</div>
+    <div class="menu-card" onclick="openCategory('patterns')">
+      <div class="mc-icon">🎨🔁</div>
       <div class="mc-name">Patterns</div>
-      <div class="mc-desc">What comes next?</div>
-      <div class="mc-badge">5 Levels</div>
+      <div class="mc-desc">what comes next?</div>
+      <div class="mc-badge">5 levels</div>
     </div>
   </div>
   <div class="progress-chart" id="progressChart"></div>
 </div>
 
-<!-- LEVELS SCREEN -->
+<!-- LEVELS -->
 <div class="screen" id="levelsScreen">
   <div class="levels-wrap">
-    <div class="levels-title" id="levelsTitle">Choose a Level</div>
+    <div class="levels-title" id="levelsTitle">pick a level</div>
     <div class="levels-grid" id="levelsGrid"></div>
-    <div style="margin-top:14px;text-align:center">
-      <button class="btn btn-back" onclick="showHome()">← Back</button>
+    <div style="margin-top:30px; text-align:center">
+      <button class="btn btn-back" onclick="showHome()">← home</button>
     </div>
   </div>
 </div>
 
-<!-- QUIZ SCREEN -->
+<!-- QUIZ -->
 <div class="screen" id="quizScreen">
   <div class="quiz-head">
     <div class="quiz-meta">
-      <span id="quizLabel">Counting • Level 1</span>
-      <span id="quizQNum">Game 1 / 5</span>
+      <span id="quizLabel">Counting · Lv1</span>
+      <span id="quizQNum">1/5</span>
     </div>
     <div class="quiz-score-row">
-      <div class="qs-item"><div class="qs-label">Stars</div><div class="qs-val" id="qsCorrect">0</div></div>
-      <div class="qs-item"><div class="qs-label">Oops</div><div class="qs-val" id="qsWrong">0</div></div>
-      <div class="qs-item"><div class="qs-label">Good!</div><div class="qs-val" id="qsAcc">⭐</div></div>
+      <div class="qs-item"><div class="qs-label">⭐ stars</div><div class="qs-val" id="qsCorrect">0</div></div>
+      <div class="qs-item"><div class="qs-label">🤷 oops</div><div class="qs-val" id="qsWrong">0</div></div>
+      <div class="qs-item"><div class="qs-label">👍🏼</div><div class="qs-val" id="qsAcc">⭐</div></div>
     </div>
     <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
@@ -244,588 +480,200 @@ body{font-family:'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', Arial, sans-serif
   <div class="feedback" id="feedback"></div>
   <div class="explanation" id="explanation"></div>
   <div class="btn-row">
-    <button class="btn btn-back" onclick="leaveQuiz()">← Home</button>
-    <button class="btn btn-hint" id="hintBtn" onclick="showHint()">💡 Hint</button>
-    <button class="btn btn-check" id="checkBtn" onclick="checkAnswer()">✅ Check</button>
-    <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">▶ Next</button>
+    <button class="btn btn-back" onclick="leaveQuiz()">🏠 home</button>
+    <button class="btn btn-hint" id="hintBtn" onclick="showHint()">💡 hint</button>
+    <button class="btn btn-check" id="checkBtn" onclick="checkAnswer()">✅ check</button>
+    <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">▶ next</button>
   </div>
 </div>
 
-<!-- RESULT SCREEN - Celebration Time! -->
+<!-- RESULT screen (big celebration) -->
 <div class="screen" id="resultScreen">
   <div class="result-card">
     <div class="result-emoji" id="resEmoji">🏆</div>
-    <div class="result-title" id="resTitle">Great Job!</div>
+    <div class="result-title" id="resTitle">good job!</div>
     <div class="result-pct" id="resPct">⭐⭐⭐</div>
     <div class="result-stars" id="resStars"></div>
-    <div class="result-msg" id="resMsg">You're a math superstar! ⭐</div>
+    <div class="result-msg" id="resMsg">you're a superstar ⭐</div>
     <div class="mistake-section" id="mistakeSection"></div>
-    <div class="btn-row" style="justify-content:center;margin-top:16px">
-      <button class="btn btn-back" id="retryBtn">🔁 Play Again</button>
-      <button class="btn btn-check" onclick="showHome()">🏠 Home</button>
-      <button class="btn btn-next" id="nextLvBtn" style="display:none">➡ Next Level</button>
+    <div class="btn-row" style="justify-content:center; gap:20px;">
+      <button class="btn btn-back" id="retryBtn">🔁 again</button>
+      <button class="btn btn-check" onclick="showHome()">🏠 home</button>
+      <button class="btn btn-next" id="nextLvBtn" style="display:none">➡ next level</button>
     </div>
   </div>
 </div>
 
-</div>
-
+<!-- audio hidden (simple beep / cheer) -->
+<audio id="soundCorrect" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
+<audio id="soundWrong" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
+<audio id="soundCelebrate" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
 <script>
-// ============================================================
-// PRE-K MATH - Simple & Fun for 4-Year-Olds!
-// ============================================================
+// ----- PRE-K DARK TABLET EDITION -----
+// all buttons huge, sound + celebration
 
-function rnd(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function playSound(id) {
+  try { document.getElementById(id).cloneNode(true).play(); } catch(e){}
 }
 
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
+// ----- data & helpers -----
+function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
 
-// ========== COUNTING GENERATOR ==========
-function generateCountingQuestions(level) {
-  const emojis = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐸", "🐙", "🦄", "⭐", "🍎", "🍪"];
-  
-  const counts = {
-    1: [1, 2, 3], // Level 1: Count 1-3
-    2: [1, 2, 3, 4], // Level 2: Count 1-4
-    3: [2, 3, 4, 5], // Level 3: Count 2-5
-    4: [3, 4, 5, 6], // Level 4: Count 3-6
-    5: [4, 5, 6, 7]  // Level 5: Count 4-7
-  };
-  
-  let numbers = counts[level] || counts[1];
-  let questions = [];
-  
-  for(let i = 0; i < 5; i++) {
-    let num = numbers[Math.floor(Math.random() * numbers.length)];
-    let emoji = emojis[Math.floor(Math.random() * emojis.length)];
-    
-    questions.push({
-      type: 'counting',
-      question: `How many ${emoji} do you see?`,
-      count: num,
-      emoji: emoji,
-      objects: Array(num).fill(emoji),
-      answer: num,
-      hint: `Count them with your finger! 1, 2, 3...`
-    });
-  }
-  
-  return questions;
-}
-
-// ========== NUMBER RECOGNITION ==========
-function generateNumberQuestions(level) {
-  const numbers = {
-    1: [1, 2, 3],
-    2: [1, 2, 3, 4],
-    3: [2, 3, 4, 5],
-    4: [3, 4, 5, 6],
-    5: [4, 5, 6, 7]
-  };
-  
-  let nums = numbers[level] || numbers[1];
-  let questions = [];
-  
-  for(let i = 0; i < 5; i++) {
-    let num = nums[Math.floor(Math.random() * nums.length)];
-    let wrong1 = num + 1 > 7 ? num - 1 : num + 1;
-    let wrong2 = num + 2 > 7 ? num - 2 : num + 2;
-    
-    questions.push({
-      type: 'number',
-      question: `Which number is this?`,
-      number: num,
-      display: '🔢',
-      options: shuffle([num, wrong1, wrong2]),
-      answer: num,
-      hint: `It looks like a ${num}!`
-    });
-  }
-  
-  return questions;
-}
-
-// ========== SHAPES ==========
-function generateShapeQuestions(level) {
-  const shapes = {
-    1: [
-      {name: "circle", emoji: "🔴", hint: "Round like a ball!"},
-      {name: "square", emoji: "🟨", hint: "Four equal sides!"}
-    ],
-    2: [
-      {name: "circle", emoji: "🔴", hint: "Round like a ball!"},
-      {name: "square", emoji: "🟨", hint: "Four equal sides!"},
-      {name: "triangle", emoji: "🔺", hint: "Three sides!"}
-    ],
-    3: [
-      {name: "circle", emoji: "🔴", hint: "Round like a ball!"},
-      {name: "square", emoji: "🟨", hint: "Four equal sides!"},
-      {name: "triangle", emoji: "🔺", hint: "Three sides!"},
-      {name: "star", emoji: "⭐", hint: "Shiny in the sky!"}
-    ],
-    4: [
-      {name: "circle", emoji: "🔴", hint: "Round like a ball!"},
-      {name: "square", emoji: "🟨", hint: "Four equal sides!"},
-      {name: "triangle", emoji: "🔺", hint: "Three sides!"},
-      {name: "star", emoji: "⭐", hint: "Shiny in the sky!"},
-      {name: "heart", emoji: "❤️", hint: "Love shape!"}
-    ],
-    5: [
-      {name: "circle", emoji: "🔴", hint: "Round like a ball!"},
-      {name: "square", emoji: "🟨", hint: "Four equal sides!"},
-      {name: "triangle", emoji: "🔺", hint: "Three sides!"},
-      {name: "star", emoji: "⭐", hint: "Shiny in the sky!"},
-      {name: "heart", emoji: "❤️", hint: "Love shape!"},
-      {name: "diamond", emoji: "💎", hint: "Sparkly gem!"}
-    ]
-  };
-  
-  let shapeList = shapes[level] || shapes[1];
-  let questions = [];
-  
-  for(let i = 0; i < 5; i++) {
-    let shape = shapeList[Math.floor(Math.random() * shapeList.length)];
-    let wrongShapes = shapeList.filter(s => s.name !== shape.name).slice(0, 3);
-    
-    questions.push({
-      type: 'shape',
-      question: `What shape is this?`,
-      shape: shape.name,
-      display: shape.emoji,
-      options: [shape.name, ...wrongShapes.map(s => s.name).slice(0, 2)],
-      answer: shape.name,
-      hint: shape.hint
-    });
-  }
-  
-  return questions;
-}
-
-// ========== PATTERNS ==========
-function generatePatternQuestions(level) {
-  const patterns = {
-    1: [
-      {pattern: ["🔴", "🔵"], next: "🔴"},
-      {pattern: ["🟡", "🟢"], next: "🟡"}
-    ],
-    2: [
-      {pattern: ["🔴", "🔴", "🔵"], next: "🔵"},
-      {pattern: ["🟡", "🟡", "🟢"], next: "🟢"}
-    ],
-    3: [
-      {pattern: ["🐶", "🐱", "🐶"], next: "🐱"},
-      {pattern: ["⭐", "🌙", "⭐"], next: "🌙"}
-    ],
-    4: [
-      {pattern: ["🔴", "🔵", "🔴", "🔵"], next: "🔴"},
-      {pattern: ["🟡", "🟢", "🟡", "🟢"], next: "🟡"}
-    ],
-    5: [
-      {pattern: ["🐶", "🐱", "🐭", "🐶", "🐱"], next: "🐭"},
-      {pattern: ["⭐", "⭐", "🌙", "⭐", "⭐"], next: "🌙"}
-    ]
-  };
-  
-  let patternList = patterns[level] || patterns[1];
-  let questions = [];
-  
-  for(let i = 0; i < 5; i++) {
-    let p = patternList[Math.floor(Math.random() * patternList.length)];
-    let wrong1 = p.pattern[0];
-    let wrong2 = p.pattern[1];
-    
-    questions.push({
-      type: 'pattern',
-      question: `What comes next?`,
-      pattern: p.pattern,
-      options: shuffle([p.next, wrong1, wrong2]),
-      answer: p.next,
-      hint: `Look at the pattern and say it out loud!`
-    });
-  }
-  
-  return questions;
-}
-
-// ============================================================
-// STATE MANAGEMENT - NO LEVEL LOCKS!
-// ============================================================
-const STORAGE_KEY = "littleMath_v1";
 const CATS = {
-  counting: {label: "Counting", levels: 5, color: "#FF6B6B", icon: "🔢"},
-  numbers: {label: "Numbers", levels: 5, color: "#4ECDC4", icon: "123"},
-  shapes: {label: "Shapes", levels: 5, color: "#FFD93D", icon: "🔴"},
-  patterns: {label: "Patterns", levels: 5, color: "#96CEB4", icon: "🎨"}
+  counting:{label:"Counting",levels:5,icon:"🔢"},
+  numbers:{label:"Numbers",levels:5,icon:"123"},
+  shapes:{label:"Shapes",levels:5,icon:"🔴"},
+  patterns:{label:"Patterns",levels:5,icon:"🎨"}
 };
-
 let progress = {};
-let cat = "", level = 0, questions = [], qi = 0, correct = 0, wrong = 0, mistakes = [];
-let answered = false, hintCount = 0;
+let cat="", level=0, questions=[], qi=0, correct=0, wrong=0, mistakes=[];
+let answered=false, hintCount=0;
 
-function initProgress() {
-  Object.keys(CATS).forEach(c => {
-    if(!progress[c]) progress[c] = {};
-    for(let l = 1; l <= CATS[c].levels; l++) {
-      if(!progress[c][l]) progress[c][l] = {done: false, stars: 0};
-    }
-  });
+function initProgress(){
+  Object.keys(CATS).forEach(c=>{if(!progress[c])progress[c]={};for(let l=1;l<=CATS[c].levels;l++){if(!progress[c][l])progress[c][l]={done:false,stars:0};}});
 }
-
-function saveProgress() {
-  const blob = new Blob([JSON.stringify({v:1, progress}, null, 2)], {type: "application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "little-math-save.json";
-  a.click();
-  document.getElementById("saveLbl").textContent = "✅ Saved! ⭐";
-  setTimeout(updateSaveLbl, 2000);
+function saveProgress(){
+  const b=new Blob([JSON.stringify({v:1,progress})],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="math-save.json";a.click();
+  document.getElementById("saveLbl").textContent="✅ saved! ⭐";setTimeout(updateSaveLbl,2000);
 }
-
-function loadProgress() { 
-  document.getElementById("loadFile").click(); 
+function loadFile(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d.v===1&&d.progress){progress=d.progress;initProgress();updateSaveLbl();}else alert("🤗 file not right");}catch{alert("try again")}};
+  r.readAsText(f);e.target.value="";
 }
-
-function loadFile(e) {
-  const file = e.target.files[0]; 
-  if(!file) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    try {
-      const d = JSON.parse(ev.target.result);
-      if(d.v === 1 && d.progress) {
-        progress = d.progress;
-        initProgress();
-        updateSaveLbl();
-      } else alert("Oops! Can't load that file.");
-    } catch { alert("Hmm, that didn't work. Try again!"); }
-  };
-  r.readAsText(file);
-  e.target.value = "";
+function updateSaveLbl(){
+  let total=0;Object.keys(CATS).forEach(c=>{for(let l=1;l<=CATS[c].levels;l++){total+=progress[c]?.[l]?.stars||0;}});
+  document.getElementById("saveLbl").innerHTML="⭐ "+total+" stars";
+  let ch=document.getElementById("progressChart");if(!ch)return;
+  let completed=0,tot=0;Object.keys(CATS).forEach(c=>{for(let l=1;l<=CATS[c].levels;l++){tot++;if(progress[c]?.[l]?.done)completed++;}});
+  let pct=Math.round((completed/tot)*100);
+  ch.innerHTML=`<h3 style="font-size:2rem;">📊 my journey</h3><div style="margin:10px 0">⭐ ${total} stars</div><div class="progress-bar-cont"><div class="progress-bar-fill" style="width:${pct}%"></div></div><div class="progress-stats">${Object.keys(CATS).map(c=>`<span>${CATS[c].icon} ${Object.values(progress[c]||{}).filter(p=>p.done).length}/${CATS[c].levels}</span>`).join(' ')}</div>`;
 }
-
-function updateSaveLbl() {
-  let totalStars = 0;
-  Object.keys(CATS).forEach(c => {
-    for(let l = 1; l <= CATS[c].levels; l++) {
-      if(progress[c] && progress[c][l]) totalStars += progress[c][l].stars || 0;
-    }
-  });
-  document.getElementById("saveLbl").textContent = "⭐ " + totalStars + " stars";
-  
-  // Update progress chart
-  let chart = document.getElementById("progressChart");
-  if(chart) {
-    let completed = 0, total = 0;
-    Object.keys(CATS).forEach(c => {
-      for(let l = 1; l <= CATS[c].levels; l++) {
-        total++;
-        if(progress[c] && progress[c][l] && progress[c][l].done) completed++;
-      }
-    });
-    let pct = Math.round((completed/total)*100);
-    
-    chart.innerHTML = `
-      <h3>📊 My Math Journey</h3>
-      <div style="margin-bottom:5px">⭐ ${totalStars} stars earned!</div>
-      <div class="progress-bar-cont"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-      <div class="progress-stats">
-        <span>🔢 ${progress.counting ? Object.values(progress.counting).filter(p => p.done).length : 0}/5</span>
-        <span>123 ${progress.numbers ? Object.values(progress.numbers).filter(p => p.done).length : 0}/5</span>
-        <span>🔴 ${progress.shapes ? Object.values(progress.shapes).filter(p => p.done).length : 0}/5</span>
-        <span>🎨 ${progress.patterns ? Object.values(progress.patterns).filter(p => p.done).length : 0}/5</span>
-      </div>
-    `;
-  }
-}
-
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-function showHome() { 
-  updateSaveLbl();
-  showScreen("homeScreen"); 
-}
-
-function openCategory(c) {
-  cat = c;
-  document.getElementById("levelsTitle").textContent = CATS[c].label + " — Choose Level";
-  const grid = document.getElementById("levelsGrid");
-  grid.innerHTML = "";
-  const emojis = ["🥉", "🥈", "🥇", "🏆", "👑"];
-  
-  // NO LOCKS - all levels are always unlocked!
-  for(let l = 1; l <= CATS[c].levels; l++) {
-    const p = progress[c][l];
-    const btn = document.createElement("button");
-    btn.className = "lv-btn" + (p.done ? " done" : "");
-    btn.innerHTML = '<span class="lv-icon">' + emojis[l-1] + '</span>Level ' + l + 
-                    (p.stars > 0 ? '<div class="lv-score">⭐ ' + p.stars + '</div>' : '');
-    btn.onclick = (function(ll) { return function() { startLevel(ll); }; })(l);
-    grid.appendChild(btn);
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");}
+function showHome(){updateSaveLbl();showScreen("homeScreen");}
+function openCategory(c){
+  cat=c;
+  document.getElementById("levelsTitle").innerText=CATS[c].label+" — big levels";
+  let grid=document.getElementById("levelsGrid");grid.innerHTML="";
+  for(let l=1;l<=CATS[c].levels;l++){
+    let p=progress[c][l];let btn=document.createElement("button");
+    btn.className="lv-btn"+(p.done?" done":"");btn.innerHTML='<span class="lv-icon">'+(l==1?'🥉':l==2?'🥈':l==3?'🥇':l==4?'🏆':'👑')+'</span>Level '+l+(p.stars>0?'<div class="lv-score">⭐'+p.stars+'</div>':'');
+    btn.onclick=(ll=>()=>startLevel(ll))(l);grid.appendChild(btn);
   }
   showScreen("levelsScreen");
 }
 
-function startLevel(l) {
-  level = l;
-  qi = 0;
-  correct = 0;
-  wrong = 0;
-  mistakes = [];
-  answered = false;
-  hintCount = 0;
-  
-  // Generate fresh problems!
-  if(cat === 'counting') questions = generateCountingQuestions(level);
-  else if(cat === 'numbers') questions = generateNumberQuestions(level);
-  else if(cat === 'shapes') questions = generateShapeQuestions(level);
-  else if(cat === 'patterns') questions = generatePatternQuestions(level);
-  
-  document.getElementById("quizLabel").textContent = CATS[cat].label + " • Level " + l;
-  showScreen("quizScreen");
-  loadQuestion();
+// ----- generators (same as before, but keep minimal) -----
+function generateCountingQuestions(level){
+  const emojis=["🐶","🐱","🐭","🐰","🦊","🐻","⭐","🍎"];
+  const nums={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]};
+  let arr=nums[level]||[1,2,3];let qs=[];
+  for(let i=0;i<5;i++){let num=arr[Math.floor(Math.random()*arr.length)];let em=emojis[Math.floor(Math.random()*emojis.length)];qs.push({type:'counting',question:`How many ${em} ?`,count:num,emoji:em,objects:Array(num).fill(em),answer:num,hint:`count with finger: 1 2 3...`});}
+  return qs;
+}
+function generateNumberQuestions(level){
+  const nums={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]};
+  let arr=nums[level]||[1,2,3];let qs=[];
+  for(let i=0;i<5;i++){let num=arr[Math.floor(Math.random()*arr.length)];let w1=num+1>7?num-1:num+1,w2=num+2>7?num-2:num+2;qs.push({type:'number',question:`Which number is this?`,number:num,options:shuffle([num,w1,w2]),answer:num,hint:`it's like a ${num}`});}
+  return qs;
+}
+function generateShapeQuestions(level){
+  let shapes={1:["circle","square"],2:["circle","square","triangle"],3:["circle","square","triangle","star"],4:["circle","square","triangle","star","heart"],5:["circle","square","triangle","star","heart","diamond"]};
+  let list=shapes[level]||shapes[1];let qs=[];
+  for(let i=0;i<5;i++){let sh=list[Math.floor(Math.random()*list.length)];let wrong=list.filter(s=>s!==sh).slice(0,2);if(wrong.length<2)wrong.push("circle");qs.push({type:'shape',question:`what shape?`,shape:sh,display:sh=='circle'?'🔴':sh=='square'?'🟨':sh=='triangle'?'🔺':sh=='star'?'⭐':sh=='heart'?'❤️':'💎',options:[sh,...wrong].slice(0,3),answer:sh,hint:`it's a ${sh}`});}
+  return qs;
+}
+function generatePatternQuestions(level){
+  let pats={1:[{p:["🔴","🔵"],n:"🔴"},{p:["🟡","🟢"],n:"🟡"}],2:[{p:["🔴","🔴","🔵"],n:"🔵"}],3:[{p:["🐶","🐱","🐶"],n:"🐱"}],4:[{p:["🔴","🔵","🔴","🔵"],n:"🔴"}],5:[{p:["⭐","⭐","🌙","⭐","⭐"],n:"🌙"}]};
+  let arr=pats[level]||pats[1];let qs=[];
+  for(let i=0;i<5;i++){let p=arr[Math.floor(Math.random()*arr.length)];let opts=[p.n,p.p[0],p.p[1]||p.p[0]];qs.push({type:'pattern',question:`what comes next?`,pattern:p.p,options:shuffle(opts),answer:p.n,hint:`say the pattern`});}
+  return qs;
 }
 
-function leaveQuiz() {
-  if(confirm("Leave this game? You can come back anytime!")) showHome();
+function startLevel(l){
+  level=l;qi=0;correct=0;wrong=0;mistakes=[];answered=false;hintCount=0;
+  if(cat==='counting') questions=generateCountingQuestions(level);
+  else if(cat==='numbers') questions=generateNumberQuestions(level);
+  else if(cat==='shapes') questions=generateShapeQuestions(level);
+  else questions=generatePatternQuestions(level);
+  document.getElementById("quizLabel").innerText=CATS[cat].label+" • Lv"+l;
+  showScreen("quizScreen");loadQuestion();
 }
-
-function loadQuestion() {
-  answered = false;
-  const q = questions[qi];
-  const total = questions.length;
-  
-  document.getElementById("quizQNum").textContent = "Game " + (qi+1) + " / " + total;
-  document.getElementById("qsCorrect").textContent = correct;
-  document.getElementById("qsWrong").textContent = wrong;
-  document.getElementById("qsAcc").textContent = "⭐";
-  document.getElementById("progFill").style.width = ((qi)/total*100) + "%";
-  
-  document.getElementById("feedback").className = "feedback";
-  document.getElementById("explanation").className = "explanation";
-  document.getElementById("hintBox").className = "hint-box";
-  document.getElementById("checkBtn").style.display = "inline-flex";
-  document.getElementById("nextBtn").style.display = "none";
-  
-  const hintAllowed = qi < 3 && hintCount < 3; // More hints for little ones
-  const hintBtn = document.getElementById("hintBtn");
-  hintBtn.style.display = hintAllowed ? "inline-flex" : "none";
-  hintBtn.disabled = false;
-  
+function leaveQuiz(){if(confirm("back home?"))showHome();}
+function loadQuestion(){
+  answered=false;let q=questions[qi];
+  document.getElementById("quizQNum").innerText="Game "+(qi+1)+"/5";
+  document.getElementById("qsCorrect").innerText=correct;
+  document.getElementById("qsWrong").innerText=wrong;
+  document.getElementById("progFill").style.width=((qi)/5*100)+"%";
+  document.getElementById("feedback").className="feedback";
+  document.getElementById("hintBox").className="hint-box";
+  document.getElementById("checkBtn").style.display="inline-flex";
+  document.getElementById("nextBtn").style.display="none";
+  document.getElementById("hintBtn").style.display=(qi<3&&hintCount<3)?"inline-flex":"none";
   renderQuestion(q);
 }
-
-function renderQuestion(q) {
-  const card = document.getElementById("qCard");
-  const colors = {
-    counting: "#FF6B6B",
-    numbers: "#4ECDC4", 
-    shapes: "#FFD93D",
-    patterns: "#96CEB4"
-  };
-  card.style.borderTopColor = colors[cat];
-  
-  let html = `<div class="q-type-badge">${CATS[cat].icon} ${CATS[cat].label}</div>`;
-  html += `<div class="q-text">${q.question}</div>`;
-  
-  if(cat === 'counting') {
-    html += `<div class="object-row">`;
-    q.objects.forEach(obj => {
-      html += `<span class="count-object">${obj}</span>`;
-    });
-    html += `</div>`;
-    
-    // Big answer buttons for little fingers
-    html += `<div class="big-answer-buttons" id="answerButtons">`;
-    let answers = [q.answer, q.answer+1, q.answer-1].filter(n => n > 0 && n < 8);
-    answers = [...new Set(answers)]; // Remove duplicates
-    answers.sort(() => Math.random() - 0.5);
-    answers.forEach(num => {
-      html += `<button class="answer-btn" onclick="selectNumber(${num}, ${q.answer})">${num}</button>`;
-    });
-    html += `</div>`;
-    
-  } else if(cat === 'numbers') {
-    html += `<div class="big-number">${q.number}</div>`;
-    html += `<div class="big-answer-buttons" id="answerButtons">`;
-    q.options.forEach(num => {
-      html += `<button class="answer-btn" onclick="selectNumber(${num}, ${q.answer})">${num}</button>`;
-    });
-    html += `</div>`;
-    
-  } else if(cat === 'shapes') {
-    html += `<div class="shape-display">`;
-    if(q.shape === 'circle') html += `<div class="circle"></div>`;
-    else if(q.shape === 'square') html += `<div class="square"></div>`;
-    else if(q.shape === 'triangle') html += `<div class="triangle"></div>`;
-    else if(q.shape === 'star') html += `<div class="star">⭐</div>`;
-    else if(q.shape === 'heart') html += `<div class="star">❤️</div>`;
-    else if(q.shape === 'diamond') html += `<div class="star">💎</div>`;
-    html += `</div>`;
-    
-    html += `<div class="options two-col" id="opts">`;
-    q.options.forEach((opt, i) => {
-      html += `<button class="opt-btn" onclick="selectOption(${i}, '${opt}', '${q.answer}')">${opt}</button>`;
-    });
-    html += `</div>`;
-    
-  } else if(cat === 'patterns') {
-    html += `<div class="pattern-row">`;
-    q.pattern.forEach(item => {
-      html += `<span class="pattern-item">${item}</span>`;
-    });
-    html += `<span class="pattern-item missing">❓</span>`;
-    html += `</div>`;
-    
-    html += `<div class="options two-col" id="opts">`;
-    q.options.forEach((opt, i) => {
-      html += `<button class="opt-btn" onclick="selectOption(${i}, '${opt}', '${q.answer}')">${opt}</button>`;
-    });
-    html += `</div>`;
+function renderQuestion(q){
+  let card=document.getElementById("qCard");
+  let html=`<div class="q-type-badge">${CATS[cat].icon} ${CATS[cat].label}</div><div class="q-text">${q.question}</div>`;
+  if(cat==='counting'){
+    html+=`<div class="object-row">${q.objects.map(o=>`<span class="count-object">${o}</span>`).join('')}</div><div class="big-answer-buttons">`;
+    let answers=[q.answer,q.answer+1,q.answer-1].filter(n=>n>0&&n<8);answers=[...new Set(answers)];shuffle(answers);
+    answers.forEach(n=>{html+=`<button class="answer-btn" onclick="selectNumber(${n},${q.answer})">${n}</button>`;});html+=`</div>`;
+  }else if(cat==='numbers'){
+    html+=`<div class="big-number">${q.number}</div><div class="big-answer-buttons">`;
+    q.options.forEach(n=>{html+=`<button class="answer-btn" onclick="selectNumber(${n},${q.answer})">${n}</button>`;});html+=`</div>`;
+  }else if(cat==='shapes'){
+    html+=`<div class="shape-display">`+(q.shape==='circle'?'<div class="circle"></div>':q.shape==='square'?'<div class="square"></div>':q.shape==='triangle'?'<div class="triangle"></div>':'<div class="star">⭐</div>')+`</div><div class="options two-col">`;
+    q.options.forEach((opt,i)=>{html+=`<button class="opt-btn" onclick="selectOption(${i},'${opt}','${q.answer}')">${opt}</button>`;});html+=`</div>`;
+  }else{
+    html+=`<div class="pattern-row">${q.pattern.map(p=>`<span class="pattern-item">${p}</span>`).join('')}<span class="pattern-item missing">❓</span></div><div class="options two-col">`;
+    q.options.forEach((opt,i)=>{html+=`<button class="opt-btn" onclick="selectOption(${i},'${opt}','${q.answer}')">${opt}</button>`;});html+=`</div>`;
   }
-  
-  card.innerHTML = html;
+  card.innerHTML=html;
 }
-
-// Helper functions for answer selection - FIXED: renamed parameter from 'correct' to 'correctAnswer'
-function selectNumber(num, correctAnswer) {
-  if(answered) return;
-  answered = true;
-  
-  const isCorrect = num === correctAnswer;
-  
-  if(isCorrect) { 
-    correct++; 
-    document.querySelectorAll('.answer-btn').forEach(btn => {
-      if(btn.textContent == num) btn.classList.add('correct');
-    });
-  } else { 
-    wrong++; 
-    mistakes.push({q: "Count the objects", exp: "Try again! You'll get it next time!"});
-    document.querySelectorAll('.answer-btn').forEach(btn => {
-      if(btn.textContent == num) btn.classList.add('wrong');
-      if(btn.textContent == correctAnswer) btn.classList.add('correct');
-    });
-  }
-  
-  showFeedback(isCorrect, isCorrect ? "🎉 Yay! Great counting!" : "🤗 Oops! Let's count together!");
+// answer handlers with sound & celebration
+function selectNumber(num,correctAns){
+  if(answered)return;answered=true;
+  if(num===correctAns){ correct++; playSound('soundCorrect'); document.querySelectorAll('.answer-btn').forEach(b=>{if(b.textContent==num)b.classList.add('correct');}); }
+  else{ wrong++; mistakes.push({q:'',exp:''}); playSound('soundWrong'); document.querySelectorAll('.answer-btn').forEach(b=>{if(b.textContent==num)b.classList.add('wrong');if(b.textContent==correctAns)b.classList.add('correct');}); }
+  document.getElementById("qsCorrect").innerText=correct;document.getElementById("qsWrong").innerText=wrong;
+  document.getElementById("feedback").textContent= num===correctAns?"🎉 yay! ⭐":"💙 oops! next time"; 
+  document.getElementById("feedback").className="feedback show "+(num===correctAns?"ok":"bad");
+  document.getElementById("checkBtn").style.display="none";document.getElementById("nextBtn").style.display="inline-flex";document.getElementById("hintBtn").style.display="none";
 }
-
-// Helper functions for answer selection - FIXED: renamed parameter from 'correct' to 'correctAnswer'
-function selectOption(idx, opt, correctAnswer) {
-  if(answered) return;
-  answered = true;
-  
-  const isCorrect = opt === correctAnswer;
-  
-  if(isCorrect) { 
-    correct++; 
-    document.querySelectorAll('.opt-btn')[idx].classList.add('correct');
-  } else { 
-    wrong++; 
-    mistakes.push({q: "Find the right one", exp: "Good try! Let's learn together!"});
-    document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
-    // Highlight correct answer
-    document.querySelectorAll('.opt-btn').forEach((btn, i) => {
-      if(btn.textContent === correctAnswer) btn.classList.add('correct');
-    });
-  }
-  
-  showFeedback(isCorrect, isCorrect ? "🌟 Perfect! You got it!" : "💪 Almost! Try again next time!");
+function selectOption(idx,opt,correctAns){
+  if(answered)return;answered=true;
+  if(opt===correctAns){correct++;playSound('soundCorrect');document.querySelectorAll('.opt-btn')[idx].classList.add('correct');}
+  else{wrong++;mistakes.push({});playSound('soundWrong');document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
+    document.querySelectorAll('.opt-btn').forEach((b,i)=>{if(b.textContent===correctAns)b.classList.add('correct');});}
+  document.getElementById("qsCorrect").innerText=correct;document.getElementById("qsWrong").innerText=wrong;
+  document.getElementById("feedback").textContent= opt===correctAns?"✨ perfect!":"🤗 try again";
+  document.getElementById("feedback").className="feedback show "+(opt===correctAns?"ok":"bad");
+  document.getElementById("checkBtn").style.display="none";document.getElementById("nextBtn").style.display="inline-flex";document.getElementById("hintBtn").style.display="none";
 }
-
-function checkAnswer() {
-  // This is handled by the button clicks now
-  if(!answered) {
-    showFeedback(false, "👆 Tap one of the big buttons!");
-  }
-}
-
-function showFeedback(isCorrect, msg) {
-  const fb = document.getElementById("feedback");
-  fb.textContent = isCorrect ? "✅ " + msg : "💙 " + msg;
-  fb.className = "feedback show " + (isCorrect ? "ok" : "bad");
-  
-  document.getElementById("checkBtn").style.display = "none";
-  document.getElementById("nextBtn").style.display = "inline-flex";
-  document.getElementById("hintBtn").style.display = "none";
-  document.getElementById("qsCorrect").textContent = correct;
-  document.getElementById("qsWrong").textContent = wrong;
-}
-
-function showHint() {
-  const q = questions[qi];
-  hintCount++;
-  const hb = document.getElementById("hintBox");
-  hb.textContent = "💡 " + (q.hint || "Count slowly with your finger!");
-  hb.className = "hint-box show";
-  document.getElementById("hintBtn").disabled = true;
-}
-
-function nextQuestion() {
-  qi++;
-  if(qi >= questions.length) showResult();
-  else loadQuestion();
-}
-
-function showResult() {
-  const total = questions.length;
-  const stars = Math.min(3, Math.ceil(correct / 2)); // 1-3 stars
-  
-  // Save progress (always mark as done and save stars)
-  progress[cat][level].done = true;
-  progress[cat][level].stars = Math.max(progress[cat][level].stars || 0, stars);
-  
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({v:1, progress})); } catch {}
-  updateSaveLbl();
-  
-  // Celebration time!
-  document.getElementById("resEmoji").textContent = stars === 3 ? "🏆" : stars === 2 ? "🌟" : "⭐";
-  document.getElementById("resTitle").textContent = stars === 3 ? "SUPERSTAR!" : stars === 2 ? "Great Job!" : "Good Try!";
-  document.getElementById("resPct").innerHTML = "⭐".repeat(stars);
-  document.getElementById("resStars").innerHTML = "⭐".repeat(stars);
-  document.getElementById("resMsg").innerHTML = stars === 3 ? "You got all stars! Amazing!" 
-    : stars === 2 ? "You did great! Want to try for 3 stars?" 
-    : "Good job! Every star counts! ⭐";
-  
-  const ms = document.getElementById("mistakeSection");
-  if(mistakes.length > 0) {
-    ms.innerHTML = '<div class="mistake-title">💪 Let\'s practice more:</div>' + 
-      mistakes.map(() => '<div class="mistake-item">Keep trying! You\'ll get it! 🌟</div>').join("");
-  } else ms.innerHTML = "";
-  
-  document.getElementById("retryBtn").onclick = function() { startLevel(level); };
-  
-  // Next level button - always show if there is a next level
-  const nb = document.getElementById("nextLvBtn");
-  if(level < CATS[cat].levels) {
-    nb.style.display = "inline-flex";
-    nb.onclick = function() { startLevel(level + 1); };
-  } else {
-    nb.style.display = "none";
-  }
-  
+function checkAnswer(){if(!answered) document.getElementById("feedback").textContent="👆 tap a big button!"; document.getElementById("feedback").className="feedback show bad";}
+function showHint(){let q=questions[qi];hintCount++;document.getElementById("hintBox").textContent="💡 "+(q.hint||"count slowly!");document.getElementById("hintBox").className="hint-box show";document.getElementById("hintBtn").disabled=true;}
+function nextQuestion(){qi++;if(qi>=5)showResult();else loadQuestion();}
+function showResult(){
+  let stars=Math.min(3,Math.ceil(correct/2));
+  progress[cat][level].done=true;progress[cat][level].stars=Math.max(progress[cat][level].stars||0,stars);
+  try{localStorage.setItem("littleMath_v1",JSON.stringify({v:1,progress}));}catch{} 
+  updateSaveLbl(); playSound('soundCelebrate');
+  document.getElementById("resEmoji").innerText=stars===3?"🏆":stars===2?"🌟":"⭐";
+  document.getElementById("resTitle").innerText=stars===3?"SUPERSTAR!":stars===2?"great!":"good try";
+  document.getElementById("resPct").innerHTML="⭐".repeat(stars);document.getElementById("resStars").innerHTML="⭐".repeat(stars);
+  document.getElementById("resMsg").innerHTML=stars===3?"all stars!!":stars===2?"awesome! want 3 stars?":"every star counts!";
+  document.getElementById("mistakeSection").innerHTML=mistakes.length?'<div class="mistake-title">💪 you can do it!</div>'+mistakes.map(()=>'<div class="mistake-item">keep practising 🌟</div>').join(''):'';
+  document.getElementById("retryBtn").onclick=()=>startLevel(level);
+  let nb=document.getElementById("nextLvBtn");
+  if(level<CATS[cat].levels){nb.style.display="inline-flex";nb.onclick=()=>startLevel(level+1);}else nb.style.display="none";
   showScreen("resultScreen");
 }
-
-// Initialize
-(function init() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw) { const d = JSON.parse(raw); if(d.v === 1 && d.progress) progress = d.progress; }
-  } catch {}
-  initProgress();
-  updateSaveLbl();
-})();
+initProgress();updateSaveLbl();
 </script>
+</div>
 </body>
 </html>

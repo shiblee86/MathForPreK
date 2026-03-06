@@ -15,7 +15,7 @@
     }
 
     body {
-      background: #1a0f2a;  /* deep purple night */
+      background: #1a0f2a;
       font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif;
       min-height: 100vh;
       display: flex;
@@ -61,7 +61,7 @@
       padding: 20px 30px !important;
     }
 
-    /* TOP BAR — personalized for Safaan */
+    /* TOP BAR */
     .topbar {
       background: #4a2a6a;
       border: 6px solid #ffb3d9;
@@ -109,7 +109,7 @@
       font-weight: 900;
     }
 
-    /* HOME hero with Safaan's name */
+    /* HOME hero */
     .home-hero h1 {
       font-size: 4.5rem;
       font-weight: 900;
@@ -126,7 +126,7 @@
       border: 4px solid #ffb3d9;
     }
 
-    /* MENU CARDS — massive tap targets */
+    /* MENU CARDS */
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -234,7 +234,7 @@
     .lv-icon { font-size: 5rem; }
     .lv-score { font-size: 1.8rem; background: rgba(0,0,0,0.2); border-radius: 50px; padding: 10px 20px; margin-top: 10px; }
 
-    /* QUIZ screen — huge everything */
+    /* QUIZ screen */
     .quiz-head {
       background: #ffe5b4;
       border-radius: 70px;
@@ -262,7 +262,7 @@
     .prog-bar { height: 35px; background: #bbb; border-radius: 40px; border: 4px solid white; }
     .prog-fill { background: linear-gradient(90deg, #ffd700, #ff69b4); height: 100%; border-radius: 40px; transition: width 0.4s; }
 
-    /* Question card  */
+    /* Question card */
     .q-card {
       background: #fff5e6;
       border-radius: 80px;
@@ -294,7 +294,7 @@
       text-shadow: 8px 8px 0 #ffd700;
     }
 
-    /* answer buttons — absolutely huge */
+    /* answer buttons */
     .big-answer-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -441,7 +441,7 @@
 <body>
 <div class="wrap">
 
-<!-- TOP BAR with Safaan's name -->
+<!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-title">🧸 Safaan's Math</div>
   <div class="topbar-btns">
@@ -452,7 +452,7 @@
   <div class="tb-lbl" id="saveLbl">⭐ 0 stars</div>
 </div>
 
-<!-- HOME screen with Safaan's name -->
+<!-- HOME screen -->
 <div class="screen active" id="homeScreen">
   <div class="home-hero">
     <h1>🧮 Safaan's Math</h1>
@@ -525,7 +525,7 @@
   </div>
 </div>
 
-<!-- RESULT screen with celebration -->
+<!-- RESULT screen -->
 <div class="screen" id="resultScreen">
   <div class="result-card">
     <div class="result-emoji" id="resEmoji">🏆</div>
@@ -549,21 +549,22 @@
 
 <script>
 // ===== SAFAAAN'S PERSONALIZED MATH ADVENTURE =====
+// FIXED: All answer buttons now work properly!
+
 function playSound(id) {
   try { document.getElementById(id).cloneNode(true).play(); } catch(e){}
 }
 
 function speakText(text) {
+  if (!text) return;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = 0.8;
   utterance.pitch = 1.2;
   window.speechSynthesis.speak(utterance);
 }
 
-// celebrate with voice and animation
 function celebrateCorrect() {
   playSound('soundCorrect');
-  // random cheering phrase
   const cheers = ["Great job, Safaan!", "You did it!", "Awesome!", "Superstar!", "Wonderful!"];
   const randomCheer = cheers[Math.floor(Math.random() * cheers.length)];
   speakText(randomCheer);
@@ -716,44 +717,79 @@ function speakQuestion(){
   if(q) speakText(q.question + (q.hint ? " Hint: " + q.hint : ""));
 }
 
-// answer handlers with celebration
-function selectNumber(num,correctAns){
-  if(answered)return;answered=true;
-  if(num===correctAns){ 
+// FIXED: selectNumber now properly handles number comparison
+function selectNumber(num, correctAns) {
+  if(answered) return;
+  answered = true;
+  
+  // Convert both to numbers to ensure proper comparison
+  const selectedNum = parseInt(num);
+  const correctNum = parseInt(correctAns);
+  const isCorrect = (selectedNum === correctNum);
+  
+  if(isCorrect){ 
     correct++; 
     celebrateCorrect();
-    document.querySelectorAll('.answer-btn').forEach(b=>{if(b.textContent==num)b.classList.add('correct');}); 
+    // Highlight the correct button
+    document.querySelectorAll('.answer-btn').forEach(b => {
+      if(parseInt(b.textContent) === correctNum) {
+        b.classList.add('correct');
+      }
+    });
   } else { 
     wrong++; 
-    mistakes.push({q:`Count to ${correctAns}`,exp:`Let's count together, Safaan!`}); 
+    mistakes.push({q:`Count to ${correctNum}`, exp:`Let's count together, Safaan!`}); 
     playSound('soundWrong');
-    document.querySelectorAll('.answer-btn').forEach(b=>{
-      if(b.textContent==num)b.classList.add('wrong');
-      if(b.textContent==correctAns)b.classList.add('correct');
+    document.querySelectorAll('.answer-btn').forEach(b => {
+      const btnNum = parseInt(b.textContent);
+      if(btnNum === selectedNum) b.classList.add('wrong');
+      if(btnNum === correctNum) b.classList.add('correct');
     });
   }
-  updateScoreAndFeedback(num===correctAns);
+  
+  updateScoreAndFeedback(isCorrect);
 }
 
-function selectOption(idx,opt,correctAns){
-  if(answered)return;answered=true;
-  if(opt===correctAns){
+// FIXED: selectOption now properly handles string comparison
+function selectOption(idx, opt, correctAns) {
+  if(answered) return;
+  answered = true;
+  
+  // Convert to strings for comparison (trim to remove any whitespace)
+  const selectedOpt = String(opt).trim();
+  const correctOpt = String(correctAns).trim();
+  const isCorrect = (selectedOpt === correctOpt);
+  
+  if(isCorrect){
     correct++;
     celebrateCorrect();
     document.querySelectorAll('.opt-btn')[idx].classList.add('correct');
   } else {
     wrong++;
-    mistakes.push({q:`Find the ${correctAns}`,exp:`Good try, Safaan!`});
+    mistakes.push({q:`Find the ${correctOpt}`, exp:`Good try, Safaan!`});
     playSound('soundWrong');
     document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
-    document.querySelectorAll('.opt-btn').forEach((b,i)=>{if(b.textContent===correctAns)b.classList.add('correct');});
+    document.querySelectorAll('.opt-btn').forEach((b,i) => {
+      if(String(b.textContent).trim() === correctOpt) {
+        b.classList.add('correct');
+      }
+    });
   }
-  updateScoreAndFeedback(opt===correctAns);
+  
+  updateScoreAndFeedback(isCorrect);
 }
 
 function updateScoreAndFeedback(isCorrect){
   document.getElementById("qsCorrect").innerText=correct;
   document.getElementById("qsWrong").innerText=wrong;
+  
+  // Update accuracy
+  const total = correct + wrong;
+  if (total > 0) {
+    const acc = Math.round((correct/total)*100);
+    document.getElementById("qsAcc").innerText = acc + "%";
+  }
+  
   let fb=document.getElementById("feedback");
   fb.innerHTML=isCorrect ? "✅ Great job, Safaan!" : "💙 Try again, Safaan!";
   fb.className="feedback show "+(isCorrect?"ok":"bad");
@@ -762,7 +798,12 @@ function updateScoreAndFeedback(isCorrect){
   document.getElementById("hintBtn").style.display="none";
 }
 
-function checkAnswer(){if(!answered){document.getElementById("feedback").innerHTML="👆 Tap a big button, Safaan!";document.getElementById("feedback").className="feedback show bad";}}
+function checkAnswer(){
+  if(!answered){
+    document.getElementById("feedback").innerHTML="👆 Tap a big button, Safaan!";
+    document.getElementById("feedback").className="feedback show bad";
+  }
+}
 
 function showHint(){
   let q=questions[qi];
@@ -770,39 +811,51 @@ function showHint(){
   document.getElementById("hintBox").innerHTML="💡 "+ (q.hint||"Count slowly, Safaan!");
   document.getElementById("hintBox").className="hint-box show";
   document.getElementById("hintBtn").disabled=true;
-  speakText(q.hint);
+  if (q.hint) speakText(q.hint);
 }
 
 function nextQuestion(){qi++;if(qi>=5)showResult();else loadQuestion();}
 
 function showResult(){
-  let stars=Math.min(3,Math.ceil(correct/2));
-  progress[cat][level].done=true;
-  progress[cat][level].stars=Math.max(progress[cat][level].stars||0,stars);
-  localStorage.setItem("safaan_math_v1",JSON.stringify(progress));
+  let total = questions.length;
+  let stars = Math.min(3, Math.ceil(correct / 2));
+  
+  progress[cat][level].done = true;
+  progress[cat][level].stars = Math.max(progress[cat][level].stars || 0, stars);
+  
+  localStorage.setItem("safaan_math_v1", JSON.stringify(progress));
   updateSaveLbl();
   celebrateLevelComplete(stars);
   
-  document.getElementById("resEmoji").innerText=stars===3?"🏆":stars===2?"🌟":"⭐";
-  document.getElementById("resTitle").innerText=stars===3?"SUPERSTAR, SAFAAAN!":stars===2?"Great job, Safaan!":"Good try, Safaan!";
-  document.getElementById("resPct").innerHTML="⭐".repeat(stars);
-  document.getElementById("resStars").innerHTML="⭐".repeat(stars);
-  document.getElementById("resMsg").innerHTML=stars===3?"You got all stars, Safaan! Amazing!" 
-    : stars===2?"Awesome, Safaan! Want 3 stars?" 
+  document.getElementById("resEmoji").innerText = stars===3 ? "🏆" : stars===2 ? "🌟" : "⭐";
+  document.getElementById("resTitle").innerText = stars===3 ? "SUPERSTAR, SAFAAAN!" : stars===2 ? "Great job, Safaan!" : "Good try, Safaan!";
+  document.getElementById("resPct").innerHTML = "⭐".repeat(stars);
+  document.getElementById("resStars").innerHTML = "⭐".repeat(stars);
+  document.getElementById("resMsg").innerHTML = stars===3 ? "You got all stars, Safaan! Amazing!" 
+    : stars===2 ? "Awesome, Safaan! Want 3 stars?" 
     : "Good trying, Safaan! Every star counts!";
   
-  document.getElementById("mistakeSection").innerHTML=mistakes.length
+  // Calculate percentage for display
+  const pct = Math.round((correct/total)*100);
+  document.getElementById("resPct").innerHTML = pct + "% " + "⭐".repeat(stars);
+  
+  document.getElementById("mistakeSection").innerHTML = mistakes.length
     ? '<div class="mistake-title">💪 Keep practicing, Safaan:</div>'+mistakes.map(()=>'<div class="mistake-item">You\'ll get it next time! 🌟</div>').join('')
     : '<div class="mistake-item">Perfect, Safaan! No mistakes! 🌟🌟🌟</div>';
   
-  document.getElementById("retryBtn").onclick=()=>startLevel(level);
-  let nb=document.getElementById("nextLvBtn");
-  if(level<CATS[cat].levels){nb.style.display="inline-flex";nb.onclick=()=>startLevel(level+1);}
-  else nb.style.display="none";
+  document.getElementById("retryBtn").onclick = ()=>startLevel(level);
+  let nb = document.getElementById("nextLvBtn");
+  if(level < CATS[cat].levels){
+    nb.style.display = "inline-flex";
+    nb.onclick = ()=>startLevel(level+1);
+  } else {
+    nb.style.display = "none";
+  }
   
   showScreen("resultScreen");
 }
 
+// Initialize
 updateSaveLbl();
 </script>
 </div>

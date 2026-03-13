@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-  <title>🧸 Safaan's Math Adventure · Pre-K Fun</title>
+  <title>🧸 Safaan's Math · 10 to 20 adventure</title>
   <style>
     /* —————————————————— RECURSIVE DESIGN —————————————————— */
     * {
@@ -17,7 +17,6 @@
       width: 100%;
       min-height: 100vh;
       background: #1a0f2a;
-      /* Regular font - no cursive */
       font-family: 'Segoe UI', Roboto, Arial, Helvetica, sans-serif;
       display: flex;
       align-items: center;
@@ -25,7 +24,6 @@
       padding: clamp(8px, 2vw, 20px);
     }
 
-    /* MAIN WRAPPER - scales with viewport */
     .wrap {
       width: min(1200px, 100%);
       background: #2a1a3a;
@@ -37,7 +35,6 @@
       border: clamp(2px, 0.5vw, 4px) solid #ffe5b4;
     }
 
-    /* TOPBAR - fully responsive */
     .topbar {
       background: #4a2a6a;
       border: clamp(3px, 0.8vw, 6px) solid #ffb3d9;
@@ -91,14 +88,12 @@
       white-space: nowrap;
     }
 
-    /* MAIN LAYOUT - recursive flex */
     .main-layout {
       display: flex;
       flex-direction: row;
       gap: clamp(10px, 2vw, 25px);
     }
 
-    /* LEFT CONTENT AREA - scrollable */
     .content-area {
       flex: 1;
       min-width: 0;
@@ -109,7 +104,6 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* RIGHT BUTTON AREA - fixed width */
     .button-area {
       width: clamp(80px, 15vw, 140px);
       display: flex;
@@ -117,7 +111,6 @@
       gap: clamp(8px, 1.5vh, 15px);
     }
 
-    /* Right side buttons - recursive sizing */
     .action-btn {
       width: 100%;
       flex: 1;
@@ -163,11 +156,9 @@
       text-align: center;
     }
 
-    /* screens */
     .screen { display: none; }
     .screen.active { display: block; }
 
-    /* HOME screen - recursive */
     .home-hero {
       text-align: center;
       margin-bottom: clamp(15px, 3vh, 30px);
@@ -240,7 +231,6 @@
       border: clamp(2px, 0.5vw, 5px) solid white;
     }
 
-    /* progress chart */
     .progress-chart {
       background: #fff0f5;
       border-radius: clamp(20px, 6vw, 60px);
@@ -279,7 +269,6 @@
       box-shadow: 0 clamp(2px, 0.5vh, 5px) 0 #ccc;
     }
 
-    /* LEVELS screen */
     .levels-wrap {
       background: #ffe5b4;
       border-radius: clamp(25px, 8vw, 80px);
@@ -327,7 +316,6 @@
       margin-top: clamp(3px, 1vh, 10px);
     }
 
-    /* QUIZ screen */
     .quiz-head {
       background: #ffe5b4;
       border-radius: clamp(20px, 6vw, 70px);
@@ -377,7 +365,6 @@
       border-radius: clamp(20px, 6vw, 40px);
     }
 
-    /* Question card */
     .q-card {
       background: #fff5e6;
       border-radius: clamp(20px, 8vw, 80px);
@@ -403,7 +390,6 @@
       margin: clamp(10px, 3vh, 30px) 0;
     }
 
-    /* Objects and answers */
     .object-row {
       display: flex;
       flex-wrap: wrap;
@@ -501,7 +487,6 @@
     .feedback.ok { background: #d4edda; color: #155724; border: clamp(2px, 0.5vw, 5px) solid #4caf50; }
     .feedback.bad { background: #f8d7da; color: #721c24; border: clamp(2px, 0.5vw, 5px) solid #f44336; }
 
-    /* RESULT screen */
     .result-card {
       background: #ffe5b4;
       border-radius: clamp(30px, 10vw, 90px);
@@ -555,7 +540,6 @@
       min-height: clamp(40px, 8vh, 70px);
     }
 
-    /* Responsive breakpoints */
     @media (max-width: 600px) {
       .main-layout {
         flex-direction: column;
@@ -582,7 +566,7 @@
 <body>
   <div class="wrap">
     <div class="topbar">
-      <div class="topbar-title">🧸 Safaan's Math</div>
+      <div class="topbar-title">🧸 Safaan's Math (10-20)</div>
       <div class="topbar-btns">
         <button class="tb-btn" onclick="saveProgress()">💾 save</button>
         <button class="tb-btn" onclick="document.getElementById('loadFile').click()">📂 load</button>
@@ -597,14 +581,14 @@
         <!-- HOME SCREEN -->
         <div class="screen active" id="homeScreen">
           <div class="home-hero">
-            <h1>🧮 Safaan's Math</h1>
-            <p>Let's learn together, Safaan! 🌟</p>
+            <h1>🧮 10 → 20 Challenge</h1>
+            <p>Let's count higher, Safaan! 🌟</p>
           </div>
           <div class="menu-grid">
             <div class="menu-card" onclick="openCategory('counting')">
-              <div class="mc-icon">🔢🐶</div>
+              <div class="mc-icon">🔟🐶2️⃣0️⃣</div>
               <div class="mc-name">Counting</div>
-              <div class="mc-desc">count cute things!</div>
+              <div class="mc-desc">count 10 to 20!</div>
               <div class="mc-badge">5 levels</div>
             </div>
             <div class="menu-card" onclick="openCategory('numbers')">
@@ -703,7 +687,7 @@
   </div>
 
   <script>
-    // ===== SAFAAAN'S PERSONALIZED MATH ADVENTURE =====
+    // ===== SAFAAAN'S MATH 10→20 EDITION =====
     function playSound(id) {
       try { document.getElementById(id).cloneNode(true).play(); } catch(e){}
     }
@@ -736,17 +720,17 @@
     function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
 
     const CATS = {
-      counting:{label:"Counting",levels:5,icon:"🔢"},
-      numbers:{label:"Numbers",levels:5,icon:"123"},
+      counting:{label:"Counting",levels:5,icon:"🔟"},
+      numbers:{label:"Numbers",levels:5,icon:"1️⃣"},
       shapes:{label:"Shapes",levels:5,icon:"🔴"},
       patterns:{label:"Patterns",levels:5,icon:"🎨"}
     };
     
     let progress = {};
-    try { progress = JSON.parse(localStorage.getItem("safaan_math_v1")) || {}; } catch(e) {}
+    try { progress = JSON.parse(localStorage.getItem("safaan_math_v1_1020")) || {}; } catch(e) {}
     let cat="", level=0, questions=[], qi=0, correct=0, wrong=0, mistakes=[];
     let answered=false, hintCount=0;
-    let hasMadeMistake = false; // Track if user made a mistake on current question
+    let hasMadeMistake = false; 
 
     function initProgress(){
       Object.keys(CATS).forEach(c=>{
@@ -759,11 +743,11 @@
     initProgress();
 
     function saveProgress(){
-      localStorage.setItem("safaan_math_v1", JSON.stringify(progress));
+      localStorage.setItem("safaan_math_v1_1020", JSON.stringify(progress));
       const b=new Blob([JSON.stringify(progress)],{type:"application/json"});
       const a=document.createElement("a");
       a.href=URL.createObjectURL(b);
-      a.download="safaan-math-save.json";
+      a.download="safaan-math-1020-save.json";
       a.click();
       document.getElementById("saveLbl").innerHTML="✅ saved! ⭐";
       setTimeout(updateSaveLbl,2000);
@@ -805,7 +789,7 @@
       });
       let pct=tot?Math.round((completed/tot)*100):0;
       
-      ch.innerHTML=`<div style="font-weight:900; font-size:clamp(1rem,4vw,2.2rem);">📊 Safaan's journey</div>
+      ch.innerHTML=`<div style="font-weight:900; font-size:clamp(1rem,4vw,2.2rem);">📊 Safaan's journey (10-20)</div>
         <div style="margin:clamp(5px,1.5vh,15px) 0; font-size:clamp(0.9rem,3.5vw,2rem);">⭐ ${total} stars</div>
         <div class="progress-bar-cont"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
         <div class="progress-stats">${
@@ -837,7 +821,7 @@
         let p=progress[c][l];
         let btn=document.createElement("button");
         btn.className="lv-btn"+(p.done?" done":"");
-        const icons=['🌱','🌿','🍃','🌟','🏆'];
+        const icons=['🔟','🌿','🍃','🌟','🏆'];
         btn.innerHTML='<span class="lv-icon">'+icons[l-1]+'</span>Level '+l+(p.stars>0?'<span class="lv-score">⭐'+p.stars+'</span>':'');
         btn.onclick=(ll=>()=>startLevel(ll))(l);
         grid.appendChild(btn);
@@ -845,48 +829,60 @@
       showScreen("levelsScreen");
     }
 
+    // ========== GENERATORS using 10..20 ==========
     function generateCountingQuestions(level){
-      const emojis=["🐶","🐱","🐭","🐰","🦊","🐻","⭐","🍎"];
-      const nums={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]};
-      let arr=nums[level]||[1,2,3];
+      const emojis=["🐶","🐱","🐭","🐰","🦊","🐻","⭐","🍎","🚗","⚽"];
+      // level 1: numbers 10-12, lv2:12-14, lv3:14-16, lv4:16-18, lv5:18-20
+      const rangeMap = {
+        1: [10,11,12],
+        2: [12,13,14],
+        3: [14,15,16],
+        4: [16,17,18],
+        5: [18,19,20]
+      };
+      let arr = rangeMap[level] || [10,11,12];
       let qs=[];
       for(let i=0;i<5;i++){
         let num=arr[Math.floor(Math.random()*arr.length)];
         let em=emojis[Math.floor(Math.random()*emojis.length)];
         qs.push({
           type:'counting',
-          question:`How many ${em} , Safaan?`,
+          question:`How many ${em} , Safaan? (count 10 to 20)`,
           count:num,
           emoji:em,
           objects:Array(num).fill(em),
           answer:num,
-          hint:`Count with your finger: 1, 2, 3...`
+          hint:`Start from 10: 10, 11, 12... up to 20.`
         });
       }
       return qs;
     }
     
     function generateNumberQuestions(level){
-      const nums={1:[1,2,3],2:[1,2,3,4],3:[2,3,4,5],4:[3,4,5,6],5:[4,5,6,7]};
-      let arr=nums[level]||[1,2,3];
+      const nums={1:[10,11,12],2:[12,13,14],3:[14,15,16],4:[16,17,18],5:[18,19,20]};
+      let arr=nums[level]||[10,11,12];
       let qs=[];
       for(let i=0;i<5;i++){
         let num=arr[Math.floor(Math.random()*arr.length)];
-        let w1=num+1>7?num-1:num+1;
-        let w2=num+2>7?num-2:num+2;
+        let opts = [num];
+        while(opts.length<3){
+          let cand = num + rnd(-2,2);
+          if(cand>=10 && cand<=20 && !opts.includes(cand)) opts.push(cand);
+        }
         qs.push({
           type:'number',
           question:`Which number is this, Safaan?`,
           number:num,
-          options:shuffle([num,w1,w2]),
+          options:shuffle(opts),
           answer:num,
-          hint:`It's like a ${num}`
+          hint:`It's ${num} (ten, eleven ... twenty)`
         });
       }
       return qs;
     }
     
     function generateShapeQuestions(level){
+      // shapes unchanged but can have new ones
       let shapes={
         1:["circle","square"],
         2:["circle","square","triangle"],
@@ -914,6 +910,7 @@
     }
     
     function generatePatternQuestions(level){
+      // patterns still abstract, but keep numbers higher in hints? not necessary
       let pats={
         1:[{p:["🔴","🔵"],n:"🔴"},{p:["🟡","🟢"],n:"🟡"}],
         2:[{p:["🔴","🔴","🔵"],n:"🔵"}],
@@ -972,7 +969,6 @@
       document.getElementById("feedback").className="feedback";
       document.getElementById("hintBox").className="hint-box";
       
-      // Enable hint and retry buttons
       document.getElementById("B_hint").disabled = false;
       document.getElementById("B_retry").disabled = false;
       
@@ -985,8 +981,15 @@
       
       if(cat==='counting'){
         html+=`<div class="object-row">${q.objects.map(o=>`<span class="count-object">${o}</span>`).join('')}</div><div class="big-answer-buttons">`;
-        let answers=[q.answer,q.answer+1,q.answer-1].filter(n=>n>0&&n<8);
-        answers=[...new Set(answers)];
+        // answers: correct, correct+1, correct-1 (within 10-20)
+        let answers=[q.answer];
+        if(q.answer+1 <=20) answers.push(q.answer+1);
+        if(q.answer-1 >=10) answers.push(q.answer-1);
+        answers = [...new Set(answers)];
+        if(answers.length<3){
+          let extra = q.answer+2 <=20 ? q.answer+2 : q.answer-2;
+          if(extra>=10 && extra<=20) answers.push(extra);
+        }
         shuffle(answers);
         answers.forEach(n=>{html+=`<button class="answer-btn" onclick="selectNumber(${n},${q.answer})">${n}</button>`;});
         html+=`</div>`;
@@ -1018,27 +1021,19 @@
         document.querySelectorAll('.answer-btn').forEach(b=>{
           if(parseInt(b.textContent)===num)b.classList.add('correct');
         });
-        
-        // Disable retry button since question is answered correctly
         document.getElementById("B_retry").disabled = true;
         
       } else { 
-        // First wrong attempt - don't mark as answered yet, allow retry
         if (!hasMadeMistake) {
           hasMadeMistake = true;
-          
-          // Mark this button as wrong
           document.querySelectorAll('.answer-btn').forEach(b=>{
             if(parseInt(b.textContent)===num)b.classList.add('wrong');
           });
-          
           playSound('soundWrong');
           document.getElementById("feedback").innerHTML="🔄 Oops! Try again, Safaan!";
           document.getElementById("feedback").className="feedback show bad";
           
-          // Retry button is already enabled
         } else {
-          // Second wrong attempt - now count as wrong and show answer
           answered=true;
           wrong++;
           mistakes.push({q:`Count to ${correctAns}`,exp:`Let's count together, Safaan!`});
@@ -1057,7 +1052,6 @@
         }
       }
       
-      // Update score if answered
       if (answered) {
         updateScoreAndFeedback(num===correctAns);
       }
@@ -1071,16 +1065,12 @@
         correct++;
         celebrateCorrect();
         document.querySelectorAll('.opt-btn')[idx].classList.add('correct');
-        
-        // Disable retry button
         document.getElementById("B_retry").disabled = true;
         
       } else {
         if (!hasMadeMistake) {
           hasMadeMistake = true;
-          
           document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
-          
           playSound('soundWrong');
           document.getElementById("feedback").innerHTML="🔄 Oops! Try again, Safaan!";
           document.getElementById("feedback").className="feedback show bad";
@@ -1089,16 +1079,13 @@
           answered=true;
           wrong++;
           mistakes.push({q:`Find the ${correctAns}`,exp:`Good try, Safaan!`});
-          
           document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
           document.querySelectorAll('.opt-btn').forEach((b,i)=>{
             if(b.textContent===correctAns)b.classList.add('correct');
           });
-          
           playSound('soundWrong');
           document.getElementById("feedback").innerHTML=`💙 The answer is ${correctAns}, Safaan!`;
           document.getElementById("feedback").className="feedback show bad";
-          
           updateScoreAndFeedback(false);
           document.getElementById("B_retry").disabled = true;
         }
@@ -1124,14 +1111,13 @@
     function showHint(){
       let q=questions[qi];
       hintCount++;
-      document.getElementById("hintBox").innerHTML="💡 "+ (q.hint||"Count slowly, Safaan!");
+      document.getElementById("hintBox").innerHTML="💡 "+ (q.hint||"Count slowly from 10 to 20, Safaan!");
       document.getElementById("hintBox").className="hint-box show";
       document.getElementById("B_hint").disabled=true;
       speakText(q.hint);
     }
 
     function retryQuestion(){
-      // Only allow retry if a mistake was made but question not yet answered
       if (answered) {
         document.getElementById("feedback").innerHTML="Already answered, Safaan! Try next question.";
         document.getElementById("feedback").className="feedback show bad";
@@ -1144,18 +1130,12 @@
         return;
       }
       
-      // Reset the wrong styling
       document.querySelectorAll('.answer-btn.wrong, .opt-btn.wrong').forEach(b => {
         b.classList.remove('wrong');
       });
-      
-      // Clear feedback
       document.getElementById("feedback").className="feedback";
       document.getElementById("feedback").innerHTML="";
-      
-      // Reset the mistake flag so user can try again
       hasMadeMistake = false;
-      
       speakText("Try again, Safaan! You can do it!");
     }
 
@@ -1166,17 +1146,17 @@
     }
 
     function showResult(){
-      let stars=Math.min(3,Math.ceil((correct+1)/2)); // Slightly easier to get stars
+      let stars=Math.min(3,Math.ceil((correct+1)/2)); 
       progress[cat][level].done=true;
       progress[cat][level].stars=Math.max(progress[cat][level].stars||0,stars);
-      localStorage.setItem("safaan_math_v1",JSON.stringify(progress));
+      localStorage.setItem("safaan_math_v1_1020",JSON.stringify(progress));
       updateSaveLbl();
       celebrateLevelComplete(stars);
       
       document.getElementById("resEmoji").innerText=stars===3?"🏆":stars===2?"🌟":"⭐";
       document.getElementById("resTitle").innerText=stars===3?"SUPERSTAR, SAFAAAN!":stars===2?"Great job, Safaan!":"Good try, Safaan!";
       document.getElementById("resStars").innerHTML="⭐".repeat(stars);
-      document.getElementById("resMsg").innerHTML=stars===3?"You got all stars, Safaan! Amazing!" 
+      document.getElementById("resMsg").innerHTML=stars===3?"You got all stars, Safaan! Amazing! (10-20 mastered)" 
         : stars===2?"Awesome, Safaan! Want 3 stars?" 
         : "Good trying, Safaan! Every star counts!";
       
@@ -1195,10 +1175,8 @@
       showScreen("resultScreen");
     }
 
-    // Initialize
     updateSaveLbl();
     
-    // Audio elements
     const audioHTML = `
       <audio id="soundCorrect" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
       <audio id="soundWrong" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>

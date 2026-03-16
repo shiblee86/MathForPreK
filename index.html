@@ -3,1186 +3,1395 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-  <title>🧸 Safaan's Math · 10 to 20 adventure</title>
+  <title>🌈 Safia's Pre-K Math + SOAR</title>
   <style>
-    /* —————————————————— RECURSIVE DESIGN —————————————————— */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif;
+      background: #1a1035; min-height: 100vh; padding: 12px; color: #f5e9ff;
     }
+    .wrap { max-width: 1000px; margin: 0 auto; }
 
-    html, body {
-      width: 100%;
-      min-height: 100vh;
-      background: #1a0f2a;
-      font-family: 'Segoe UI', Roboto, Arial, Helvetica, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(8px, 2vw, 20px);
-    }
-
-    .wrap {
-      width: min(1200px, 100%);
-      background: #2a1a3a;
-      border-radius: clamp(30px, 6vw, 70px);
-      padding: clamp(16px, 3vw, 30px);
-      box-shadow: 0 clamp(10px, 2vw, 20px) 0 #4a2a5a, 
-                  0 0 0 clamp(3px, 0.8vw, 6px) #ffb3d9, 
-                  0 0 0 clamp(6px, 1.5vw, 12px) #6b4f9f;
-      border: clamp(2px, 0.5vw, 4px) solid #ffe5b4;
-    }
-
+    /* ── TOP BAR ── */
     .topbar {
-      background: #4a2a6a;
-      border: clamp(3px, 0.8vw, 6px) solid #ffb3d9;
-      border-radius: clamp(30px, 6vw, 60px);
-      padding: clamp(12px, 2.5vw, 24px) clamp(16px, 3vw, 30px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: clamp(10px, 2vw, 20px);
-      margin-bottom: clamp(20px, 4vw, 40px);
-      box-shadow: 0 clamp(6px, 1.5vw, 12px) 0 #2a1a3a;
+      background: #2d1b4a; border: 4px solid #b794f4; border-radius: 60px;
+      padding: 16px 24px; display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      margin-bottom: 20px; box-shadow: 0 10px 0 #0d0820, 0 0 0 2px #e9d2ff;
     }
-
-    .topbar-title {
-      font-size: clamp(1.5rem, 5vw, 3rem);
-      font-weight: 900;
-      color: #ffe5b4;
-      text-shadow: clamp(2px, 0.5vw, 4px) clamp(2px, 0.5vw, 4px) 0 #ff69b4,
-                   clamp(3px, 0.8vw, 6px) clamp(3px, 0.8vw, 6px) 0 #ffaa33;
-    }
-
-    .topbar-btns {
-      display: flex;
-      gap: clamp(8px, 1.5vw, 15px);
-      flex-wrap: wrap;
-    }
-
+    .topbar-title { font-size: 1.8rem; font-weight: 900; color: #ffd6b0; text-shadow: 3px 3px 0 #8a6ccf; }
+    .topbar-btns { display: flex; gap: 10px; flex-wrap: wrap; }
     .tb-btn {
-      background: #ffe5b4;
-      color: #2a1a3a;
-      border: clamp(2px, 0.5vw, 4px) solid white;
-      font-size: clamp(1rem, 3.5vw, 1.8rem);
-      padding: clamp(8px, 2vw, 18px) clamp(12px, 3vw, 28px);
-      border-radius: clamp(30px, 8vw, 60px);
-      box-shadow: 0 clamp(4px, 1vw, 8px) 0 #b1741e;
-      cursor: pointer;
-      font-weight: 900;
-      min-height: clamp(40px, 8vw, 70px);
-      min-width: clamp(60px, 12vw, 100px);
+      padding: 10px 20px; border: 3px solid white; border-radius: 50px;
+      font-weight: 900; font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 5px 0 #0d0820; transition: 0.1s; min-height: 50px;
     }
+    .tb-btn:active { transform: translateY(5px); box-shadow: 0 1px 0 #0d0820; }
+    .tb-save { background: #c4a5ff; color: #1e1133; }
+    .tb-load { background: #9ae6b4; color: #1e4620; }
+    .tb-lbl { background: #392b54; color: #f5e9ff; padding: 10px 20px; border-radius: 50px; font-weight: 900; font-size: 1.1rem; border: 3px solid #b794f4; }
 
-    .tb-lbl {
-      font-size: clamp(1rem, 3.5vw, 1.8rem);
-      background: #6b4f9f;
-      padding: clamp(8px, 2vw, 16px) clamp(12px, 3vw, 24px);
-      border-radius: clamp(30px, 8vw, 60px);
-      color: #ffe5b4;
-      border: clamp(2px, 0.5vw, 4px) solid #ffb3d9;
-      font-weight: 900;
-      white-space: nowrap;
+    /* ── QUICK NAV (sticky bottom) ── */
+    .quick-nav {
+      display: flex; gap: 8px; background: #1a0f30; border-top: 3px solid #b794f4;
+      padding: 10px 12px; position: sticky; bottom: 0; z-index: 50; margin: 16px -12px 0;
     }
-
-    .main-layout {
-      display: flex;
-      flex-direction: row;
-      gap: clamp(10px, 2vw, 25px);
+    .qn-btn {
+      flex: 1; border: none; border-radius: 30px; padding: 12px 6px;
+      font-weight: 900; font-size: 0.9rem; cursor: pointer; transition: 0.1s;
     }
-
-    .content-area {
-      flex: 1;
-      min-width: 0;
-      max-height: min(800px, 70vh);
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding-right: clamp(5px, 1vw, 15px);
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .button-area {
-      width: clamp(80px, 15vw, 140px);
-      display: flex;
-      flex-direction: column;
-      gap: clamp(8px, 1.5vh, 15px);
-    }
-
-    .action-btn {
-      width: 100%;
-      flex: 1;
-      min-height: clamp(50px, 10vh, 80px);
-      background: #6b4f9f;
-      border: clamp(2px, 0.5vw, 4px) solid white;
-      border-radius: clamp(15px, 4vw, 30px);
-      box-shadow: 0 clamp(4px, 1vh, 8px) 0 rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-weight: 900;
-      padding: clamp(4px, 1vh, 10px);
-      font-family: inherit;
-    }
-
-    .action-btn:active:not(:disabled) {
-      transform: translateY(clamp(3px, 0.8vh, 6px));
-      box-shadow: 0 clamp(1px, 0.3vh, 2px) 0 rgba(0,0,0,0.4);
-    }
-
-    .action-btn:disabled {
-      opacity: 0.5;
-      cursor: default;
-      transform: none;
-      box-shadow: 0 clamp(4px, 1vh, 8px) 0 rgba(0,0,0,0.4);
-    }
-
-    .action-btn.home { background: #6b4f9f; }
-    .action-btn.hint { background: #ffd700; color: #2a1a3a; }
-    .action-btn.sound { background: #00bcd4; }
-    .action-btn.retry { background: #ffa500; color: #2a1a3a; }
-    .action-btn.next { background: #4caf50; }
-
-    .action-icon {
-      font-size: clamp(1.2rem, 4vw, 2.2rem);
-    }
-
-    .action-text {
-      font-size: clamp(0.6rem, 2vw, 1rem);
-      text-align: center;
-    }
+    .qn-btn:active { transform: translateY(3px); }
+    .qn-home { background: #FF9FCF; color: #1a0f2a; }
+    .qn-soar { background: #9ae6b4; color: #1e4620; }
+    .qn-math { background: #c4a5ff; color: #1e1133; }
 
     .screen { display: none; }
     .screen.active { display: block; }
 
-    .home-hero {
-      text-align: center;
-      margin-bottom: clamp(15px, 3vh, 30px);
+    /* ── HOME ── */
+    .path-header {
+      background: #2d1b4a; border-radius: 70px; padding: 24px 20px;
+      border: 4px solid #b794f4; box-shadow: 0 10px 0 #0d0820;
+      text-align: center; margin-bottom: 24px;
     }
+    .path-header h1 { font-size: 2.4rem; font-weight: 900; color: #ffd6b0; text-shadow: 3px 3px 0 #8a6ccf; }
+    .path-header p { font-size: 1.4rem; background: #4a2f7a; display: inline-block; padding: 10px 28px; border-radius: 60px; border: 3px solid #e9d2ff; margin-top: 12px; }
 
-    .home-hero h1 {
-      font-size: clamp(2rem, 8vw, 5rem);
-      font-weight: 900;
-      color: #ffe5b4;
-      text-shadow: clamp(2px, 0.8vw, 5px) clamp(2px, 0.8vw, 5px) 0 #ff69b4,
-                   clamp(3px, 1.2vw, 8px) clamp(3px, 1.2vw, 8px) 0 #ffaa33;
+    .section-wrap { margin: 28px 0; }
+    .section-title {
+      font-size: 1.8rem; font-weight: 900; background: #392b54; display: inline-block;
+      padding: 10px 28px; border-radius: 50px; border: 3px solid #b794f4;
+      box-shadow: 0 5px 0 #0d0820; margin-bottom: 16px;
     }
-
-    .home-hero p {
-      font-size: clamp(1rem, 4vw, 2.2rem);
-      background: #6b4f9f;
-      padding: clamp(8px, 2vh, 18px) clamp(15px, 4vw, 35px);
-      border-radius: clamp(30px, 8vw, 70px);
-      display: inline-block;
-      color: white;
-      border: clamp(2px, 0.5vw, 4px) solid #ffb3d9;
+    .soar-section-title {
+      font-size: 1.8rem; font-weight: 900; background: #1e4620; display: inline-block;
+      padding: 10px 28px; border-radius: 50px; border: 3px solid #9ae6b4;
+      box-shadow: 0 5px 0 #0d0820; margin-bottom: 16px; color: #9ae6b4;
+    }
+    .challenge-section-title {
+      font-size: 1.8rem; font-weight: 900; background: #4a2000; display: inline-block;
+      padding: 10px 28px; border-radius: 50px; border: 3px solid #ffb347;
+      box-shadow: 0 5px 0 #0d0820; margin-bottom: 16px; color: #ffb347;
     }
 
     .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
-      gap: clamp(12px, 2.5vw, 25px);
-      margin: clamp(15px, 3vh, 35px) 0;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px; margin: 12px 0;
     }
-
     .menu-card {
-      background: #ffe5b4;
-      border-radius: clamp(20px, 6vw, 70px);
-      padding: clamp(15px, 4vh, 45px) clamp(8px, 2vw, 20px);
-      text-align: center;
-      border: clamp(3px, 0.8vw, 8px) solid white;
-      box-shadow: 0 clamp(8px, 2vh, 18px) 0 #b36582;
-      cursor: pointer;
+      background: #2d1b4a; border-radius: 40px; padding: 22px 12px;
+      text-align: center; cursor: pointer; border: 4px solid transparent;
+      box-shadow: 0 10px 0 #0d0820; transition: 0.1s;
+      min-height: 170px; display: flex; flex-direction: column; align-items: center; gap: 7px;
     }
-
-    .menu-card:active {
-      transform: translateY(clamp(4px, 1vh, 8px));
-      box-shadow: 0 clamp(3px, 0.8vh, 5px) 0 #b36582;
-    }
-
-    .mc-icon {
-      font-size: clamp(2.5rem, 10vw, 7rem);
-    }
-
-    .mc-name {
-      font-size: clamp(1.2rem, 5vw, 2.8rem);
-      font-weight: 900;
-      color: #2a1a3a;
-      margin: clamp(3px, 1vh, 10px) 0;
-    }
-
-    .mc-desc {
-      font-size: clamp(0.8rem, 3.5vw, 1.8rem);
-      color: #4a2a6a;
-    }
-
-    .mc-badge {
-      font-size: clamp(0.8rem, 3.5vw, 2rem);
-      background: #ff69b4;
-      color: white;
-      padding: clamp(4px, 1.5vh, 15px) clamp(8px, 2.5vw, 30px);
-      border-radius: clamp(20px, 8vw, 60px);
-      display: inline-block;
-      margin-top: clamp(5px, 1.5vh, 20px);
-      border: clamp(2px, 0.5vw, 5px) solid white;
-    }
+    .menu-card:active { transform: translateY(7px); box-shadow: 0 3px 0 #0d0820; }
+    .menu-card.math-card  { border-color: #c4a5ff; }
+    .menu-card.soar-card  { border-color: #9ae6b4; background: #1a2e22; }
+    .menu-card.chal-card  { border-color: #ffb347; background: #2a1800; }
+    .mc-icon { font-size: 3rem; }
+    .mc-name { font-weight: 900; font-size: 1.3rem; color: #ffd6b0; }
+    .mc-desc { font-size: 0.9rem; color: #d4c2ff; }
+    .mc-badge { background: #4a2f7a; color: white; border-radius: 40px; padding: 5px 14px; font-weight: 900; border: 2px solid #b794f4; font-size: 0.85rem; }
+    .mc-badge.soar-b { background: #2d5a3a; border-color: #9ae6b4; color: #9ae6b4; }
+    .mc-badge.chal-b { background: #5a2e00; border-color: #ffb347; color: #ffb347; }
+    .done-star { color: #ffd6b0; font-size: 0.9rem; margin-top: 4px; }
 
     .progress-chart {
-      background: #fff0f5;
-      border-radius: clamp(20px, 6vw, 60px);
-      padding: clamp(15px, 3vh, 30px);
-      border: clamp(3px, 0.8vw, 6px) solid white;
-      font-size: clamp(0.9rem, 3.5vw, 2rem);
-      margin-top: clamp(10px, 2vh, 30px);
+      background: #2d1b4a; border-radius: 50px; padding: 20px;
+      border: 4px solid #b794f4; box-shadow: 0 8px 0 #0d0820; margin-top: 20px;
     }
 
-    .progress-bar-cont {
-      height: clamp(20px, 4vh, 45px);
-      background: #d0d0d0;
-      border-radius: clamp(20px, 6vw, 40px);
-      border: clamp(2px, 0.5vw, 4px) solid white;
-      margin: clamp(8px, 2vh, 20px) 0;
+    /* ── SOAR ACTIVITY ── */
+    .soar-activity-card {
+      background: #1a2e22; border-radius: 50px; padding: 24px;
+      border: 4px solid #9ae6b4; box-shadow: 0 10px 0 #0d0820; margin-bottom: 16px;
+    }
+    .soar-act-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .soar-act-icon { font-size: 3rem; }
+    .soar-act-title { font-size: 1.8rem; font-weight: 900; color: #ffd6b0; }
+    .soar-act-age { background: #9ae6b4; color: #1e4620; padding: 4px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 900; display: inline-block; margin-top: 4px; }
+    .soar-aim { background: #2d5a3a; border-radius: 20px; padding: 10px 16px; font-size: 1rem; color: #9ae6b4; margin-bottom: 14px; }
+    .soar-illustration {
+      background: #1a1035; border-radius: 30px; padding: 20px; font-size: 1.5rem;
+      text-align: center; border: 4px dashed #9ae6b4; margin: 12px 0; line-height: 1.6;
+    }
+    .soar-steps { margin: 14px 0; }
+    .soar-step { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+    .soar-step-num {
+      background: #9ae6b4; color: #1e4620; border-radius: 50%; width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center; font-weight: 900;
+      font-size: 0.9rem; flex-shrink: 0; margin-top: 2px;
+    }
+    .soar-step-text { font-size: 1.1rem; color: #e4d2ff; line-height: 1.6; }
+    .talk-bubble {
+      background: #2d1b4a; border-radius: 30px 30px 30px 5px; padding: 14px 18px;
+      margin: 10px 0; border: 2px solid #b794f4; font-size: 1rem; color: #e4d2ff;
+      position: relative;
+    }
+    .hint-toggle-card {
+      background: #1e4620; border-radius: 30px; padding: 14px 18px;
+      font-size: 1rem; color: #9ae6b4; margin: 10px 0;
+      border: 2px solid #9ae6b4; display: none;
+    }
+    .hint-toggle-card.show { display: block; }
+    .done-btn {
+      background: #9ae6b4; color: #1e4620; border: 3px solid white; border-radius: 50px;
+      padding: 14px 24px; font-weight: 900; font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 5px 0 #0d0820; transition: 0.1s; flex: 1; min-height: 54px;
+    }
+    .done-btn:active { transform: translateY(5px); box-shadow: 0 1px 0 #0d0820; }
+    .undone-btn {
+      background: #ffd6b0; color: #2d1b4a; border: 3px solid white; border-radius: 50px;
+      padding: 14px 24px; font-weight: 900; font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 5px 0 #0d0820; transition: 0.1s; flex: 1; min-height: 54px;
+    }
+    .nrich-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg,#c4a5ff,#9ae6b4); color: #1a1035;
+      border: 3px solid white; border-radius: 50px; padding: 10px 20px;
+      font-weight: 900; font-size: 1rem; text-decoration: none;
+      box-shadow: 0 5px 0 #0d0820; cursor: pointer; transition: 0.1s;
+    }
+    .yt-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #ff4444; color: white;
+      border: 3px solid white; border-radius: 50px; padding: 10px 20px;
+      font-weight: 900; font-size: 1rem; text-decoration: none;
+      box-shadow: 0 5px 0 #0d0820; cursor: pointer; transition: 0.1s;
     }
 
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #ffb703, #ff69b4);
-      border-radius: clamp(20px, 6vw, 40px);
-      transition: width 0.5s;
-    }
-
-    .progress-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: clamp(5px, 1.5vw, 15px);
-    }
-
-    .progress-stats span {
-      font-size: clamp(0.7rem, 3vw, 1.8rem);
-      background: white;
-      padding: clamp(4px, 1.5vh, 10px) clamp(8px, 2vw, 20px);
-      border-radius: clamp(20px, 6vw, 50px);
-      box-shadow: 0 clamp(2px, 0.5vh, 5px) 0 #ccc;
-    }
-
-    .levels-wrap {
-      background: #ffe5b4;
-      border-radius: clamp(25px, 8vw, 80px);
-      padding: clamp(15px, 4vh, 35px);
-      border: clamp(3px, 0.8vw, 8px) solid white;
-    }
-
-    .levels-title {
-      font-size: clamp(1.5rem, 7vw, 3.5rem);
-      color: #ff1493;
-      text-shadow: clamp(1px, 0.5vw, 3px) clamp(1px, 0.5vw, 3px) 0 #ffd700;
-      margin-bottom: clamp(10px, 3vh, 30px);
-    }
-
-    .levels-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(120px, 100%), 1fr));
-      gap: clamp(8px, 2vw, 25px);
-    }
-
-    .lv-btn {
-      background: #6b4f9f;
-      border: clamp(2px, 0.5vw, 6px) solid white;
-      border-radius: clamp(20px, 6vw, 70px);
-      padding: clamp(10px, 3vh, 30px) clamp(3px, 1vw, 10px);
-      font-size: clamp(0.8rem, 3.5vw, 2.2rem);
-      font-weight: 900;
-      color: white;
-      box-shadow: 0 clamp(6px, 1.5vh, 15px) 0 #2a1a3a;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .lv-icon {
-      font-size: clamp(1.5rem, 7vw, 5rem);
-    }
-
-    .lv-score {
-      font-size: clamp(0.7rem, 3vw, 1.8rem);
-      background: rgba(0,0,0,0.2);
-      border-radius: 30px;
-      padding: clamp(3px, 1vh, 10px) clamp(5px, 1.5vw, 20px);
-      margin-top: clamp(3px, 1vh, 10px);
-    }
-
+    /* ── QUIZ ── */
     .quiz-head {
-      background: #ffe5b4;
-      border-radius: clamp(20px, 6vw, 70px);
-      padding: clamp(12px, 3vh, 30px);
-      border: clamp(2px, 0.5vw, 6px) solid #ff69b4;
-      margin-bottom: clamp(10px, 2.5vh, 30px);
+      background: #2d1b4a; border-radius: 50px; padding: 18px 22px;
+      border: 4px solid #b794f4; box-shadow: 0 7px 0 #0d0820; margin-bottom: 18px;
     }
-
-    .quiz-meta {
-      font-size: clamp(0.9rem, 4vw, 2.2rem);
-      display: flex;
-      justify-content: space-between;
-      font-weight: 900;
-      color: #ff1493;
-    }
-
-    .quiz-score-row {
-      display: flex;
-      gap: clamp(8px, 2vw, 25px);
-      background: white;
-      border-radius: clamp(30px, 10vw, 80px);
-      padding: clamp(8px, 2vh, 20px) clamp(12px, 3vw, 30px);
-      margin: clamp(5px, 1.5vh, 20px) 0;
-      flex-wrap: wrap;
-    }
-
-    .qs-item .qs-label {
-      font-size: clamp(0.7rem, 3vw, 1.6rem);
-    }
-
-    .qs-item .qs-val {
-      font-size: clamp(1.2rem, 5vw, 4rem);
-      font-weight: 900;
-      color: #2a1a3a;
-    }
-
-    .prog-bar {
-      height: clamp(15px, 3vh, 35px);
-      background: #bbb;
-      border-radius: clamp(20px, 6vw, 40px);
-      border: clamp(1px, 0.3vw, 4px) solid white;
-    }
-
-    .prog-fill {
-      background: linear-gradient(90deg, #ffd700, #ff69b4);
-      height: 100%;
-      border-radius: clamp(20px, 6vw, 40px);
-    }
+    .quiz-meta { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 900; color: #ffd6b0; }
+    .quiz-score-row { display: flex; gap: 12px; margin: 12px 0; }
+    .qs-item { background: #392b54; border-radius: 35px; padding: 10px; flex: 1; text-align: center; border: 2px solid #b794f4; }
+    .qs-val { font-size: 1.8rem; font-weight: 900; color: #ffd6b0; }
+    .prog-bar { background: #1a1035; height: 14px; border-radius: 30px; border: 2px solid #b794f4; }
+    .prog-fill { height: 100%; border-radius: 30px; background: linear-gradient(90deg,#c4a5ff,#ffd6b0); transition: width 0.3s; }
 
     .q-card {
-      background: #fff5e6;
-      border-radius: clamp(20px, 8vw, 80px);
-      padding: clamp(15px, 4vh, 35px);
-      border: clamp(2px, 0.5vw, 8px) solid #ffb3d9;
-      box-shadow: 0 clamp(8px, 2vh, 20px) 0 #a04b6d;
-      margin-bottom: clamp(10px, 2.5vh, 30px);
+      background: #2d1b4a; border-radius: 50px; padding: 24px;
+      border: 4px solid #ffb347; box-shadow: 0 8px 0 #0d0820; margin-bottom: 16px;
     }
-
     .q-type-badge {
-      font-size: clamp(0.8rem, 4vw, 2.2rem);
-      background: #ff69b4;
-      padding: clamp(5px, 2vh, 18px) clamp(10px, 3vw, 35px);
-      border-radius: clamp(30px, 10vw, 80px);
-      display: inline-block;
-      border: clamp(2px, 0.5vw, 5px) solid white;
+      background: #392b54; color: #e4d2ff; border-radius: 30px;
+      padding: 4px 14px; font-size: 0.8rem; font-weight: 900;
+      display: inline-block; margin-bottom: 12px;
     }
-
-    .q-text {
-      font-size: clamp(1.2rem, 5vw, 3rem);
-      font-weight: 800;
-      color: #2a1a3a;
-      margin: clamp(10px, 3vh, 30px) 0;
+    .question-text { font-size: 1.9rem; font-weight: 900; text-align: center; margin-bottom: 20px; color: #ffd6b0; line-height: 1.5; }
+    .answer-input {
+      width: 100%; padding: 14px; font-size: 1.8rem; font-family: inherit;
+      background: #1a1035; border: 4px solid #b794f4; border-radius: 50px;
+      color: #ffd6b0; text-align: center; outline: none; margin: 10px 0;
+      box-shadow: 0 5px 0 #0d0820;
     }
-
-    .object-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: clamp(5px, 1.5vw, 25px);
-      margin: clamp(10px, 3vh, 35px) 0;
-    }
-
-    .count-object {
-      font-size: clamp(2rem, 10vw, 6rem);
-      filter: drop-shadow(clamp(2px, 0.5vw, 6px) clamp(3px, 0.8vh, 10px) 0 rgba(0,0,0,0.3));
-    }
-
-    .big-number {
-      font-size: clamp(4rem, 20vw, 12rem);
-      line-height: 1;
-      color: #ff1493;
-      text-shadow: clamp(3px, 1vw, 8px) clamp(3px, 1vw, 8px) 0 #ffd700;
-      text-align: center;
-    }
-
-    .big-answer-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: clamp(10px, 3vw, 30px);
-      margin: clamp(10px, 3vh, 35px) 0;
-    }
-
-    .answer-btn {
-      width: clamp(60px, 20vw, 170px);
-      height: clamp(60px, 20vw, 170px);
-      border-radius: 50%;
-      background: #6b4f9f;
-      border: clamp(3px, 1vw, 10px) solid white;
-      font-size: clamp(1.5rem, 8vw, 6rem);
-      font-weight: 900;
-      color: white;
-      box-shadow: 0 clamp(6px, 2vh, 18px) 0 #2a1a3a;
-      cursor: pointer;
-    }
-
-    .answer-btn:active:not(:disabled) {
-      transform: translateY(clamp(4px, 1.5vh, 12px));
-      box-shadow: 0 clamp(1px, 0.5vh, 3px) 0 #2a1a3a;
-    }
-
-    .answer-btn.correct { background: #4caf50; }
-    .answer-btn.wrong { background: #f44336; }
-
-    .options.two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(8px, 2.5vw, 30px);
-      margin: clamp(8px, 2.5vh, 30px) 0;
-    }
-
-    .opt-btn {
-      padding: clamp(10px, 3vh, 40px) clamp(5px, 2vw, 20px);
-      font-size: clamp(1rem, 5vw, 3.2rem);
-      border-radius: clamp(20px, 8vw, 80px);
-      background: #6fc2d6;
-      border: clamp(2px, 0.5vw, 8px) solid white;
-      box-shadow: 0 clamp(5px, 1.5vh, 16px) 0 #218294;
-      color: white;
-      cursor: pointer;
-      text-transform: capitalize;
-    }
-
-    .opt-btn.correct { background: #4caf50; }
-    .opt-btn.wrong { background: #f44336; }
-
-    .pattern-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: clamp(3px, 1vw, 15px);
-      margin: clamp(6px, 2vh, 20px) 0;
-      font-size: clamp(1.5rem, 8vw, 4rem);
-    }
-
-    .feedback, .hint-box {
-      font-size: clamp(1rem, 5vw, 3rem);
-      padding: clamp(8px, 2.5vh, 35px);
-      border-radius: clamp(20px, 8vw, 90px);
-      margin-top: clamp(8px, 2vh, 20px);
-    }
+    .fact-rows { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+    .fact-row { display: flex; align-items: center; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .fact-input { width: 60px; padding: 10px 4px; font-size: 1.3rem; font-family: inherit; background: #1a1035; border: 3px solid #b794f4; border-radius: 20px; color: #ffd6b0; text-align: center; outline: none; }
+    .compose-rows { display: flex; flex-direction: column; gap: 12px; margin: 12px 0; }
+    .compose-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .compose-input { width: 64px; padding: 12px 4px; font-size: 1.4rem; font-family: inherit; background: #1a1035; border: 3px solid #b794f4; border-radius: 20px; color: #ffd6b0; text-align: center; outline: none; }
+    .compose-sym { font-size: 1.6rem; color: #FF9FCF; min-width: 20px; text-align: center; font-weight: 900; }
+    .compose-eq { font-size: 1.1rem; color: #b1a5d9; white-space: nowrap; }
 
     .hint-box {
-      background: #ffe68f;
-      border: clamp(3px, 0.8vw, 8px) solid #ffa500;
+      background: #2a1f3a; border-radius: 30px; padding: 20px;
+      font-size: 1rem; margin: 14px 0;
+      border: 3px solid #ffd6b0; color: #f5e9ff;
+      display: none; line-height: 1.7;
     }
+    .hint-box.show { display: block; }
+    .hint-bubble { background: #392b54; border-radius: 16px; padding: 12px 16px; margin: 8px 0; color: #e4d2ff; line-height: 1.7; }
+    .hint-col { background: #1a1035; border-radius: 14px; padding: 12px 20px; display: inline-block; min-width: 110px; text-align: right; font-family: 'Courier New', monospace; font-size: 1.4rem; margin: 6px auto; }
+    .hint-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0; }
+    .hint-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; border-radius: 9px; font-size: 1.2rem; font-weight: bold; padding: 0 6px; }
 
+    .feedback {
+      border-radius: 50px; padding: 18px 22px; font-weight: 900;
+      font-size: 1.3rem; margin: 12px 0; display: none;
+    }
     .feedback.show { display: block; }
-    .feedback.ok { background: #d4edda; color: #155724; border: clamp(2px, 0.5vw, 5px) solid #4caf50; }
-    .feedback.bad { background: #f8d7da; color: #721c24; border: clamp(2px, 0.5vw, 5px) solid #f44336; }
+    .feedback.ok  { background: #2d6a4f; border: 4px solid #9ae6b4; color: #e6ffe6; }
+    .feedback.bad { background: #9d4b4b; border: 4px solid #ffb3b3; color: #ffe6e6; }
 
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .btn {
+      padding: 16px 20px; border: none; border-radius: 50px; font-weight: 900;
+      font-size: 1.2rem; cursor: pointer; border: 4px solid white;
+      box-shadow: 0 5px 0 #0d0820; transition: 0.1s; flex: 1; min-height: 60px; text-align: center;
+    }
+    .btn:active { transform: translateY(5px); box-shadow: 0 2px 0 #0d0820; }
+    .btn-check { background: #c4a5ff; color: #1e1133; }
+    .btn-next  { background: #9ae6b4; color: #1e4620; display: none; }
+    .btn-hint  { background: #ffb347; color: #2d1b4a; }
+    .btn-back  { background: #6b4f9f; color: white; }
+
+    /* ── RESULT ── */
     .result-card {
-      background: #ffe5b4;
-      border-radius: clamp(30px, 10vw, 90px);
-      padding: clamp(20px, 5vh, 50px);
-      border: clamp(4px, 1vw, 10px) solid #ff69b4;
-      text-align: center;
-      animation: pulse 2s infinite;
+      background: #2d1b4a; border-radius: 70px; padding: 36px 22px;
+      text-align: center; border: 6px solid #ffb347; box-shadow: 0 12px 0 #0d0820;
     }
+    .result-emoji { font-size: 5rem; }
+    .result-title { font-size: 3rem; font-weight: 900; color: #ffd6b0; text-shadow: 3px 3px 0 #8a6ccf; margin: 10px 0; }
+    .result-stars { font-size: 3.5rem; margin: 12px; }
+    .result-msg { font-size: 1.3rem; color: #d4c2ff; margin: 10px 0; }
+    .mistake-item { background: #392b54; border-radius: 35px; padding: 14px; margin: 10px 0; border: 3px solid #b794f4; text-align: left; font-size: 1rem; }
 
-    @keyframes pulse {
-      0% { box-shadow: 0 0 10px #ffd700; }
-      50% { box-shadow: 0 0 30px #ff69b4; }
-      100% { box-shadow: 0 0 10px #ffd700; }
+    /* ── CHALLENGE QUIZ ── */
+    .chal-card {
+      background: #2a1800; border-radius: 50px; padding: 24px;
+      border: 4px solid #ffb347; box-shadow: 0 8px 0 #0d0820; margin-bottom: 16px;
     }
+    .chal-story { font-size: 1.2rem; color: #ffd6b0; line-height: 1.8; margin-bottom: 14px; }
+    .chal-question { font-size: 1.6rem; font-weight: 900; color: #ffb347; margin-bottom: 14px; }
 
-    .result-emoji {
-      font-size: clamp(3rem, 15vw, 12rem);
-      display: block;
-      animation: bounce 1s infinite;
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 380px) {
+      body { padding: 6px; }
+      .topbar { padding: 10px 12px; border-radius: 40px; }
+      .topbar-title { font-size: 1.2rem; }
+      .tb-btn { padding: 8px 12px; font-size: 0.9rem; min-height: 40px; }
+      .path-header h1 { font-size: 1.7rem; }
+      .section-title, .soar-section-title, .challenge-section-title { font-size: 1.2rem; padding: 8px 16px; }
+      .menu-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .menu-card { min-height: 140px; padding: 16px 10px; border-radius: 30px; }
+      .mc-icon { font-size: 2.4rem; }
+      .mc-name { font-size: 1.1rem; }
+      .question-text { font-size: 1.4rem; }
+      .btn { font-size: 1rem; padding: 12px 8px; min-height: 52px; }
+      .qn-btn { font-size: 0.75rem; padding: 10px 4px; }
+      .answer-input { font-size: 1.5rem; }
+      .result-title { font-size: 2.2rem; }
+      .result-emoji { font-size: 4rem; }
     }
-
-    @keyframes bounce {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .result-title {
-      font-size: clamp(1.5rem, 7vw, 5rem);
-      text-shadow: clamp(2px, 0.8vw, 4px) clamp(2px, 0.8vw, 4px) 0 #ffd700;
-    }
-
-    .result-stars {
-      font-size: clamp(2rem, 8vw, 6rem);
-    }
-
-    .res-btns {
-      display: flex;
-      justify-content: center;
-      gap: clamp(8px, 2vw, 25px);
-      margin-top: clamp(15px, 3vh, 30px);
-      flex-wrap: wrap;
-    }
-
-    .res-btn {
-      border-radius: clamp(30px, 8vw, 80px);
-      padding: clamp(8px, 2.5vh, 20px) clamp(15px, 4vw, 30px);
-      font-size: clamp(1rem, 4vw, 2rem);
-      border: clamp(2px, 0.5vw, 5px) solid white;
-      cursor: pointer;
-      font-weight: 900;
-      min-height: clamp(40px, 8vh, 70px);
-    }
-
     @media (max-width: 600px) {
-      .main-layout {
-        flex-direction: column;
-      }
-      
-      .button-area {
-        width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      
-      .action-btn {
-        width: clamp(70px, 20vw, 100px);
-        height: clamp(60px, 15vh, 80px);
-      }
-      
-      .content-area {
-        max-height: 60vh;
-      }
+      .menu-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .question-text { font-size: 1.6rem; }
+      .btn { font-size: 1.05rem; padding: 14px 8px; }
+    }
+    @media (max-height: 500px) and (orientation: landscape) {
+      .quiz-head { padding: 10px 16px; }
+      .q-card, .chal-card { padding: 14px; }
+      .btn-row { margin-top: 10px; }
+      .quick-nav { padding: 6px 8px; }
+      .qn-btn { padding: 8px 4px; }
+    }
+    @media (min-width: 600px) and (max-width: 1023px) {
+      .wrap { max-width: 780px; }
+      .path-header h1 { font-size: 2.6rem; }
+      .section-title, .soar-section-title, .challenge-section-title { font-size: 2rem; }
+      .menu-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .menu-card { min-height: 200px; padding: 26px 14px; }
+      .mc-icon { font-size: 3.5rem; }
+      .mc-name { font-size: 1.5rem; }
+      .question-text { font-size: 2rem; }
+      .btn { font-size: 1.3rem; padding: 18px; min-height: 68px; }
+      .answer-input { font-size: 2rem; }
+      .qn-btn { font-size: 1rem; padding: 14px 8px; }
+      .qs-val { font-size: 2rem; }
+      .result-title { font-size: 3.2rem; }
+      .result-emoji { font-size: 6rem; }
+    }
+    @media (min-width: 1024px) {
+      body { padding: 20px 40px; }
+      .wrap { max-width: 1100px; }
+      .path-header h1 { font-size: 3rem; }
+      .path-header p { font-size: 1.8rem; }
+      .section-title, .soar-section-title, .challenge-section-title { font-size: 2.2rem; }
+      .menu-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+      .menu-card { min-height: 210px; padding: 28px 16px; border-radius: 50px; }
+      .mc-icon { font-size: 4rem; }
+      .mc-name { font-size: 1.6rem; }
+      .question-text { font-size: 2.2rem; }
+      .btn { font-size: 1.4rem; padding: 20px; min-height: 70px; border-radius: 60px; }
+      .answer-input { font-size: 2rem; padding: 16px; }
+      .qn-btn { font-size: 1.1rem; padding: 14px 10px; }
+      .topbar-title { font-size: 2.2rem; }
+      .result-card { max-width: 700px; margin: 0 auto; padding: 50px 32px; }
+      .result-emoji { font-size: 7rem; }
+      .result-title { font-size: 3.8rem; }
+      .hint-col { font-size: 1.6rem; padding: 14px 24px; }
+      .hint-bubble { font-size: 1.2rem; padding: 14px 18px; }
+    }
+    @media (min-width: 1400px) {
+      .wrap { max-width: 1280px; }
+      .menu-grid { grid-template-columns: repeat(5, 1fr); gap: 22px; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="topbar-title">🧸 Safaan's Math (10-20)</div>
-      <div class="topbar-btns">
-        <button class="tb-btn" onclick="saveProgress()">💾 save</button>
-        <button class="tb-btn" onclick="document.getElementById('loadFile').click()">📂 load</button>
-        <input type="file" id="loadFile" accept=".json" style="display:none" onchange="loadFile(event)">
-      </div>
-      <div class="tb-lbl" id="saveLbl">⭐ 0 stars</div>
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-title">🌈 Safia's Pre-K Math</div>
+    <div class="topbar-btns">
+      <button class="tb-btn tb-save" onclick="saveProgress()">💾 Save</button>
+      <button class="tb-btn tb-load" onclick="loadProgress()">📂 Load</button>
+      <input type="file" id="loadFile" accept=".json" style="display:none" onchange="handleLoad(event)">
+    </div>
+    <div class="tb-lbl" id="starLbl">⭐ 0 stars</div>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen active" id="homeScreen">
+    <div class="path-header">
+      <h1>🌟 Safia's Math Adventure!</h1>
+      <p>Pre-K · Ages 3–5 🎉</p>
     </div>
 
-    <div class="main-layout">
-      <!-- LEFT CONTENT - Scrollable -->
-      <div class="content-area" id="scrollArea">
-        <!-- HOME SCREEN -->
-        <div class="screen active" id="homeScreen">
-          <div class="home-hero">
-            <h1>🧮 10 → 20 Challenge</h1>
-            <p>Let's count higher, Safaan! 🌟</p>
-          </div>
-          <div class="menu-grid">
-            <div class="menu-card" onclick="openCategory('counting')">
-              <div class="mc-icon">🔟🐶2️⃣0️⃣</div>
-              <div class="mc-name">Counting</div>
-              <div class="mc-desc">count 10 to 20!</div>
-              <div class="mc-badge">5 levels</div>
-            </div>
-            <div class="menu-card" onclick="openCategory('numbers')">
-              <div class="mc-icon">123✨</div>
-              <div class="mc-name">Numbers</div>
-              <div class="mc-desc">find the number</div>
-              <div class="mc-badge">5 levels</div>
-            </div>
-            <div class="menu-card" onclick="openCategory('shapes')">
-              <div class="mc-icon">🔴🔺⭐</div>
-              <div class="mc-name">Shapes</div>
-              <div class="mc-desc">circle, star, heart</div>
-              <div class="mc-badge">5 levels</div>
-            </div>
-            <div class="menu-card" onclick="openCategory('patterns')">
-              <div class="mc-icon">🎨🔁</div>
-              <div class="mc-name">Patterns</div>
-              <div class="mc-desc">what comes next?</div>
-              <div class="mc-badge">5 levels</div>
-            </div>
-          </div>
-          <div class="progress-chart" id="progressChart"></div>
-        </div>
-
-        <!-- LEVELS SCREEN -->
-        <div class="screen" id="levelsScreen">
-          <div class="levels-wrap">
-            <div class="levels-title" id="levelsTitle">pick a level, Safaan!</div>
-            <div class="levels-grid" id="levelsGrid"></div>
-            <div style="margin-top: clamp(15px, 4vh, 30px); text-align:center">
-              <button class="res-btn" style="background:#b39ddb; color:#2a1a3a;" onclick="showHome()">← home</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- QUIZ SCREEN -->
-        <div class="screen" id="quizScreen">
-          <div class="quiz-head">
-            <div class="quiz-meta">
-              <span id="quizLabel">Counting · Lv1</span>
-              <span id="quizQNum">1/5</span>
-            </div>
-            <div class="quiz-score-row">
-              <div class="qs-item"><div class="qs-label">⭐ stars</div><div class="qs-val" id="qsCorrect">0</div></div>
-              <div class="qs-item"><div class="qs-label">🤷 oops</div><div class="qs-val" id="qsWrong">0</div></div>
-              <div class="qs-item"><div class="qs-label">👍🏼</div><div class="qs-val" id="qsAcc">0%</div></div>
-            </div>
-            <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
-          </div>
-          <div class="q-card" id="qCard"></div>
-          <div class="hint-box" id="hintBox"></div>
-          <div class="feedback" id="feedback"></div>
-        </div>
-
-        <!-- RESULT SCREEN -->
-        <div class="screen" id="resultScreen">
-          <div class="result-card">
-            <span class="result-emoji" id="resEmoji">🏆</span>
-            <div class="result-title" id="resTitle">good job, Safaan!</div>
-            <div class="result-stars" id="resStars">⭐⭐⭐</div>
-            <div class="result-msg" id="resMsg">you're a math superstar, Safaan! ⭐</div>
-            <div id="mistakeSection"></div>
-            <div class="res-btns">
-              <button class="res-btn" style="background:#b39ddb; color:#2a1a3a;" id="retryBtn">🔁 again</button>
-              <button class="res-btn" style="background:#ff69b4; color:white;" onclick="showHome()">🏠 home</button>
-              <button class="res-btn" style="background:#4caf50; color:white;" id="nextLvBtn" style="display:none">➡ next</button>
-            </div>
-          </div>
-        </div>
+    <div class="menu-grid" style="grid-template-columns:1fr 1fr;gap:20px;margin:0 0 20px;">
+      <div class="menu-card math-card" style="min-height:220px;border-color:#c4a5ff;" onclick="showPracticeMenu()">
+        <div class="mc-icon" style="font-size:4rem;">🧮✏️</div>
+        <div class="mc-name">Practice Maths</div>
+        <div class="mc-desc">Quizzes &amp; Brain Challenges</div>
+        <div class="mc-badge" style="background:#4a2f7a;border-color:#c4a5ff;margin-top:6px;">PRACTISE</div>
       </div>
-
-      <!-- RIGHT BUTTONS - Fixed position column -->
-      <div class="button-area">
-        <button class="action-btn home" id="B_home" onclick="goHome()">
-          <span class="action-icon">🏠</span>
-          <span class="action-text">Home</span>
-        </button>
-        <button class="action-btn hint" id="B_hint" onclick="showHint()">
-          <span class="action-icon">💡</span>
-          <span class="action-text">Hint</span>
-        </button>
-        <button class="action-btn sound" id="B_sound" onclick="speakQuestion()">
-          <span class="action-icon">🔊</span>
-          <span class="action-text">Question</span>
-        </button>
-        <button class="action-btn retry" id="B_retry" onclick="retryQuestion()">
-          <span class="action-icon">🔄</span>
-          <span class="action-text">Try Again</span>
-        </button>
-        <button class="action-btn next" id="B_next" onclick="nextQuestion()">
-          <span class="action-icon">▶️</span>
-          <span class="action-text">Next</span>
-        </button>
+      <div class="menu-card soar-card" style="min-height:220px;" onclick="showSoarMenu()">
+        <div class="mc-icon" style="font-size:4rem;">🦅✨</div>
+        <div class="mc-name">SOAR Adventures</div>
+        <div class="mc-desc">56 hands-on activities</div>
+        <div class="mc-badge soar-b" style="margin-top:6px;">EXPLORE</div>
       </div>
+    </div>
+
+    <div class="progress-chart" id="progressChart"></div>
+    <div class="quick-nav">
+      <button class="qn-btn qn-home" onclick="showHome()">🏠 Home</button>
+      <button class="qn-btn qn-soar" onclick="showSoarMenu()">🦅 SOAR</button>
+      <button class="qn-btn qn-math" onclick="showPracticeMenu()">🧮 Maths</button>
     </div>
   </div>
 
-  <script>
-    // ===== SAFAAAN'S MATH 10→20 EDITION =====
-    function playSound(id) {
-      try { document.getElementById(id).cloneNode(true).play(); } catch(e){}
-    }
+  <!-- PRACTICE MENU SCREEN -->
+  <div class="screen" id="practiceMenuScreen">
+    <div class="btn-row" style="margin-bottom:14px;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-back" style="flex:none;padding:12px 18px;" onclick="showHome()">🏠 Home</button>
+      <button class="btn btn-back" style="flex:none;padding:12px 18px;background:#2d5a3a;border-color:#9ae6b4;" onclick="showSoarMenu()">🦅 SOAR</button>
+    </div>
+    <div class="path-header" style="padding:16px 20px;margin-bottom:20px;">
+      <h1 style="font-size:1.8rem;">🧮 Practice Maths</h1>
+    </div>
 
-    function speakText(text) {
-      if (!window.speechSynthesis) return;
-      try {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.8;
-        utterance.pitch = 1.2;
-        window.speechSynthesis.speak(utterance);
-      } catch(e) {}
-    }
+    <div class="section-wrap">
+      <div class="section-title">📝 Quiz Levels</div>
+      <div class="menu-grid" id="mathGrid"></div>
+    </div>
 
-    function celebrateCorrect() {
-      playSound('soundCorrect');
-      const cheers = ["Great job, Safaan!", "You did it!", "Awesome!", "Superstar!", "Wonderful!"];
-      speakText(cheers[Math.floor(Math.random() * cheers.length)]);
-    }
+    <div class="section-wrap">
+      <div class="challenge-section-title">🏆 Brain Challenges</div>
+      <div style="color:#ffb347;font-size:1rem;margin-bottom:14px;">Story problems to stretch your thinking!</div>
+      <div class="menu-grid" id="chalGrid"></div>
+    </div>
 
-    function celebrateLevelComplete(stars) {
-      playSound('soundCelebrate');
-      if (stars === 3) speakText("Amazing, Safaan! Three stars!");
-      else if (stars === 2) speakText("Good job, Safaan! Two stars!");
-      else speakText("Great trying, Safaan!");
-    }
+    <div class="quick-nav">
+      <button class="qn-btn qn-home" onclick="showHome()">🏠 Home</button>
+      <button class="qn-btn qn-soar" onclick="showSoarMenu()">🦅 SOAR</button>
+      <button class="qn-btn qn-math" onclick="showPracticeMenu()">🧮 Maths</button>
+    </div>
+  </div>
 
-    function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-    function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+  <!-- SOAR MENU SCREEN -->
+  <div class="screen" id="soarMenuScreen">
+    <div class="btn-row" style="margin-bottom:14px;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-back" style="flex:none;padding:12px 18px;" onclick="showHome()">🏠 Home</button>
+      <button class="btn btn-back" style="flex:none;padding:12px 18px;background:#4a2f7a;border-color:#c4a5ff;" onclick="showPracticeMenu()">🧮 Maths</button>
+    </div>
+    <div class="path-header" style="padding:16px 20px;margin-bottom:20px;">
+      <h1 style="font-size:1.8rem;">🦅 SOAR Adventures</h1>
+    </div>
 
-    const CATS = {
-      counting:{label:"Counting",levels:5,icon:"🔟"},
-      numbers:{label:"Numbers",levels:5,icon:"1️⃣"},
-      shapes:{label:"Shapes",levels:5,icon:"🔴"},
-      patterns:{label:"Patterns",levels:5,icon:"🎨"}
-    };
-    
-    let progress = {};
-    try { progress = JSON.parse(localStorage.getItem("safaan_math_v1_1020")) || {}; } catch(e) {}
-    let cat="", level=0, questions=[], qi=0, correct=0, wrong=0, mistakes=[];
-    let answered=false, hintCount=0;
-    let hasMadeMistake = false; 
+    <div class="section-wrap">
+      <div class="soar-section-title">🌱 NRICH Activities</div>
+      <div style="color:#9ae6b4;font-size:1rem;margin-bottom:14px;">Hands-on exploring with a grown-up!</div>
+      <div class="menu-grid" id="soarGrid"></div>
+    </div>
 
-    function initProgress(){
-      Object.keys(CATS).forEach(c=>{
-        if(!progress[c])progress[c]={};
-        for(let l=1;l<=CATS[c].levels;l++){
-          if(!progress[c][l])progress[c][l]={done:false,stars:0};
-        }
-      });
-    }
-    initProgress();
+    <div class="quick-nav">
+      <button class="qn-btn qn-home" onclick="showHome()">🏠 Home</button>
+      <button class="qn-btn qn-soar" onclick="showSoarMenu()">🦅 SOAR</button>
+      <button class="qn-btn qn-math" onclick="showPracticeMenu()">🧮 Maths</button>
+    </div>
+  </div>
 
-    function saveProgress(){
-      localStorage.setItem("safaan_math_v1_1020", JSON.stringify(progress));
-      const b=new Blob([JSON.stringify(progress)],{type:"application/json"});
-      const a=document.createElement("a");
-      a.href=URL.createObjectURL(b);
-      a.download="safaan-math-1020-save.json";
-      a.click();
-      document.getElementById("saveLbl").innerHTML="✅ saved! ⭐";
-      setTimeout(updateSaveLbl,2000);
-    }
+  <!-- SOAR ACTIVITY SCREEN -->
+  <div class="screen" id="soarScreen">
+    <div class="btn-row" style="margin-bottom:14px;">
+      <button class="btn btn-back" onclick="showHome()">🏠 Home</button>
+      <button class="btn btn-back" style="background:#2d5a3a;border-color:#9ae6b4;" onclick="showSoarMenu()">← All SOAR</button>
+    </div>
+    <div id="soarContent"></div>
+    <div class="quick-nav">
+      <button class="qn-btn qn-home" onclick="showHome()">🏠 Home</button>
+      <button class="qn-btn qn-soar" onclick="showSoarMenu()">🦅 SOAR</button>
+      <button class="qn-btn qn-math" onclick="showPracticeMenu()">🧮 Maths</button>
+    </div>
+  </div>
 
-    function loadFile(e){
-      const f=e.target.files[0];if(!f)return;
-      const r=new FileReader();
-      r.onload=ev=>{
-        try{
-          progress=JSON.parse(ev.target.result);
-          initProgress();
-          updateSaveLbl();
-          speakText("Progress loaded, Safaan!");
-        } catch(e){ alert("try again, Safaan!"); }
-      };
-      r.readAsText(f);
-      e.target.value="";
-    }
+  <!-- QUIZ SCREEN -->
+  <div class="screen" id="quizScreen">
+    <div class="btn-row" style="margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <button class="btn btn-back" style="flex:none;padding:12px 18px;" onclick="showHome()">🏠 Home</button>
+      <button class="btn btn-back" style="flex:none;padding:12px 18px;background:#392b54;" onclick="showPracticeMenu()">← Levels</button>
+    </div>
+    <div class="quiz-head">
+      <div class="quiz-meta">
+        <span id="quizLabel">Level</span>
+        <span id="quizQNum">Q1/11</span>
+      </div>
+      <div class="quiz-score-row">
+        <div class="qs-item"><div>✅</div><div class="qs-val" id="scoreCorrect">0</div></div>
+        <div class="qs-item"><div>❌</div><div class="qs-val" id="scoreWrong">0</div></div>
+        <div class="qs-item"><div>%</div><div class="qs-val" id="scorePercent">—</div></div>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="quizBar" style="width:0%"></div></div>
+    </div>
+    <div id="videoArea" style="text-align:center;margin-bottom:10px;"></div>
+    <div class="q-card" id="questionCard"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="hint-box" id="hintBox"></div>
+    <div class="btn-row">
+      <button class="btn btn-back" onclick="showPracticeMenu()">← Back</button>
+      <button class="btn btn-hint" id="hintBtn" onclick="showHint()">💡 Hint</button>
+      <button class="btn btn-check" id="checkBtn" onclick="checkAnswer()">✅ Check</button>
+      <button class="btn btn-next" id="nextBtn" onclick="nextQ()">▶ Next</button>
+    </div>
+    <div class="quick-nav">
+      <button class="qn-btn qn-home" onclick="showHome()">🏠 Home</button>
+      <button class="qn-btn qn-soar" onclick="showSoarMenu()">🦅 SOAR</button>
+      <button class="qn-btn qn-math" onclick="showPracticeMenu()">← Levels</button>
+    </div>
+  </div>
 
-    function updateSaveLbl(){
-      let total=0;
-      Object.keys(CATS).forEach(c=>{
-        for(let l=1;l<=CATS[c].levels;l++){
-          total+=progress[c]?.[l]?.stars||0;
-        }
-      });
-      document.getElementById("saveLbl").innerHTML="⭐ "+total+" stars";
-      
-      let ch=document.getElementById("progressChart");
-      if(!ch)return;
-      
-      let completed=0,tot=0;
-      Object.keys(CATS).forEach(c=>{
-        for(let l=1;l<=CATS[c].levels;l++){
-          tot++;
-          if(progress[c]?.[l]?.done)completed++;
-        }
-      });
-      let pct=tot?Math.round((completed/tot)*100):0;
-      
-      ch.innerHTML=`<div style="font-weight:900; font-size:clamp(1rem,4vw,2.2rem);">📊 Safaan's journey (10-20)</div>
-        <div style="margin:clamp(5px,1.5vh,15px) 0; font-size:clamp(0.9rem,3.5vw,2rem);">⭐ ${total} stars</div>
-        <div class="progress-bar-cont"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-        <div class="progress-stats">${
-          Object.keys(CATS).map(c=>`<span>${CATS[c].icon} ${Object.values(progress[c]||{}).filter(p=>p.done).length}/${CATS[c].levels}</span>`).join(' ')
-        }</div>`;
-    }
+  <!-- RESULT SCREEN -->
+  <div class="screen" id="resultScreen">
+    <div class="btn-row" style="margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <button class="btn btn-back" style="flex:none;padding:12px 18px;" onclick="showHome()">🏠 Home</button>
+      <button class="btn btn-back" style="flex:none;padding:12px 18px;background:#392b54;" onclick="showPracticeMenu()">🧮 Levels</button>
+    </div>
+    <div class="result-card">
+      <div class="result-emoji" id="resEmoji">🏆</div>
+      <div class="result-title" id="resTitle">Amazing!</div>
+      <div class="result-stars" id="resStars">⭐⭐⭐</div>
+      <div class="result-msg" id="resMsg"></div>
+      <div id="mistakeSection"></div>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-back" id="retryBtn">🔁 Try again</button>
+        <button class="btn btn-check" onclick="showPracticeMenu()">🧮 Levels</button>
+        <button class="btn btn-next" id="nextLvBtn" style="display:none">➡ Next level</button>
+      </div>
+    </div>
+    <div class="quick-nav">
+      <button class="qn-btn qn-home" onclick="showHome()">🏠 Home</button>
+      <button class="qn-btn qn-soar" onclick="showSoarMenu()">🦅 SOAR</button>
+      <button class="qn-btn qn-math" onclick="showPracticeMenu()">🧮 Levels</button>
+    </div>
+  </div>
 
-    function showScreen(id){
-      document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    }
-    
-    function showHome(){
-      updateSaveLbl();
-      showScreen("homeScreen");
-    }
-    
-    function goHome(){
-      if(confirm("Back home, Safaan?")) showHome();
-    }
+</div><!-- .wrap -->
 
-    function openCategory(c){
-      cat=c;
-      document.getElementById("levelsTitle").innerText=CATS[c].label+" — choose, Safaan!";
-      let grid=document.getElementById("levelsGrid");
-      grid.innerHTML="";
-      
-      for(let l=1;l<=CATS[c].levels;l++){
-        let p=progress[c][l];
-        let btn=document.createElement("button");
-        btn.className="lv-btn"+(p.done?" done":"");
-        const icons=['🔟','🌿','🍃','🌟','🏆'];
-        btn.innerHTML='<span class="lv-icon">'+icons[l-1]+'</span>Level '+l+(p.stars>0?'<span class="lv-score">⭐'+p.stars+'</span>':'');
-        btn.onclick=(ll=>()=>startLevel(ll))(l);
-        grid.appendChild(btn);
-      }
-      showScreen("levelsScreen");
-    }
+<script>
+(function(){
+'use strict';
 
-    // ========== GENERATORS using 10..20 ==========
-    function generateCountingQuestions(level){
-      const emojis=["🐶","🐱","🐭","🐰","🦊","🐻","⭐","🍎","🚗","⚽"];
-      // level 1: numbers 10-12, lv2:12-14, lv3:14-16, lv4:16-18, lv5:18-20
-      const rangeMap = {
-        1: [10,11,12],
-        2: [12,13,14],
-        3: [14,15,16],
-        4: [16,17,18],
-        5: [18,19,20]
-      };
-      let arr = rangeMap[level] || [10,11,12];
-      let qs=[];
-      for(let i=0;i<5;i++){
-        let num=arr[Math.floor(Math.random()*arr.length)];
-        let em=emojis[Math.floor(Math.random()*emojis.length)];
-        qs.push({
-          type:'counting',
-          question:`How many ${em} , Safaan? (count 10 to 20)`,
-          count:num,
-          emoji:em,
-          objects:Array(num).fill(em),
-          answer:num,
-          hint:`Start from 10: 10, 11, 12... up to 20.`
-        });
-      }
-      return qs;
-    }
-    
-    function generateNumberQuestions(level){
-      const nums={1:[10,11,12],2:[12,13,14],3:[14,15,16],4:[16,17,18],5:[18,19,20]};
-      let arr=nums[level]||[10,11,12];
-      let qs=[];
-      for(let i=0;i<5;i++){
-        let num=arr[Math.floor(Math.random()*arr.length)];
-        let opts = [num];
-        while(opts.length<3){
-          let cand = num + rnd(-2,2);
-          if(cand>=10 && cand<=20 && !opts.includes(cand)) opts.push(cand);
-        }
-        qs.push({
-          type:'number',
-          question:`Which number is this, Safaan?`,
-          number:num,
-          options:shuffle(opts),
-          answer:num,
-          hint:`It's ${num} (ten, eleven ... twenty)`
-        });
-      }
-      return qs;
-    }
-    
-    function generateShapeQuestions(level){
-      // shapes unchanged but can have new ones
-      let shapes={
-        1:["circle","square"],
-        2:["circle","square","triangle"],
-        3:["circle","square","triangle","star"],
-        4:["circle","square","triangle","star","heart"],
-        5:["circle","square","triangle","star","heart","diamond"]
-      };
-      let list=shapes[level]||shapes[1];
-      let qs=[];
-      for(let i=0;i<5;i++){
-        let sh=list[Math.floor(Math.random()*list.length)];
-        let wrong=list.filter(s=>s!==sh).slice(0,2);
-        if(wrong.length<2)wrong.push("circle");
-        qs.push({
-          type:'shape',
-          question:`What shape is this, Safaan?`,
-          shape:sh,
-          display:sh=='circle'?'🔴':sh=='square'?'🟨':sh=='triangle'?'🔺':sh=='star'?'⭐':sh=='heart'?'❤️':'💎',
-          options:[sh,...wrong].slice(0,3),
-          answer:sh,
-          hint:`It's a ${sh}`
-        });
-      }
-      return qs;
-    }
-    
-    function generatePatternQuestions(level){
-      // patterns still abstract, but keep numbers higher in hints? not necessary
-      let pats={
-        1:[{p:["🔴","🔵"],n:"🔴"},{p:["🟡","🟢"],n:"🟡"}],
-        2:[{p:["🔴","🔴","🔵"],n:"🔵"}],
-        3:[{p:["🐶","🐱","🐶"],n:"🐱"}],
-        4:[{p:["🔴","🔵","🔴","🔵"],n:"🔴"}],
-        5:[{p:["⭐","⭐","🌙","⭐","⭐"],n:"🌙"}]
-      };
-      let arr=pats[level]||pats[1];
-      let qs=[];
-      for(let i=0;i<5;i++){
-        let p=arr[Math.floor(Math.random()*arr.length)];
-        let opts=[p.n,p.p[0],p.p[1]||p.p[0]];
-        qs.push({
-          type:'pattern',
-          question:`What comes next, Safaan?`,
-          pattern:p.p,
-          options:shuffle(opts),
-          answer:p.n,
-          hint:`Say the pattern out loud!`
-        });
-      }
-      return qs;
-    }
+// ── HELPERS ──────────────────────────────────────────────────────────────
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function buildLevel(eqFn,pool){
+  const eqs=[];let g=0;
+  while(eqs.length<10&&g++<500){const p=eqFn();if(p)eqs.push(p);}
+  const words=shuffle(pool).slice(0,5);
+  return[...eqs.slice(0,7).map(p=>({...p,category:'equation',hasHint:true})),
+         ...eqs.slice(7,10).map(p=>({...p,category:'equation',hasHint:false})),
+         ...words.slice(0,2).map(p=>({...p,category:'word',hasHint:true})),
+         ...words.slice(2,5).map(p=>({...p,category:'word',hasHint:false}))];
+}
 
-    function startLevel(l){
-      level=l;
-      qi=0;
-      correct=0;
-      wrong=0;
-      mistakes=[];
-      answered=false;
-      hasMadeMistake = false;
-      hintCount=0;
-      
-      if(cat==='counting') questions=generateCountingQuestions(level);
-      else if(cat==='numbers') questions=generateNumberQuestions(level);
-      else if(cat==='shapes') questions=generateShapeQuestions(level);
-      else questions=generatePatternQuestions(level);
-      
-      document.getElementById("quizLabel").innerText=CATS[cat].label+" • Lv"+l;
-      showScreen("quizScreen");
-      loadQuestion();
-    }
+// ===== HINT FUNCTIONS =====
+// RULES:
+//  subtractColumn(big, small):
+//    ones(big) >= ones(small) → simple column subtraction
+//    ones(big) <  ones(small) → borrowing column subtraction
+//  addColumn(a, b):
+//    ones(a)+ones(b) <= 9 → simple column addition
+//    ones(a)+ones(b) >  9 → carry column addition
+//  Missing add  (a + ? = total):  show subtractColumn(total, a)
+//  Missing sub  (total − ? = result): show subtractColumn(total, result)
+//  Missing 3add (total = a + b + ?): addColumn(a,b) then subtractColumn(total, a+b)
 
-    function loadQuestion(){
-      answered=false;
-      hasMadeMistake = false;
-      let q=questions[qi];
-      
-      document.getElementById("quizQNum").innerText="Game "+(qi+1)+"/5";
-      document.getElementById("qsCorrect").innerText=correct;
-      document.getElementById("qsWrong").innerText=wrong;
-      let acc= (correct+wrong)>0 ? Math.round((correct/(correct+wrong))*100) : 0;
-      document.getElementById("qsAcc").innerText=acc+"%";
-      document.getElementById("progFill").style.width=((qi)/5*100)+"%";
-      document.getElementById("feedback").className="feedback";
-      document.getElementById("hintBox").className="hint-box";
-      
-      document.getElementById("B_hint").disabled = false;
-      document.getElementById("B_retry").disabled = false;
-      
-      renderQuestion(q);
-    }
+function bubble(text) {
+  return `<div style="background:#2f274a;border-radius:14px;padding:12px 16px;margin:8px 0;color:#e4d2ff;line-height:1.7;">${text}</div>`;
+}
+function wrap(borderColor, icon, title, body) {
+  return `<div style="background:linear-gradient(135deg,#2a1f3a,#1f1730);border-radius:22px;padding:18px;border:3px solid ${borderColor};font-size:0.95rem;">`
+    + `<div style="color:${borderColor};font-weight:800;font-size:1.05rem;text-align:center;margin-bottom:12px;">${icon} ${title}</div>`
+    + body + `</div>`;
+}
+function numChip(n, bg) {
+  return `<span style="display:inline-flex;align-items:center;justify-content:center;background:${bg||'#FF9FCF'};color:#1a0f2a;min-width:38px;height:38px;border-radius:9px;font-size:1.2rem;font-weight:bold;padding:0 5px;margin:2px;">${n}</span>`;
+}
+function colBox(rows) {
+  const lines = rows.map(r =>
+    `<div style="font-family:'Courier New';font-size:1.5rem;color:${r.color||'#FF9FCF'};text-align:right;padding:1px 0;">${r.text}</div>`
+  ).join('');
+  return `<div style="background:#1a1530;border-radius:12px;padding:12px 22px;display:inline-block;min-width:110px;">${lines}</div>`;
+}
 
-    function renderQuestion(q){
-      let card=document.getElementById("qCard");
-      let html=`<div class="q-type-badge">${CATS[cat].icon} ${CATS[cat].label}</div><div class="q-text">${q.question}</div>`;
-      
-      if(cat==='counting'){
-        html+=`<div class="object-row">${q.objects.map(o=>`<span class="count-object">${o}</span>`).join('')}</div><div class="big-answer-buttons">`;
-        // answers: correct, correct+1, correct-1 (within 10-20)
-        let answers=[q.answer];
-        if(q.answer+1 <=20) answers.push(q.answer+1);
-        if(q.answer-1 >=10) answers.push(q.answer-1);
-        answers = [...new Set(answers)];
-        if(answers.length<3){
-          let extra = q.answer+2 <=20 ? q.answer+2 : q.answer-2;
-          if(extra>=10 && extra<=20) answers.push(extra);
-        }
-        shuffle(answers);
-        answers.forEach(n=>{html+=`<button class="answer-btn" onclick="selectNumber(${n},${q.answer})">${n}</button>`;});
-        html+=`</div>`;
-      }else if(cat==='numbers'){
-        html+=`<div class="big-number">${q.number}</div><div class="big-answer-buttons">`;
-        q.options.forEach(n=>{html+=`<button class="answer-btn" onclick="selectNumber(${n},${q.answer})">${n}</button>`;});
-        html+=`</div>`;
-      }else if(cat==='shapes'){
-        html+=`<div style="text-align:center; font-size:clamp(2rem,10vw,6rem); margin:15px 0">${q.display}</div>`;
-        html+=`<div class="options two-col">`;
-        q.options.forEach((opt,i)=>{html+=`<button class="opt-btn" onclick="selectOption(${i},'${opt}','${q.answer}')">${opt}</button>`;});
-        html+=`</div>`;
-      }else{
-        html+=`<div class="pattern-row">${q.pattern.map(p=>`<span>${p}</span>`).join('')}<span>❓</span></div>`;
-        html+=`<div class="options two-col">`;
-        q.options.forEach((opt,i)=>{html+=`<button class="opt-btn" onclick="selectOption(${i},'${opt}','${q.answer}')">${opt}</button>`;});
-        html+=`</div>`;
-      }
-      card.innerHTML=html;
-    }
+// ── Core subtraction (big >= small always) ───────────────────────────────
+function subtractColumn(big, small) {
+  const oB = big % 10, oS = small % 10;
+  const tB = Math.floor(big / 10), tS = Math.floor(small / 10);
+  const needBorrow = oB < oS;
+  const ans = big - small;
+  const pad = String(big).length;
 
-    function selectNumber(num,correctAns){
-      if(answered) return;
-      
-      if(num===correctAns){ 
-        answered=true;
-        correct++; 
-        celebrateCorrect();
-        document.querySelectorAll('.answer-btn').forEach(b=>{
-          if(parseInt(b.textContent)===num)b.classList.add('correct');
-        });
-        document.getElementById("B_retry").disabled = true;
-        
-      } else { 
-        if (!hasMadeMistake) {
-          hasMadeMistake = true;
-          document.querySelectorAll('.answer-btn').forEach(b=>{
-            if(parseInt(b.textContent)===num)b.classList.add('wrong');
-          });
-          playSound('soundWrong');
-          document.getElementById("feedback").innerHTML="🔄 Oops! Try again, Safaan!";
-          document.getElementById("feedback").className="feedback show bad";
-          
-        } else {
-          answered=true;
-          wrong++;
-          mistakes.push({q:`Count to ${correctAns}`,exp:`Let's count together, Safaan!`});
-          
-          document.querySelectorAll('.answer-btn').forEach(b=>{
-            if(parseInt(b.textContent)===num)b.classList.add('wrong');
-            if(parseInt(b.textContent)===correctAns)b.classList.add('correct');
-          });
-          
-          playSound('soundWrong');
-          document.getElementById("feedback").innerHTML=`💙 The answer is ${correctAns}, Safaan!`;
-          document.getElementById("feedback").className="feedback show bad";
-          
-          updateScoreAndFeedback(false);
-          document.getElementById("B_retry").disabled = true;
-        }
-      }
-      
-      if (answered) {
-        updateScoreAndFeedback(num===correctAns);
-      }
-    }
+  if (!needBorrow) {
+    const oneAns = oB - oS;
+    const tenAns = tB - tS;
+    return wrap('#6BCB77', '➖', `${big} \u2212 ${small}`,
+      bubble(`<strong style="color:#FFD93D;">Right side (ones):</strong> Is ${oB} bigger than or equal to ${oS}? <strong style="color:#6BCB77;">YES \u2705</strong><br>${oB} \u2212 ${oS} = <strong>${oneAns}</strong>`)
+      + bubble(`<strong style="color:#FFD93D;">Left side (tens):</strong> ${tB} \u2212 ${tS} = <strong>${tenAns}</strong>`)
+      + `<div style="text-align:center;margin:10px 0;">${colBox([
+          {text:'  '+big},
+          {text:'\u2212 '+String(small).padStart(pad,' ')},
+          {text:'\u2500\u2500\u2500\u2500\u2500',color:'#9e8fc9'},
+          {text:'  '+ans,color:'#6BCB77'}
+        ])}</div>`
+      + bubble(`<strong style="color:#6BCB77;">\u2705 ${big} \u2212 ${small} = ${ans}, Safia! \u2b50</strong>`)
+    );
+  } else {
+    const borrowedOnes = oB + 10;
+    const newTens = tB - 1;
+    const oneAns = borrowedOnes - oS;
+    const tenAns = newTens - tS;
+    const oSteps = Array.from({length: oneAns}, (_, i) => oS + i + 1);
+    return wrap('#FF6B6B', '\u2796', `${big} \u2212 ${small} (with borrowing)`,
+      bubble(`<strong style="color:#FFD93D;">Right side (ones):</strong> Is ${oB} bigger than or equal to ${oS}? <strong style="color:#FF6B6B;">NO \u274c</strong><br>${oB} is less than ${oS} \u2014 we need to <strong>borrow</strong>.`)
+      + bubble(`<strong style="color:#FFD93D;">Borrowing:</strong><br>
+        Take 1 ten from the left: <strong>${tB} \u2192 ${newTens}</strong><br>
+        Add that 10 to the right: <strong>${oB} \u2192 ${borrowedOnes}</strong> (because 10 + ${oB} = ${borrowedOnes})<br><br>
+        <div style="text-align:center;">${colBox([
+          {text:'  '+newTens,color:'#FFD93D'},
+          {text:'\u0338 '+tB+'|'+oB+' \u2192 '+newTens+'|'+borrowedOnes,color:'#b1a5d9'},
+          {text:'\u2212 '+tS+'|'+oS},
+          {text:'\u2500\u2500\u2500\u2500\u2500\u2500',color:'#9e8fc9'}
+        ])}</div>`)
+      + bubble(`<strong style="color:#FFD93D;">Right side (ones): ${borrowedOnes} \u2212 ${oS}</strong><br>
+        Count from ${oS} up to ${borrowedOnes}:<br>
+        ${numChip(oS,'#C77DFF')} \u2192 ${oSteps.map((n,i)=>numChip(n,i===oSteps.length-1?'#6BCB77':'#FF9FCF')).join(' ')}<br>
+        <em>${oSteps.join(', ')}</em> \u2192 <strong style="color:#6BCB77;">${oneAns}</strong>`)
+      + bubble(`<strong style="color:#FFD93D;">Left side (tens): ${newTens} \u2212 ${tS} = ${tenAns}</strong>`)
+      + `<div style="text-align:center;margin:10px 0;">${colBox([
+          {text:'  '+big},
+          {text:'\u2212 '+String(small).padStart(pad,' ')},
+          {text:'\u2500\u2500\u2500\u2500\u2500',color:'#9e8fc9'},
+          {text:'  '+ans,color:'#6BCB77'}
+        ])}</div>`
+      + bubble(`<strong style="color:#6BCB77;">\u2705 ${big} \u2212 ${small} = ${ans}, Safia! \u2b50</strong>`)
+    );
+  }
+}
 
-    function selectOption(idx,opt,correctAns){
-      if(answered) return;
-      
-      if(opt===correctAns){
-        answered=true;
-        correct++;
-        celebrateCorrect();
-        document.querySelectorAll('.opt-btn')[idx].classList.add('correct');
-        document.getElementById("B_retry").disabled = true;
-        
-      } else {
-        if (!hasMadeMistake) {
-          hasMadeMistake = true;
-          document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
-          playSound('soundWrong');
-          document.getElementById("feedback").innerHTML="🔄 Oops! Try again, Safaan!";
-          document.getElementById("feedback").className="feedback show bad";
-          
-        } else {
-          answered=true;
-          wrong++;
-          mistakes.push({q:`Find the ${correctAns}`,exp:`Good try, Safaan!`});
-          document.querySelectorAll('.opt-btn')[idx].classList.add('wrong');
-          document.querySelectorAll('.opt-btn').forEach((b,i)=>{
-            if(b.textContent===correctAns)b.classList.add('correct');
-          });
-          playSound('soundWrong');
-          document.getElementById("feedback").innerHTML=`💙 The answer is ${correctAns}, Safaan!`;
-          document.getElementById("feedback").className="feedback show bad";
-          updateScoreAndFeedback(false);
-          document.getElementById("B_retry").disabled = true;
-        }
-      }
-      
-      if (answered) {
-        updateScoreAndFeedback(opt===correctAns);
-      }
-    }
+// ── Core addition ─────────────────────────────────────────────────────────
+function addColumn(a, b) {
+  const oA = a % 10, oB = b % 10;
+  const tA = Math.floor(a / 10), tB = Math.floor(b / 10);
+  const onesSum = oA + oB;
+  const needCarry = onesSum > 9;
+  const onesWrite = onesSum % 10;
+  const carry = Math.floor(onesSum / 10);
+  const ans = a + b;
+  const bigO = Math.max(oA, oB), smallO = Math.min(oA, oB);
+  const oSteps = Array.from({length: smallO}, (_, i) => bigO + i + 1);
+  const pad = String(a).length;
 
-    function updateScoreAndFeedback(isCorrect){
-      document.getElementById("qsCorrect").innerText=correct;
-      document.getElementById("qsWrong").innerText=wrong;
-      let acc= (correct+wrong)>0 ? Math.round((correct/(correct+wrong))*100) : 0;
-      document.getElementById("qsAcc").innerText=acc+"%";
-    }
+  if (!needCarry) {
+    return wrap('#6BCB77', '\u2795', `${a} + ${b}`,
+      bubble(`<strong style="color:#FFD93D;">Right side (ones): ${oA} + ${oB}</strong><br>
+        Count from <strong>${bigO}</strong> up <strong>${smallO}</strong> step${smallO!==1?'s':''}:<br>
+        ${numChip(bigO,'#C77DFF')} \u2192 ${oSteps.map((n,i)=>numChip(n,i===oSteps.length-1?'#6BCB77':'#FF9FCF')).join(' ')}<br>
+        ${oSteps.length ? '<em>'+oSteps.join(', ')+'</em> \u2192 ' : ''}<strong style="color:#6BCB77;">${onesSum}</strong><br>
+        ${onesSum} is 9 or less \u2014 <strong>no carrying needed</strong>.`)
+      + bubble(`<strong style="color:#FFD93D;">Left side (tens): ${tA} + ${tB} = ${tA+tB}</strong>`)
+      + `<div style="text-align:center;margin:10px 0;">${colBox([
+          {text:'  '+a},
+          {text:'+ '+String(b).padStart(pad,' ')},
+          {text:'\u2500\u2500\u2500\u2500\u2500',color:'#9e8fc9'},
+          {text:'  '+ans,color:'#6BCB77'}
+        ])}</div>`
+      + bubble(`<strong style="color:#6BCB77;">\u2705 ${a} + ${b} = ${ans}, Safia! \u2b50</strong>`)
+    );
+  } else {
+    return wrap('#6BCB77', '\u2795', `${a} + ${b} (with carrying)`,
+      bubble(`<strong style="color:#FFD93D;">Right side (ones): ${oA} + ${oB}</strong><br>
+        Count from <strong>${bigO}</strong> up <strong>${smallO}</strong> step${smallO!==1?'s':''}:<br>
+        ${numChip(bigO,'#C77DFF')} \u2192 ${oSteps.map((n)=>numChip(n,'#FF9FCF')).join(' ')}<br>
+        Total = <strong>${onesSum}</strong><br>
+        <strong style="color:#FF9FCF;">\u26a0\ufe0f ${onesSum} is bigger than 9!</strong> The biggest we can write on the right is 9.<br>
+        So we write <strong style="color:#6BCB77;">${onesWrite}</strong> on the right and carry <strong style="color:#FFD93D;">${carry}</strong> to the left.`)
+      + bubble(`<strong style="color:#FFD93D;">Left side (tens): ${tA} + ${tB} + ${carry} (carried) = ${tA+tB+carry}</strong>`)
+      + `<div style="text-align:center;margin:10px 0;">${colBox([
+          {text:'  '+carry,color:'#FFD93D'},
+          {text:'  '+a},
+          {text:'+ '+String(b).padStart(pad,' ')},
+          {text:'\u2500\u2500\u2500\u2500\u2500',color:'#9e8fc9'},
+          {text:'  '+ans,color:'#6BCB77'}
+        ])}</div>`
+      + bubble(`<strong style="color:#6BCB77;">\u2705 ${a} + ${b} = ${ans}, Safia! \u2b50</strong>`)
+    );
+  }
+}
 
-    function speakQuestion(){
-      let q=questions[qi];
-      if(q) speakText(q.question + (q.hint ? " Hint: " + q.hint : ""));
-    }
+// ── Public hint functions ─────────────────────────────────────────────────
+function hintAdd(a, b)       { return addColumn(a, b); }
+function hintSub(a, b)       { return subtractColumn(a, b); }
+function hintCarryAdd(a, b)  { return addColumn(a, b); }
+function hintBorrowSub(a, b) { return subtractColumn(a, b); }
 
-    function showHint(){
-      let q=questions[qi];
-      hintCount++;
-      document.getElementById("hintBox").innerHTML="💡 "+ (q.hint||"Count slowly from 10 to 20, Safaan!");
-      document.getElementById("hintBox").className="hint-box show";
-      document.getElementById("B_hint").disabled=true;
-      speakText(q.hint);
-    }
+// Missing add: a + ? = total  → total − a
+function hintMissingAddSimple(total, a) {
+  const ans = total - a;
+  return wrap('#6BCB77', '\u2753', 'MISSING NUMBER \u2014 ADDITION',
+    bubble(`<strong style="color:#FFD93D;">We have: ${a} + ? = ${total}</strong><br>
+      We have <strong>${a}</strong> and a number we don\u2019t know. Together they make <strong>${total}</strong>.<br>
+      To find the missing number, we subtract <strong>${a}</strong> from <strong>${total}</strong>.`)
+    + subtractColumn(total, a)
+    + bubble(`<strong style="color:#6BCB77;">\u2705 The missing number is ${ans}, Safia! \u2b50</strong><br>Check: ${a} + ${ans} = ${total} \u2713`)
+  );
+}
 
-    function retryQuestion(){
-      if (answered) {
-        document.getElementById("feedback").innerHTML="Already answered, Safaan! Try next question.";
-        document.getElementById("feedback").className="feedback show bad";
-        return;
-      }
-      
-      if (!hasMadeMistake) {
-        document.getElementById("feedback").innerHTML="You haven't tried yet, Safaan! Pick an answer.";
-        document.getElementById("feedback").className="feedback show bad";
-        return;
-      }
-      
-      document.querySelectorAll('.answer-btn.wrong, .opt-btn.wrong').forEach(b => {
-        b.classList.remove('wrong');
-      });
-      document.getElementById("feedback").className="feedback";
-      document.getElementById("feedback").innerHTML="";
-      hasMadeMistake = false;
-      speakText("Try again, Safaan! You can do it!");
-    }
+// Missing sub: total − ? = result  → total − result
+function hintMissingSubSmall(total, result) {
+  const ans = total - result;
+  return wrap('#FF6B6B', '\u2753', 'MISSING NUMBER \u2014 SUBTRACTION',
+    bubble(`<strong style="color:#FFD93D;">We have: ${total} \u2212 ? = ${result}</strong><br>
+      We subtract a number we don\u2019t know from <strong>${total}</strong> to get <strong>${result}</strong>.<br>
+      To find the missing number, we subtract <strong>${result}</strong> from <strong>${total}</strong>.`)
+    + subtractColumn(total, result)
+    + bubble(`<strong style="color:#6BCB77;">\u2705 The missing number is ${ans}, Safia! \u2b50</strong><br>Check: ${total} \u2212 ${ans} = ${result} \u2713`)
+  );
+}
 
-    function nextQuestion(){
-      qi++;
-      if(qi>=5) showResult();
-      else loadQuestion();
-    }
+// Missing 3-add: total = a + b + ?  → step1: a+b, step2: total − (a+b)
+function hintMissingThreeAdd(total, a, b) {
+  const known = a + b;
+  const ans = total - known;
+  return wrap('#6BCB77', '\u2753', 'MISSING NUMBER \u2014 THREE ADDENDS',
+    bubble(`<strong style="color:#FFD93D;">We have: ${total} = ${a} + ${b} + ?</strong><br>
+      We know two numbers (${a} and ${b}) and the total (${total}). Let\u2019s find the third.`)
+    + bubble(`<strong style="color:#FFD93D;">Step 1 \u2014 Add the numbers we know: ${a} + ${b}</strong>`)
+    + addColumn(a, b)
+    + bubble(`<strong style="color:#FFD93D;">Step 2 \u2014 Subtract from the total: ${total} \u2212 ${known}</strong>`)
+    + subtractColumn(total, known)
+    + bubble(`<strong style="color:#6BCB77;">\u2705 The missing number is ${ans}, Safia! \u2b50</strong><br>Check: ${a} + ${b} + ${ans} = ${total} \u2713`)
+  );
+}
+// ===== LEVEL GENERATORS =====
+function eqCounting(){if(rnd(0,1)===0){const a=rnd(2,14),b=rnd(1,6);return{type:'counting_add',question:`${a} + ${b} = ?`,answer:a+b,hint:hintAdd(a,b)};}else{const a=rnd(6,18),b=rnd(1,5);return{type:'counting_sub',question:`${a} − ${b} = ?`,answer:a-b,hint:hintSub(a,b)};}}
+function eqGrouping(){const t=rnd(0,1);if(t===0){const tens=rnd(1,7),ones=rnd(0,9),total=tens*10+ones;return{type:'grouping',question:`${tens} tens and ${ones} ones = ?`,answer:total};}else{const n=rnd(11,79),ones=n%10;return{type:'grouping',question:`${n} = ___ tens and ___ ones.\nHow many ones?`,answer:ones};}}
+function eqMissingAdd(){
+  const t=rnd(0,3);
+  if(t===0){
+    const a=rnd(2,9),total=rnd(a+3,18),ans=total-a;
+    return{type:'missing_add',category:'equation',hasHint:true,question:`? + ${a} = ${total}`,answer:ans,hint:hintMissingAddSimple(total,a)};
+  }
+  if(t===1){
+    const a=rnd(2,9),total=rnd(a+3,18),ans=total-a;
+    return{type:'missing_add',category:'equation',hasHint:true,question:`${a} + ? = ${total}`,answer:ans,hint:hintMissingAddSimple(total,a)};
+  }
+  if(t===2){
+    const total=rnd(12,25),result=rnd(5,total-3),ans=total-result;
+    return{type:'missing_add',category:'equation',hasHint:true,question:`${total} − ? = ${result}`,answer:ans,hint:hintMissingSubSmall(total,result)};
+  }
+  const a=rnd(3,8),b=rnd(3,8),total=rnd(a+b+3,30),ans=total-a-b;
+  return{type:'missing_add',category:'equation',hasHint:true,question:`${total} = ${a} + ${b} + ?`,answer:ans,hint:hintMissingThreeAdd(total,a,b)};
+}
+function eqCarryAdd(){let a,b,g=0;do{a=rnd(14,67);b=rnd(13,55);g++;}while(((a%10)+(b%10)<10||a+b>99)&&g<200);return{type:'carry_add',category:'equation',hasHint:true,question:`${a} + ${b} = ?`,answer:a+b,hint:hintCarryAdd(a,b)};}
+function eqBorrowSub(){let a,b,g=0;do{a=rnd(22,91);b=rnd(13,a-5);g++;}while(((a%10)>=(b%10)||a-b<5)&&g<200);return{type:'borrow_sub',category:'equation',hasHint:true,question:`${a} − ${b} = ?`,answer:a-b,hint:hintBorrowSub(a,b)};}
+function hintAddThree(a, b, c) {
+  const step1 = a + b;
+  const step2 = step1 + c;
+  return wrap('#6BCB77', '🔺', `${a} + ${b} + ${c}`,
+    bubble(`<strong style="color:#FFD93D;">We have three numbers to add: ${a} + ${b} + ${c}</strong><br>
+      We add them <strong>two at a time</strong>. First add ${a} + ${b}, then add ${c} to the result.`)
+    + bubble(`<strong style="color:#FFD93D;">Step 1 — Add ${a} + ${b}:</strong>`)
+    + addColumn(a, b)
+    + bubble(`<strong style="color:#FFD93D;">Step 2 — Add ${c} to the result (${step1} + ${c}):</strong>`)
+    + addColumn(step1, c)
+    + bubble(`<strong style="color:#6BCB77;">✅ ${a} + ${b} + ${c} = ${step2}, Safia! ⭐</strong>`)
+  );
+}
 
-    function showResult(){
-      let stars=Math.min(3,Math.ceil((correct+1)/2)); 
-      progress[cat][level].done=true;
-      progress[cat][level].stars=Math.max(progress[cat][level].stars||0,stars);
-      localStorage.setItem("safaan_math_v1_1020",JSON.stringify(progress));
-      updateSaveLbl();
-      celebrateLevelComplete(stars);
-      
-      document.getElementById("resEmoji").innerText=stars===3?"🏆":stars===2?"🌟":"⭐";
-      document.getElementById("resTitle").innerText=stars===3?"SUPERSTAR, SAFAAAN!":stars===2?"Great job, Safaan!":"Good try, Safaan!";
-      document.getElementById("resStars").innerHTML="⭐".repeat(stars);
-      document.getElementById("resMsg").innerHTML=stars===3?"You got all stars, Safaan! Amazing! (10-20 mastered)" 
-        : stars===2?"Awesome, Safaan! Want 3 stars?" 
-        : "Good trying, Safaan! Every star counts!";
-      
-      document.getElementById("mistakeSection").innerHTML=mistakes.length
-        ? '<div class="mistake-item">Keep practicing, Safaan! 🌟</div>'
-        : '<div class="mistake-item">Perfect, Safaan! No mistakes! 🌟🌟🌟</div>';
-      
-      document.getElementById("retryBtn").onclick=()=>startLevel(level);
-      let nb=document.getElementById("nextLvBtn");
-      if(level<CATS[cat].levels){
-        nb.style.display="inline-block";
-        nb.onclick=()=>startLevel(level+1);
-      }
-      else nb.style.display="none";
-      
-      showScreen("resultScreen");
-    }
+function hintSubThree(total, b, c) {
+  const step1 = total - b;
+  const step2 = step1 - c;
+  return wrap('#FF6B6B', '🔻', `${total} − ${b} − ${c}`,
+    bubble(`<strong style="color:#FFD93D;">We have to subtract two numbers from ${total}.</strong><br>
+      We subtract them <strong>one at a time</strong>. First subtract ${b}, then subtract ${c} from the result.`)
+    + bubble(`<strong style="color:#FFD93D;">Step 1 — Subtract ${b} from ${total}:</strong>`)
+    + subtractColumn(total, b)
+    + bubble(`<strong style="color:#FFD93D;">Step 2 — Subtract ${c} from the result (${step1} − ${c}):</strong>`)
+    + subtractColumn(step1, c)
+    + bubble(`<strong style="color:#6BCB77;">✅ ${total} − ${b} − ${c} = ${step2}, Safia! ⭐</strong>`)
+  );
+}
 
-    updateSaveLbl();
-    
-    const audioHTML = `
-      <audio id="soundCorrect" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
-      <audio id="soundWrong" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
-      <audio id="soundCelebrate" preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f38="></audio>
-    `;
-    document.body.insertAdjacentHTML('beforeend', audioHTML);
-  </script>
+function eqAddThree(){let a,b,c,g=0;do{a=rnd(10,33);b=rnd(10,33);c=rnd(10,33);g++;}while((a+b+c>95||a+b+c<38)&&g<200);return{type:'add_three',category:'equation',hasHint:true,question:`${a} + ${b} + ${c} = ?`,answer:a+b+c,hint:hintAddThree(a,b,c)};}
+function eqSubThree(){let total,b,c,g=0;do{total=rnd(45,85);b=rnd(12,total-15);c=rnd(8,total-b-5);g++;}while((total-b-c<10||total-b-c>40)&&g<200);return{type:'sub_three',category:'equation',hasHint:true,question:`${total} − ${b} − ${c} = ?`,answer:total-b-c,hint:hintSubThree(total,b,c)};}
+function hintComposeAdd(target) {
+  // Pick a simple example number (not 1, not target/2, something like 5 or 7)
+  const e = target > 10 ? 7 : 3;
+  const ans = target - e;
+  // Pick a second different example
+  const e2 = e + 3;
+  const ans2 = target - e2;
+  return wrap('#6BCB77', '🧩', `Make a Sum — two pairs that add to ${target}`,
+    bubble(`<strong style="color:#FFD93D;">We need TWO different pairs of numbers that add up to ${target}.</strong><br>
+      Think of it like this: what two numbers fit together to make ${target}?`)
+    + bubble(`<strong style="color:#FFD93D;">Let's find the first pair.</strong><br>
+      Pick any number less than ${target}. Let's use <strong>${e}</strong>.<br>
+      So now we have: <strong>${e} + ? = ${target}</strong><br>
+      To find the missing number, we subtract ${e} from ${target}:`)
+    + subtractColumn(target, e)
+    + bubble(`So our first pair is: ${numChip(e,'#FF9FCF')} + ${numChip(ans,'#6BCB77')} = ${numChip(target,'#FFD93D')} ✅`)
+    + bubble(`<strong style="color:#FFD93D;">Now let's find the second pair.</strong><br>
+      Pick a different number — not ${e} and not ${target}. Let's use <strong>${e2}</strong>.<br>
+      So now we have: <strong>${e2} + ? = ${target}</strong><br>
+      Subtract ${e2} from ${target}:`)
+    + subtractColumn(target, e2)
+    + bubble(`So our second pair is: ${numChip(e2,'#FF9FCF')} + ${numChip(ans2,'#6BCB77')} = ${numChip(target,'#FFD93D')} ✅<br><br>
+      <strong style="color:#6BCB77;">Now it's your turn, Safia! Choose your own two numbers and find their pairs. ⭐</strong>`)
+  );
+}
+
+function hintComposeSub(diff) {
+  // Case 1: big − ? = diff  → pick a big number > diff, e.g. diff+2
+  const big = diff + 2;
+  const small = big - diff; // = 2
+  // Case 2: ? − small = diff → pick a small number, e.g. 3
+  const small2 = 3;
+  const big2 = small2 + diff;
+
+  return wrap('#FF6B6B', '🔍', `Find the Gap — two pairs with a difference of ${diff}`,
+    bubble(`<strong style="color:#FFD93D;">We need TWO different pairs where the bigger number minus the smaller equals ${diff}.</strong><br>
+      The <strong>gap</strong> between the two numbers must always be ${diff}.`)
+
+    + bubble(`<strong style="color:#FFD93D;">🍪 Cookie Story:</strong><br>
+      In a minus problem, the <strong>first number is always the Boss</strong> (the whole tray). The other numbers are the parts.`)
+
+    + bubble(`<strong style="color:#FFD93D;">Case 1 — We know the Boss: ${big} − ? = ${diff}</strong><br><br>
+      "Safia, you have <strong>${big}</strong> cookies. You eat some, and <strong>${diff}</strong> are left. How many did you eat?"<br><br>
+      Since we know the Boss is <strong>${big}</strong>, we <strong>subtract</strong> the ${diff} we still have:<br>
+      <strong>${big} − ${diff} = ?</strong>`)
+    + subtractColumn(big, diff)
+    + bubble(`✅ <strong>${big} − ${small} = ${diff}</strong><br>
+      Check: ${big} − ${small} = ${diff} ✓<br><br>
+      <em>Rule: If we know the Big Boss, we subtract to find the missing friend.</em>`)
+
+    + bubble(`<strong style="color:#FFD93D;">Case 2 — The Boss is hiding: ? − ${small2} = ${diff}</strong><br><br>
+      "Safia, there is a Mystery Bag of cookies. You take out <strong>${small2}</strong> and eat them. <strong>${diff}</strong> are still left. How many were in the bag at the start?"<br><br>
+      To find the bag's starting amount, we put back the <strong>${small2}</strong> we took out.<br>
+      We <strong>add</strong>: <strong>${diff} + ${small2} = ?</strong>`)
+    + addColumn(diff, small2)
+    + bubble(`✅ <strong>${big2} − ${small2} = ${diff}</strong><br>
+      Check: ${big2} − ${small2} = ${diff} ✓<br><br>
+      <em>Rule: If the Big Boss is hiding, we add the friends together to find him!</em>`)
+
+    + bubble(`<strong style="color:#6BCB77;">Summary for Safia:</strong><br>
+      ${numChip(big,'#FFD93D')} − <strong style="color:#FF9FCF;">?</strong> = ${numChip(diff,'#6BCB77')} &nbsp;→&nbsp; Boss is here → <strong>subtract</strong> (${big} − ${diff} = ${small})<br>
+      <strong style="color:#FF9FCF;">?</strong> − ${numChip(small2,'#FF9FCF')} = ${numChip(diff,'#6BCB77')} &nbsp;→&nbsp; Boss is hiding → <strong>add</strong> (${diff} + ${small2} = ${big2})<br><br>
+      <strong style="color:#6BCB77;">Now pick your own two pairs, Safia! ⭐</strong>`)
+  );
+}
+
+function hintFactFamily(a, b, total) {
+  // a and b are the Small Friends, total is the Big Boss
+  return wrap('#C77DFF', '👪', `Fact Family — Math Family for ${a}, ${b}, and ${total}`,
+
+    bubble(`<strong style="color:#FFD93D;">Every Fact Family has a "Math Family" with special roles:</strong><br><br>
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:8px 0;">
+        <div style="text-align:center;">
+          <div style="background:#FFD93D;color:#1a0f2a;border-radius:50%;width:60px;height:60px;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:bold;">${total}</div>
+          <div style="color:#FFD93D;font-size:0.85rem;margin-top:4px;font-weight:800;">👑 BIG BOSS</div>
+        </div>
+        <div style="color:#b1a5d9;font-size:1.5rem;">↕</div>
+        <div style="text-align:center;">
+          <div style="background:#FF9FCF;color:#1a0f2a;border-radius:50%;width:50px;height:50px;display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:bold;">${a}</div>
+          <div style="color:#FF9FCF;font-size:0.85rem;margin-top:4px;font-weight:800;">🤝 FRIEND</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="background:#FF9FCF;color:#1a0f2a;border-radius:50%;width:50px;height:50px;display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:bold;">${b}</div>
+          <div style="color:#FF9FCF;font-size:0.85rem;margin-top:4px;font-weight:800;">🤝 FRIEND</div>
+        </div>
+      </div>`)
+
+    + bubble(`<strong style="color:#FFD93D;">➕ The PLUS rule — Friends join to make the Boss:</strong><br>
+      <em>"The two Small Friends join together. It doesn't matter who stands first — they always equal the Big Boss."</em><br><br>
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap;">
+        ${numChip(a,'#FF9FCF')} <span style="color:#FFD93D;font-size:1.3rem;">+</span> ${numChip(b,'#FF9FCF')} <span style="color:#fff;font-size:1.3rem;">=</span> ${numChip(total,'#FFD93D')} <span style="color:#6BCB77;">✅ Friend + Friend = Big Boss</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap;">
+        ${numChip(b,'#FF9FCF')} <span style="color:#FFD93D;font-size:1.3rem;">+</span> ${numChip(a,'#FF9FCF')} <span style="color:#fff;font-size:1.3rem;">=</span> ${numChip(total,'#FFD93D')} <span style="color:#6BCB77;">✅ Friend + Friend = Big Boss</span>
+      </div>`)
+
+    + bubble(`<strong style="color:#FFD93D;">➖ The MINUS rule — Boss gives to find a Friend:</strong><br>
+      <em>"We ALWAYS start with the Big Boss. We take away one Small Friend to find the other Small Friend."</em><br><br>
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap;">
+        ${numChip(total,'#FFD93D')} <span style="color:#FF6B6B;font-size:1.3rem;">−</span> ${numChip(a,'#FF9FCF')} <span style="color:#fff;font-size:1.3rem;">=</span> ${numChip(b,'#6BCB77')} <span style="color:#6BCB77;">✅ Big Boss − Friend = Friend</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap;">
+        ${numChip(total,'#FFD93D')} <span style="color:#FF6B6B;font-size:1.3rem;">−</span> ${numChip(b,'#FF9FCF')} <span style="color:#fff;font-size:1.3rem;">=</span> ${numChip(a,'#6BCB77')} <span style="color:#6BCB77;">✅ Big Boss − Friend = Friend</span>
+      </div>`)
+
+    + bubble(`<strong style="color:#FF6B6B;">🍪 Why can't we write ${b} − ${a} = ${total}?</strong><br>
+      "Safia, imagine you only have <strong>${b}</strong> cookies on your plate. Can someone eat <strong>${a}</strong> cookies from your plate? ${a > b ? 'No! You don\'t have enough!' : 'And even if they could, you\'d never end up with MORE cookies than you started with!'} The Big Boss <strong>${total}</strong> must always be the <strong>first</strong> number in a minus fact."`)
+
+    + bubble(`<strong style="color:#FFD93D;">🔎 Safia's Quick Check:</strong><br>
+      <span style="color:#6BCB77;">✅ Plus fact?</span> The Big Boss <strong>(${total})</strong> must be <strong>at the END</strong> (after =)<br>
+      <span style="color:#6BCB77;">✅ Minus fact?</span> The Big Boss <strong>(${total})</strong> must be <strong>at the FRONT</strong> (before −)<br>
+      <span style="color:#FF6B6B;">❌ If you see ${total} in the middle of a plus, or a small number at the start of a minus — it's a "silly" equation that needs fixing!</span>`)
+
+    + bubble(`<strong style="color:#6BCB77;">✅ All four facts for ${a}, ${b}, ${total}:</strong><br>
+      ${numChip(a,'#FF9FCF')} + ${numChip(b,'#FF9FCF')} = ${numChip(total,'#FFD93D')} &nbsp;|&nbsp; ${numChip(b,'#FF9FCF')} + ${numChip(a,'#FF9FCF')} = ${numChip(total,'#FFD93D')}<br>
+      ${numChip(total,'#FFD93D')} − ${numChip(a,'#FF9FCF')} = ${numChip(b,'#6BCB77')} &nbsp;|&nbsp; ${numChip(total,'#FFD93D')} − ${numChip(b,'#FF9FCF')} = ${numChip(a,'#6BCB77')}`)
+  );
+}
+
+function eqComposeAdd(){const targets=[10,12,14,15,16,18,20,22,24,25];const target=targets[rnd(0,targets.length-1)];return{type:'compose_add',category:'equation',hasHint:true,question:`Find TWO ways to make <strong>${target}</strong> by adding two numbers.`,target,hint:hintComposeAdd(target)};}
+function eqComposeSub(){const diffs=[4,5,6,7,8,9,10,11,12];const diff=diffs[rnd(0,diffs.length-1)];return{type:'compose_sub',category:'equation',hasHint:true,question:`Find TWO pairs with a difference of <strong>${diff}</strong>.`,target:diff,hint:hintComposeSub(diff)};}
+function eqFactFamily(){const a=rnd(3,12),b=rnd(3,12),total=a+b;return{type:'fact_family',category:'equation',hasHint:true,question:`Using ${a}, ${b}, and ${total}, fill in all four facts:`,a,b,total,hint:hintFactFamily(a,b,total)};}
+function eqLogic(){const t=rnd(0,3);if(t===0){const p=[{pattern:"🔴 🔵 🔴 🔵",next:"🔴"},{pattern:"🟡 🟢 🟡 🟢",next:"🟡"},{pattern:"🐶 🐱 🐶 🐱",next:"🐶"}][rnd(0,2)];return{type:'logic',question:`What comes next?\n${p.pattern} __?`,answer:p.next};}if(t===1){const p=[{q:"If it's raining, we use an umbrella.\nIt is raining today. What do we use?",answer:"umbrella"},{q:"Finish your vegetables → get dessert.\nSafia finished her vegetables. Dessert?",answer:"yes"}][rnd(0,1)];return{type:'logic',question:p.q,answer:p.answer};}if(t===2){const p=[{q:"Which doesn't belong?\n🍎 🍌 🐶 🍊",answer:"🐶"},{q:"Which doesn't belong?\n🔴 🟡 🔵 🟢 ⭐",answer:"⭐"}][rnd(0,1)];return{type:'logic',question:p.q,answer:p.answer};}const p=[{q:"What comes next?\n2, 4, 6, 8, __?",answer:"10"},{q:"What comes next?\n5, 10, 15, 20, __?",answer:"25"}][rnd(0,1)];return{type:'logic',question:p.q,answer:p.answer};}
+
+const wordsCounting=[{type:'word',question:"Sara has 8 apples. Her mum gives 5 more. How many now?",answer:13},{type:'word',question:"14 birds on a tree. 6 fly away. How many left?",answer:8}];
+const wordsGrouping=[{type:'word',question:"3 bundles of 10 pencils + 4 loose. How many total?",answer:34}];
+const wordsMissingAdd=[{type:'word',question:"Safia has some stickers. Gets 5 more → now 13. How many did she start with?",answer:8}];
+const wordsCarryAdd=[{type:'word',question:"37 red marbles + 45 blue marbles. Total?",answer:82}];
+const wordsBorrowSub=[{type:'word',question:"Safia had 52 crayons. She shared 27. How many left?",answer:25}];
+const wordsAddThree=[{type:'word',question:"19 cars + 21 trains + 30 planes. Total toys?",answer:70}];
+const wordsSubThree=[{type:'word',question:"75 stickers. Gave away 28 and 19. How many left?",answer:28}];
+const wordsComposeAdd=[{type:'word',question:"Find two ways to make 15 with two piles.",target:15}];
+const wordsComposeSub=[{type:'word',question:"Find two pairs with difference 8.",target:8}];
+const wordsFactFamily=[{type:'word',question:"Fact family for 5, 7, 12",a:5,b:7,total:12}];
+const wordsLogic=[{type:'word',question:"3 red apples + 2 green apples. Total?",answer:"5"}];
+
+function generateLevel(id){
+  if(id==='combo')return[];
+  const map={counting:{eqFn:eqCounting,pool:wordsCounting},grouping:{eqFn:eqGrouping,pool:wordsGrouping},missing_add:{eqFn:eqMissingAdd,pool:wordsMissingAdd},carry_add:{eqFn:eqCarryAdd,pool:wordsCarryAdd},borrow_sub:{eqFn:eqBorrowSub,pool:wordsBorrowSub},add_three:{eqFn:eqAddThree,pool:wordsAddThree},sub_three:{eqFn:eqSubThree,pool:wordsSubThree},compose_add:{eqFn:eqComposeAdd,pool:wordsComposeAdd},compose_sub:{eqFn:eqComposeSub,pool:wordsComposeSub},fact_family:{eqFn:eqFactFamily,pool:wordsFactFamily},logic:{eqFn:eqLogic,pool:wordsLogic}};
+  const d=map[id];return d?buildLevel(d.eqFn,d.pool):[];
+}
+
+// ── LEVELS ───────────────────────────────────────────────────────────────
+const LEVELS=[
+  {id:'counting',    name:'Counting',       icon:'🔢', color:'#c4a5ff'},
+  {id:'grouping',    name:'Tens & Ones',    icon:'📦', color:'#7bc9ff'},
+  {id:'missing_add', name:'Missing Number', icon:'❓', color:'#ffd6b0'},
+  {id:'carry_add',   name:'Carry Addition', icon:'➕', color:'#c4a5ff'},
+  {id:'borrow_sub',  name:'Borrow Sub',     icon:'➖', color:'#ff9fcf'},
+  {id:'add_three',   name:'Add Three',      icon:'🔺', color:'#a3d977'},
+  {id:'sub_three',   name:'Subtract Three', icon:'🔻', color:'#ff9fcf'},
+  {id:'compose_add', name:'Make a Sum',     icon:'🧩', color:'#c4a5ff'},
+  {id:'compose_sub', name:'Find the Gap',   icon:'🔍', color:'#ffd6b0'},
+  {id:'fact_family', name:'Fact Family',    icon:'👪', color:'#c4a5ff'},
+  {id:'logic',       name:'Logic Puzzles',  icon:'🧠', color:'#9ae6b4'},
+  {id:'combo',       name:'Grand Finale',   icon:'🏆', color:'#ffb347'}
+];
+
+const LEVEL_VIDEOS={
+  counting:    {url:'https://www.youtube.com/results?search_query=jack+hartmann+count+to+20+kids',title:'🔢 Count to 20'},
+  grouping:    {url:'https://www.youtube.com/results?search_query=tens+and+ones+place+value+song+kids',title:'📦 Tens & Ones'},
+  missing_add: {url:'https://www.youtube.com/results?search_query=missing+number+addition+kids+math',title:'❓ Missing Number'},
+  carry_add:   {url:'https://www.youtube.com/results?search_query=addition+with+regrouping+song+kids',title:'➕ Carry Addition'},
+  borrow_sub:  {url:'https://www.youtube.com/results?search_query=subtraction+borrowing+kids+math',title:'➖ Borrowing'},
+  add_three:   {url:'https://www.youtube.com/results?search_query=adding+three+numbers+kids+math',title:'🔺 Add Three'},
+  sub_three:   {url:'https://www.youtube.com/results?search_query=subtracting+numbers+kids+math',title:'🔻 Subtract Three'},
+  compose_add: {url:'https://www.youtube.com/results?search_query=number+bonds+ways+to+make+a+number+kids',title:'🧩 Number Bonds'},
+  compose_sub: {url:'https://www.youtube.com/results?search_query=number+bonds+subtraction+kids',title:'🔍 Find the Gap'},
+  fact_family: {url:'https://www.youtube.com/results?search_query=fact+family+math+kids+song',title:'👪 Fact Families'},
+  logic:       {url:'https://www.youtube.com/results?search_query=patterns+logic+kids+math',title:'🧠 Logic & Patterns'},
+  combo:       {url:'https://www.youtube.com/results?search_query=mixed+math+kids+addition+subtraction',title:'🏆 Mixed Maths'}
+};
+
+// ── PROGRESS ─────────────────────────────────────────────────────────────
+let progress={};
+LEVELS.forEach(l=>{progress[l.id]={completed:false,score:0,stars:0};});
+let soarProgress={};
+let chalProgress={};
+try{const s=localStorage.getItem('safia-prek-progress');if(s){const p=JSON.parse(s);progress=p.math||progress;soarProgress=p.soar||{};chalProgress=p.chal||{};}}catch(e){}
+
+function saveAll(){
+  try{localStorage.setItem('safia-prek-progress',JSON.stringify({math:progress,soar:soarProgress,chal:chalProgress}));}catch(e){}
+}
+
+function saveProgress(){
+  saveAll();
+  const b=new Blob([JSON.stringify({math:progress,soar:soarProgress,chal:chalProgress})],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='safia-prek-save.json';a.click();
+  document.getElementById('starLbl').textContent='✅ Saved!';
+  setTimeout(updateStars,2000);
+}
+function loadProgress(){document.getElementById('loadFile').click();}
+function handleLoad(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{try{const p=JSON.parse(ev.target.result);progress=p.math||progress;soarProgress=p.soar||{};chalProgress=p.chal||{};updateStars();alert('Loaded! ✅');}catch{alert('Could not load file');}};
+  r.readAsText(f);e.target.value='';
+}
+
+function updateStars(){
+  let stars=0,done=0;
+  LEVELS.forEach(l=>{if(progress[l.id]?.stars)stars+=progress[l.id].stars;if(progress[l.id]?.completed)done++;});
+  soarActivities.forEach((_,i)=>{if(soarProgress[i])stars+=1;});
+  challenges.forEach((_,i)=>{if(chalProgress[i])stars+=2;});
+  document.getElementById('starLbl').innerHTML='⭐ '+stars+' stars';
+  const ch=document.getElementById('progressChart');
+  const total=LEVELS.length+soarActivities.length+challenges.length;
+  const pct=Math.round(done/LEVELS.length*100)||0;
+  ch.innerHTML=`<h3 style="color:#ffd6b0;font-size:1.4rem;margin-bottom:10px;">📊 My Progress</h3>
+    <div style="background:#1a1035;border-radius:30px;height:20px;overflow:hidden;border:2px solid #b794f4;">
+      <div style="width:${pct}%;height:20px;border-radius:30px;background:linear-gradient(90deg,#c4a5ff,#9ae6b4);transition:width 0.4s;"></div>
+    </div>
+    <div style="font-size:1.1rem;margin-top:10px;color:#d4c2ff;">⭐ ${stars} stars · 🧮 ${done}/${LEVELS.length} levels done · 🦅 SOAR explored!</div>`;
+}
+
+// ── SCREENS ───────────────────────────────────────────────────────────────
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function showHome(){updateStars();showScreen('homeScreen');}
+function goHome(){showPracticeMenu();}
+function showPracticeMenu(){renderPracticeMenu();showScreen('practiceMenuScreen');}
+function showSoarMenu(){renderSoarMenu();showScreen('soarMenuScreen');}
+function goToSOAR(){showSoarMenu();}
+
+// ── HOME RENDERING ─────────────────────────────────────────────────────────
+function renderHome(){
+  updateStars();
+}
+
+function renderPracticeMenu(){
+  // Math levels grid
+  const mg=document.getElementById('mathGrid');
+  mg.innerHTML='';
+  LEVELS.forEach(level=>{
+    const p=progress[level.id];
+    const stars=p.completed?(p.score>=90?'⭐⭐⭐':p.score>=70?'⭐⭐':'⭐'):'';
+    const d=document.createElement('div');
+    d.className='menu-card math-card';
+    d.style.borderColor=level.color;
+    d.innerHTML=`<div class="mc-icon">${level.icon}</div>
+      <div class="mc-name">${level.name}</div>
+      <div class="done-star">${stars||'&nbsp;'}</div>`;
+    d.onclick=()=>startLevel(level);
+    mg.appendChild(d);
+  });
+
+  // Challenges grid
+  const cg=document.getElementById('chalGrid');
+  cg.innerHTML='';
+  challenges.forEach((chal,idx)=>{
+    const done=chalProgress[idx];
+    const d=document.createElement('div');
+    d.className='menu-card chal-card';
+    d.innerHTML=`<div class="mc-icon">${chal.icon}</div>
+      <div class="mc-name">${chal.title}</div>
+      <div class="mc-desc">${chal.desc}</div>
+      <div class="mc-badge chal-b">${done?'✅ Done':'CHALLENGE'}</div>`;
+    d.onclick=()=>startChallenge(idx);
+    cg.appendChild(d);
+  });
+  updateStars();
+}
+
+function renderSoarMenu(){
+  const sg=document.getElementById('soarGrid');
+  sg.innerHTML='';
+  soarActivities.forEach((act,idx)=>{
+    const done=soarProgress[idx];
+    const d=document.createElement('div');
+    d.className='menu-card soar-card';
+    d.innerHTML=`<div class="mc-icon">${act.icon}</div>
+      <div class="mc-name">${act.title}</div>
+      <div class="mc-desc">${act.desc}</div>
+      <div class="mc-badge soar-b">${done?'✅ Done':'EXPLORE'}</div>`;
+    d.onclick=()=>openSoar(idx);
+    sg.appendChild(d);
+  });
+  updateStars();
+}
+
+
+// ── QUIZ SYSTEM ───────────────────────────────────────────────────────────
+let currentLevel=null,questions=[],qIndex=0,score=0,wrong=0,answered=false;
+
+function startLevel(level){
+  currentLevel=level;
+  questions=generateLevel(level.id);
+  qIndex=0;score=0;wrong=0;answered=false;
+  document.getElementById('quizLabel').textContent=level.icon+' '+level.name;
+  const vd=LEVEL_VIDEOS[level.id];
+  const va=document.getElementById('videoArea');
+  if(vd&&va) va.innerHTML=`<a class="yt-link" href="${vd.url}" target="_blank" rel="noopener">▶️ ${vd.title}</a>`;
+  showScreen('quizScreen');
+  renderQ();
+}
+
+function renderQ(){
+  const q=questions[qIndex],total=questions.length;
+  document.getElementById('quizQNum').textContent='Q'+(qIndex+1)+'/'+total;
+  document.getElementById('scoreCorrect').textContent=score;
+  document.getElementById('scoreWrong').textContent=wrong;
+  document.getElementById('scorePercent').textContent=(score+wrong)?Math.round(score/(score+wrong)*100)+'%':'—';
+  document.getElementById('quizBar').style.width=(qIndex/total*100)+'%';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('hintBox').className='hint-box';
+  document.getElementById('hintBox').innerHTML='';
+  document.getElementById('checkBtn').style.display='block';
+  document.getElementById('nextBtn').style.display='none';
+  answered=false;
+  const hb=document.getElementById('hintBtn');
+  hb.style.display=q.hasHint?'block':'none';
+  hb.disabled=false;
+
+  const labels={counting_add:'🔢 Counting',counting_sub:'🔢 Counting',grouping:'📦 Tens & Ones',missing_add:'❓ Missing',carry_add:'➕ Carry',borrow_sub:'➖ Borrow',add_three:'🔺 Add Three',sub_three:'🔻 Subtract Three',compose_add:'🧩 Make a Sum',compose_sub:'🔍 Find the Gap',fact_family:'👪 Fact Family',logic:'🧠 Logic',word:'📖 Word Problem'};
+  const badge=labels[q.type]||'🧮';
+  const isFF=q.type==='fact_family', isCA=q.type==='compose_add', isCS=q.type==='compose_sub';
+  const isC=isCA||isCS, sym=isCA?'+':'−';
+  const card=document.getElementById('questionCard');
+  card.className='q-card';
+
+  let inputHtml='';
+  if(isFF){
+    inputHtml=`<div class="fact-rows">${[1,2,3,4].map(i=>`<div class="fact-row"><span style="color:#b794f4;font-size:1.1rem;">${i}.</span><input class="fact-input" id="f${i}a" type="number" placeholder="?"><span style="color:#ff9fcf;font-size:1.3rem;font-weight:900;">${i<=2?'+':'−'}</span><input class="fact-input" id="f${i}b" type="number" placeholder="?"><span style="color:#ff9fcf;font-size:1.3rem;font-weight:900;">=</span><input class="fact-input" id="f${i}c" type="number" placeholder="?"></div>`).join('')}</div>`;
+  } else if(isC){
+    const t=q.target;
+    inputHtml=`<div class="compose-rows">${[1,2].map(i=>`<div class="compose-row"><input class="compose-input" id="c${i}a" type="number" placeholder="?"><span class="compose-sym">${sym}</span><input class="compose-input" id="c${i}b" type="number" placeholder="?"><span class="compose-eq">= ${t}</span></div>`).join('')}</div>`;
+  } else {
+    inputHtml=`<input class="answer-input" id="answerInput" type="number" placeholder="Your answer…">`;
+  }
+
+  card.innerHTML=`<div class="q-type-badge">${badge}</div><div class="question-text">${q.question.replace(/\n/g,'<br>')}</div>${inputHtml}`;
+
+  const addEnter=id=>{document.getElementById(id)?.addEventListener('keydown',e=>{if(e.key==='Enter')checkAnswer();});};
+  if(isFF){['f1a','f1b','f1c','f2a','f2b','f2c','f3a','f3b','f3c','f4a','f4b','f4c'].forEach(addEnter);}
+  else if(isC){['c1a','c1b','c2a','c2b'].forEach(addEnter);}
+  else addEnter('answerInput');
+}
+
+function showHint(){
+  const q=questions[qIndex];
+  const hb=document.getElementById('hintBox');
+  if(q.hint){hb.innerHTML=q.hint;hb.className='hint-box show';}
+  document.getElementById('hintBtn').disabled=true;
+}
+
+function friendlyAnswer(q){
+  if(q.type==='compose_add')return'e.g. 7+8 and 6+9';
+  if(q.type==='compose_sub')return'e.g. 12−4 and 13−5';
+  if(q.type==='fact_family')return`${q.a}+${q.b}=${q.total}, ${q.b}+${q.a}=${q.total}, ${q.total}−${q.a}=${q.b}, ${q.total}−${q.b}=${q.a}`;
+  return String(q.answer);
+}
+
+function checkAnswer(){
+  if(answered)return;
+  const q=questions[qIndex];
+  const isFF=q.type==='fact_family', isC=q.type==='compose_add'||q.type==='compose_sub';
+  const fb=document.getElementById('feedback');
+
+  if(isFF){
+    const gv=id=>{const v=document.getElementById(id)?.value;return v&&v.trim()!==''?parseInt(v):NaN;};
+    const facts=[1,2,3,4].map(i=>({a:gv(`f${i}a`),b:gv(`f${i}b`),c:gv(`f${i}c`)}));
+    if(facts.some(f=>isNaN(f.a)||isNaN(f.b)||isNaN(f.c))){fb.textContent='✏️ Fill all four facts!';fb.className='feedback show bad';return;}
+    const cf=[{a:q.a,b:q.b,c:q.total},{a:q.b,b:q.a,c:q.total},{a:q.total,b:q.a,c:q.b},{a:q.total,b:q.b,c:q.a}];
+    const used=new Set();let allOk=true;
+    facts.forEach((fact,idx)=>{
+      let ok=false;
+      for(let i=0;i<cf.length;i++){if(used.has(i))continue;const c=cf[i];if(idx<2){if((fact.a===c.a&&fact.b===c.b&&fact.c===c.c)||(fact.a===c.b&&fact.b===c.a&&fact.c===c.c)){ok=true;used.add(i);break;}}else{if(fact.a===c.a&&fact.b===c.b&&fact.c===c.c){ok=true;used.add(i);break;}}}
+      [['f1a','f1b','f1c'],['f2a','f2b','f2c'],['f3a','f3b','f3c'],['f4a','f4b','f4c']][idx].forEach(id=>document.getElementById(id).style.borderColor=ok?'#9ae6b4':'#ff6b6b');
+      if(!ok)allOk=false;
+    });
+    answered=true;
+    if(allOk&&used.size===4){score++;fb.textContent='✅ All four facts — brilliant, Safia!';fb.className='feedback show ok';}
+    else{wrong++;fb.textContent='❌ Keep trying! '+friendlyAnswer(q);fb.className='feedback show bad';}
+  } else if(isC){
+    const gv=id=>{const v=document.getElementById(id)?.value;return v&&v.trim()!==''?parseInt(v):NaN;};
+    const rows=[{a:gv('c1a'),b:gv('c1b')},{a:gv('c2a'),b:gv('c2b')}];
+    if(rows.some(r=>isNaN(r.a)||isNaN(r.b))){fb.textContent='✏️ Fill both rows!';fb.className='feedback show bad';return;}
+    const ok=q.type==='compose_add'?rows.every(r=>r.a>0&&r.b>0&&r.a+r.b===q.target)&&!(rows[0].a===rows[1].a&&rows[0].b===rows[1].b):rows.every(r=>r.a>r.b&&r.a-r.b===q.target)&&!(rows[0].a===rows[1].a&&rows[0].b===rows[1].b);
+    answered=true;
+    if(ok){score++;fb.textContent='✅ Both pairs work — well done!';fb.className='feedback show ok';}
+    else{wrong++;fb.textContent='❌ Try different pairs!';fb.className='feedback show bad';}
+  } else {
+    const raw=document.getElementById('answerInput')?.value;
+    if(!raw){fb.textContent='✏️ Type your answer first!';fb.className='feedback show bad';return;}
+    answered=true;
+    const ok=parseInt(raw)===q.answer;
+    if(ok){score++;fb.textContent='✅ Correct! Amazing work, Safia! ⭐';fb.className='feedback show ok';}
+    else{wrong++;fb.textContent='❌ The answer is '+q.answer+', Safia! You can do it!';fb.className='feedback show bad';}
+  }
+  document.getElementById('scoreCorrect').textContent=score;
+  document.getElementById('scoreWrong').textContent=wrong;
+  document.getElementById('scorePercent').textContent=Math.round(score/(score+wrong)*100)+'%';
+  document.getElementById('checkBtn').style.display='none';
+  document.getElementById('nextBtn').style.display='block';
+}
+
+function nextQ(){qIndex++;if(qIndex>=questions.length)showResults();else renderQ();}
+
+function showResults(){
+  const total=questions.length,pct=Math.round(score/total*100),passed=pct>=70;
+  const stars=pct>=90?3:pct>=70?2:1;
+  if(passed){progress[currentLevel.id]={completed:true,score:pct,stars:Math.max(progress[currentLevel.id]?.stars||0,stars)};}
+  saveAll();updateStars();
+  document.getElementById('resEmoji').textContent=pct>=90?'🏆':pct>=70?'🌟':'💪';
+  document.getElementById('resTitle').textContent=pct>=90?'Amazing, Safia!':pct>=70?'Great job!':'Keep practising!';
+  document.getElementById('resStars').innerHTML='⭐'.repeat(stars);
+  document.getElementById('resMsg').textContent='You got '+score+' out of '+total+' correct ('+pct+'%)!';
+  const ms=document.getElementById('mistakeSection');
+  ms.innerHTML='';
+  const idx=LEVELS.findIndex(l=>l.id===currentLevel.id);
+  const nb=document.getElementById('nextLvBtn');
+  if(passed&&idx<LEVELS.length-1){nb.style.display='block';nb.onclick=()=>startLevel(LEVELS[idx+1]);}
+  else nb.style.display='none';
+  document.getElementById('retryBtn').onclick=()=>startLevel(currentLevel);
+  showScreen('resultScreen');
+}
+
+
+// ── SOAR ACTIVITIES ──────────────────────────────────────────────────────
+const soarActivities=[
+  {id:'beatClock',icon:'⏰',title:'Beat the Clock',age:'3-5',desc:'How many jumps in one minute?',aim:'Compare quantities and talk about time',instructions:['Set a timer for 1 minute.','Do star jumps, hops, or write your name as many times as you can!','Count how many you did.','Try again – can you do more?'],illustration:'🕐⭐ → 🏃‍♀️ 1️⃣2️⃣3️⃣',hint:'If an action is quick (like clapping), you can do lots! If it takes longer (like twirling), you do fewer.',questions:['What can you do more of in a minute – star jumps or twirls?','Can you put your coat on in less than a minute?'],nrich:'https://nrich.maths.org/eyfs-activities/beat-clock'},
+  {id:'canYouBuild',icon:'🏗️',title:'Can You Build This?',age:'3-5',desc:'Copy a model with blocks',aim:'Explore shapes and positions',instructions:['An adult builds a simple model with 4-5 blocks.','Look closely! Can you make yours exactly the same?','Use the same pieces and put them in the same place.','Check – is your model the same?'],illustration:'🟦🟥 → 🏠 (copy the tower!)',hint:'Look at where each block goes – on top, next to, behind.',questions:['Which block is on top? Which is underneath?','How do you need to turn that brick to match?'],nrich:'https://nrich.maths.org/eyfs-activities/can-you-build'},
+  {id:'howLongAreYou',icon:'📏',title:'How Long Are You?',age:'3-5',desc:'Measure yourself with everyday things',aim:'Compare length using non-standard units',instructions:['Lie down and have an adult mark where your head and feet go.','Measure with pens – place them end to end, no gaps!','Count how many pens tall you are.','Try with paper rolls, spoons, or LEGO bricks.'],illustration:'🧍‍♀️ → ✏️✏️✏️✏️ (20 pens tall!)',hint:'If things are shorter, you need more of them.',questions:['How many LEGO bricks tall are you? Why more than pens?','Are you taller than a metre?'],nrich:'https://nrich.maths.org/eyfs-activities/how-long-are-you'},
+  {id:'makingFootprints',icon:'🦶',title:'Making Footprints',age:'3-5',desc:'Press shapes into soft dough',aim:'Explore faces of 3D shapes',instructions:['Get some soft dough or playdough.','Press different wooden blocks into it to make "footprints".','Run your finger around the edge.','Can you find another block that makes the same footprint?'],illustration:'🧊🔺 → ⏺️⏸️ (cube makes a square!)',hint:'The flat side of the block makes the print.',questions:['What shape is the footprint of a cube? A sphere?','Can you guess which block made a footprint?'],nrich:'https://nrich.maths.org/eyfs-activities/making-footprints'},
+  {id:'longCreatures',icon:'🐛',title:'Long Creatures',age:'3-5',desc:'Make worms, snakes, caterpillars',aim:'Compare lengths',instructions:['Use thin card, playdough, or linking cubes.','Make a long creature – a snake, worm, or lizard!','Now make another one – longer or shorter?','Compare with a friend\'s creature.'],illustration:'🐍📏 → longer · shorter · longest',hint:'Fold paper like an accordion to make it stretch!',questions:['How can you make it longer? Shorter?','Whose creature is longest? How do you know?'],nrich:'https://nrich.maths.org/eyfs-activities/long-creatures'},
+  {id:'packing',icon:'📦',title:'Packing',age:'3-5',desc:'Sort toys into boxes',aim:'Sort and classify',instructions:['Get some boxes or trays.','Choose a group of toys – animals, cars, or blocks.','Put them into boxes by type.','How many in each box? Which has most?'],illustration:'🐶🐱 | 🚗🚕 | 🧊🧊 (sorted!)',hint:'Look for things that are the same kind.',questions:['Are there more farm animals or zoo animals?','Could you sort them by colour instead?'],nrich:'https://nrich.maths.org/eyfs-activities/packing'},
+  {id:'tubesTunnels',icon:'🧻',title:'Tubes and Tunnels',age:'3-5',desc:'Play with cardboard tubes',aim:'Explore size, length, position',instructions:['Find different tubes – paper towel rolls, wrapping paper tubes, straws.','Roll them, blow through them!','Make a tunnel for toy cars.','Can you stack them? Make a telescope?'],illustration:'📦🧻🚗 (car goes through tunnel!)',hint:'Wider tubes let bigger things through.',questions:['Which tube is longest? Widest?','Can you make a tunnel that turns a corner?'],nrich:'https://nrich.maths.org/eyfs-activities/tubes-and-tunnels'},
+  {id:'dice',icon:'🎲',title:'Dice',age:'3-5',desc:'Roll and count',aim:'Match numerals to amounts',instructions:['Get a big dice and some toys.','Roll the dice. Count the dots.','Take that many toys!','Roll again – more or fewer toys?'],illustration:'🎲⚀ → 🧸🧸🧸 (3 teddies)',hint:'The dots tell you how many. Count carefully!',questions:['What number did you roll? Can you write it?','Have we got enough teddies for a tea party?'],nrich:'https://nrich.maths.org/eyfs-activities/dice'},
+  {id:'mudKitchen',icon:'🍲',title:'Mud Kitchen',age:'3-5',desc:'Cook with mud and water',aim:'Explore size, capacity, weight',instructions:['Get pots, pans, spoons, and mud (or sand).','Make mud pies, soups, and cakes!','Fill different containers – which holds more?','Use big spoons and little spoons.'],illustration:'🥘🌊 (fill the pot!)',hint:'Bigger containers hold more mud.',questions:['Which pan is biggest? Which holds the most?','Is the pot full? How do you know?'],nrich:'https://nrich.maths.org/eyfs-activities/mud-kitchen'},
+  {id:'patternMaking',icon:'🎨',title:'Pattern Making',age:'3-5',desc:'Make and describe patterns',aim:'Recognise and extend patterns',instructions:['Use coloured cubes, beads, or toys.','Make a pattern: red, blue, red, blue…','Say the pattern out loud.','Can you make it longer? A different pattern?'],illustration:'🔴🔵🔴🔵 → next is 🔴',hint:'Patterns repeat. What comes next?',questions:['What is the rule of your pattern?','Can you make a sound pattern – clap, stomp, clap, stomp?'],nrich:'https://nrich.maths.org/eyfs-activities/pattern-making'},
+  {id:'cooking',icon:'🥄',title:'Cooking With Children',age:'3-5',desc:'Follow a simple recipe',aim:'Measure and count ingredients',instructions:['Find a simple recipe – like playdough or cookies.','Count the cups of flour, spoonfuls of sugar.','Mix it all together!','Talk about what you\'re doing – "I need one more cup."'],illustration:'🥣 1 cup flour, 2 spoons sugar',hint:'Read the recipe together. Count the spoonfuls carefully.',questions:['How many cups of flour do we need?','What if we add too much water?'],nrich:'https://nrich.maths.org/eyfs-activities/cooking-children'},
+  {id:'numberBook',icon:'📘',title:'Number Book',age:'3-5',desc:'Make a book of 4',aim:'Collect groups and count',instructions:['Choose a number – like 4!','Go on a hunt – find 4 leaves, 4 stones, 4 toys.','Stick them in a book or take photos.','Write the number 4 on each page.'],illustration:'4 leaves 🍁🍁🍁🍁 · 4 stones',hint:'Count each thing carefully. Touch and say the number.',questions:['Do you have 4 of everything?','Which group is your favourite?'],nrich:'https://nrich.maths.org/eyfs-activities/number-book'},
+  {id:'smallWorld',icon:'🐏',title:'Small World Play',age:'3-5',desc:'Build a farm or zoo',aim:'Use language of position and size',instructions:['Get farm animals, fences, and boxes.','Build fields and pens.','Put the cows in one field, sheep in another.','Talk about it – "The pig is next to the trough."'],illustration:'🐄🐑 | 🐖 (fields with fences)',hint:'Bigger animals might need bigger fields.',questions:['How many cows fit in this field?','Which animal has the biggest field? Why?'],nrich:'https://nrich.maths.org/eyfs-activities/small-world-play'}
+];
+
+function openSoar(idx){
+  const act=soarActivities[idx];
+  const steps=act.instructions.map((t,i)=>`<div class="soar-step"><div class="soar-step-num">${i+1}</div><div class="soar-step-text">${t}</div></div>`).join('');
+  const questions=act.questions.map(q=>`<div class="talk-bubble">🤔 <strong>Ask:</strong> ${q}</div>`).join('');
+  const done=soarProgress[idx];
+  const doneBtn=done
+    ?`<button class="undone-btn" onclick="unmarkSoar(${idx})">↩️ Mark undone</button>`
+    :`<button class="done-btn" onclick="markSoar(${idx})">✅ I did it!</button>`;
+
+  document.getElementById('soarContent').innerHTML=`
+    <div class="soar-activity-card">
+      <div class="soar-act-header">
+        <div class="soar-act-icon">${act.icon}</div>
+        <div>
+          <div class="soar-act-title">${act.title}</div>
+          <span class="soar-act-age">Ages ${act.age}</span>
+        </div>
+      </div>
+      <div class="soar-aim">🎯 ${act.aim}</div>
+      <div class="soar-illustration">${act.illustration}</div>
+      <div class="soar-steps">${steps}</div>
+      <button onclick="document.getElementById('soarHint${idx}').classList.toggle('show')" class="btn btn-hint" style="margin:10px 0;">💡 Show hint</button>
+      <div class="hint-toggle-card" id="soarHint${idx}">💡 ${act.hint}</div>
+      ${questions}
+      <div class="btn-row" style="margin-top:16px;flex-wrap:wrap;gap:10px;">
+        <a class="nrich-link" href="${act.nrich}" target="_blank" rel="noopener">📘 NRICH Page</a>
+        <a class="yt-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(act.title+' kids maths activity')}" target="_blank" rel="noopener">▶️ Watch a video</a>
+      </div>
+      <div class="btn-row" style="margin-top:12px;">
+        ${doneBtn}
+      </div>
+    </div>`;
+  showScreen('soarScreen');
+}
+
+function markSoar(idx){soarProgress[idx]=true;saveAll();updateStars();openSoar(idx);}
+function unmarkSoar(idx){soarProgress[idx]=false;saveAll();updateStars();openSoar(idx);}
+
+
+// ── BRAIN CHALLENGES ─────────────────────────────────────────────────────
+// 10 age 3-5 open-ended challenges with multiple choice answers
+const challenges=[
+  {
+    icon:'🍎', title:'Apple Sharing', desc:'Share apples between friends',
+    story:'Safia has 6 apples. She wants to share them equally between herself and her friend Layla. How many apples does each girl get?',
+    question:'How many apples each?',
+    answer:3, opts:[2,3,4,6],
+    hint:()=>subtractHint?hBubble('Draw 6 apples. Give 1 to Safia, 1 to Layla, 1 to Safia... keep going until they are all given out!'):'Draw 6 apples, share one by one!',
+    explanation:'6 apples shared between 2 friends: 6 ÷ 2 = 3 each. Give one to each, one to each — count them!'
+  },
+  {
+    icon:'🐾', title:'Animal Legs', desc:'Count all the legs',
+    story:'In Safia\'s toy box there are 2 dogs and 3 ducks. Dogs have 4 legs. Ducks have 2 legs. How many legs are there altogether?',
+    question:'Total legs?',
+    answer:14, opts:[10,12,14,16],
+    hint:()=>'Dogs: 2 × 4 = 8 legs. Ducks: 3 × 2 = 6 legs. 8 + 6 = 14!',
+    explanation:'2 dogs = 8 legs. 3 ducks = 6 legs. 8 + 6 = 14 legs altogether!'
+  },
+  {
+    icon:'🔴', title:'Colour Sorting', desc:'Sort shapes by colour',
+    story:'Safia has these shapes: 🔴🔴🔵🔴🔵🔵🔴. She puts all the RED ones in one pile and all the BLUE ones in another. How many more red shapes than blue shapes are there?',
+    question:'How many MORE red than blue?',
+    answer:1, opts:[1,2,3,4],
+    hint:()=>'Count the reds: 1,2,3,4. Count the blues: 1,2,3. 4 - 3 = ?',
+    explanation:'Red: 4. Blue: 3. 4 - 3 = 1. There is 1 more red shape than blue!'
+  },
+  {
+    icon:'🌈', title:'Pattern Detective', desc:'What comes next in the pattern?',
+    story:'Safia is making a bead necklace with this pattern:\n🔴🟡🟢 🔴🟡🟢 🔴🟡__\nWhat colour bead comes next?',
+    question:'What comes next?',
+    answer:'🟢', opts:['🔴','🟡','🟢','🔵'],
+    hint:()=>'The pattern repeats: RED, YELLOW, GREEN. After GREEN comes RED again, then YELLOW, then GREEN...',
+    explanation:'The pattern is RED → YELLOW → GREEN, repeating. After 🔴🟡 comes 🟢!'
+  },
+  {
+    icon:'🏠', title:'House Numbers', desc:'Spot the number pattern',
+    story:'Safia walks down a street. The house numbers are: 2, 4, 6, 8, __ . What is the next house number?',
+    question:'What is the next number?',
+    answer:10, opts:[9,10,11,12],
+    hint:()=>'Count by 2s: 2, 4, 6, 8... what comes after 8 when counting by 2s?',
+    explanation:'The pattern adds 2 each time: 2, 4, 6, 8, 10. Even numbers!'
+  },
+  {
+    icon:'🧁', title:'Birthday Cupcakes', desc:'Work out how many cupcakes',
+    story:'Safia bakes cupcakes for her party. She makes 4 chocolate ones and 5 vanilla ones. Then she eats 2 of them! How many cupcakes are left?',
+    question:'How many cupcakes left?',
+    answer:7, opts:[6,7,8,9],
+    hint:()=>addHint?'First add: 4 + 5 = 9. Then take away: 9 - 2 = ?':'First add 4+5=9, then take away 2!',
+    explanation:'4 + 5 = 9 cupcakes total. She eats 2, so 9 - 2 = 7 cupcakes left!'
+  },
+  {
+    icon:'🐸', title:'Lily Pad Jumps', desc:'Count the frog\'s jumps',
+    story:'A frog sits on lily pad 3. It jumps forward 4 lily pads. Then it jumps back 2. Which lily pad is the frog on now?',
+    question:'Which lily pad?',
+    answer:5, opts:[3,4,5,6],
+    hint:()=>'Start at 3. Jump forward 4: 3+4=7. Jump back 2: 7-2=?',
+    explanation:'Start at 3, jump +4 = 7, jump -2 = 5. The frog is on lily pad 5!'
+  },
+  {
+    icon:'🧦', title:'Sock Pairs', desc:'Match the socks',
+    story:'Safia\'s mum washed 10 socks. They all need to be paired up. How many PAIRS of socks can she make?',
+    question:'How many pairs?',
+    answer:5, opts:[4,5,6,10],
+    hint:()=>'Pairs means groups of 2. 10 socks ÷ 2 = ?',
+    explanation:'10 socks ÷ 2 = 5 pairs. Lay them out: 1+1=pair, 2+2=pair... 5 pairs!'
+  },
+  {
+    icon:'🌟', title:'Star Stickers', desc:'Share stickers equally',
+    story:'Safia has 12 star stickers. She wants to put the same number of stickers on each of her 3 notebooks. How many stickers go on each notebook?',
+    question:'Stickers per notebook?',
+    answer:4, opts:[3,4,5,6],
+    hint:()=>'Share 12 stickers into 3 equal groups. Put one in each group, keep going... 12 ÷ 3 = ?',
+    explanation:'12 ÷ 3 = 4. Give 1 sticker to each notebook, repeat until they are all given out: 4 each!'
+  },
+  {
+    icon:'🚌', title:'Bus Stops', desc:'Count passengers on the bus',
+    story:'A bus starts with 5 children. At the first stop, 3 more children get on. At the second stop, 2 children get off. How many children are on the bus now?',
+    question:'Children on the bus?',
+    answer:6, opts:[5,6,7,8],
+    hint:()=>addThreeHint?'5 + 3 = 8. Then 8 - 2 = ?':'5 start + 3 get on = 8. Then 2 get off: 8 - 2 = ?',
+    explanation:'5 + 3 = 8 on the bus. Then 2 get off: 8 - 2 = 6 children left on the bus!'
+  }
+];
+
+// ── CHALLENGE QUIZ ────────────────────────────────────────────────────────
+let currentChalIdx=-1;
+
+function startChallenge(idx){
+  currentChalIdx=idx;
+  const chal=challenges[idx];
+  const done=chalProgress[idx];
+
+  // Build option buttons
+  const opts=shuffle([...chal.opts]);
+  const optsHtml=opts.map(opt=>`<button class="btn" style="background:#4a2f7a;border-color:#ffb347;font-size:1.6rem;" onclick="checkChallenge('${opt}','${chal.answer}')">${opt}</button>`).join('');
+
+  document.getElementById('questionCard').innerHTML=`
+    <div class="q-type-badge">🏆 Brain Challenge</div>
+    <div class="chal-story">${chal.story.replace(/\n/g,'<br>')}</div>
+    <div class="chal-question">${chal.question}</div>
+    <div class="btn-row" style="flex-wrap:wrap;">${optsHtml}</div>`;
+
+  document.getElementById('quizLabel').textContent=chal.icon+' '+chal.title;
+  document.getElementById('quizQNum').textContent='Challenge';
+  document.getElementById('quizBar').style.width='50%';
+  document.getElementById('scoreCorrect').textContent='?';
+  document.getElementById('scoreWrong').textContent='?';
+  document.getElementById('scorePercent').textContent='?';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('hintBox').innerHTML='';
+  document.getElementById('hintBox').className='hint-box';
+  document.getElementById('videoArea').innerHTML='';
+  document.getElementById('checkBtn').style.display='none';
+  document.getElementById('nextBtn').style.display='none';
+  document.getElementById('hintBtn').style.display='block';
+  document.getElementById('hintBtn').disabled=false;
+  document.getElementById('hintBtn').onclick=function(){
+    const h=typeof chal.hint==='function'?chal.hint():chal.hint;
+    const hb=document.getElementById('hintBox');
+    hb.innerHTML=`<div class="hint-bubble">💡 ${h}</div>`;
+    hb.className='hint-box show';
+    this.disabled=true;
+  };
+  answered=false;
+  showScreen('quizScreen');
+}
+
+window.checkChallenge=function(selected, correct){
+  if(answered)return;
+  answered=true;
+  const chal=challenges[currentChalIdx];
+  const isOk=String(selected)===String(correct);
+  const fb=document.getElementById('feedback');
+  if(isOk){
+    chalProgress[currentChalIdx]=true;
+    saveAll();updateStars();
+    fb.textContent='✅ Brilliant! '+chal.explanation;
+    fb.className='feedback show ok';
+  } else {
+    fb.textContent='❌ Not quite! The answer is '+correct+'. '+chal.explanation;
+    fb.className='feedback show bad';
+  }
+  // highlight buttons
+  document.querySelectorAll('#questionCard .btn').forEach(btn=>{
+    btn.disabled=true;
+    if(String(btn.textContent.trim())===String(correct))btn.style.background='#2d6a4f';
+    else if(String(btn.textContent.trim())===String(selected)&&!isOk)btn.style.background='#9d4b4b';
+  });
+  document.getElementById('nextBtn').style.display='block';
+  document.getElementById('nextBtn').onclick=()=>{showPracticeMenu();};
+  document.getElementById('nextBtn').textContent='🏠 Back to Home';
+};
+
+// ── INIT ─────────────────────────────────────────────────────────────────
+function hBubble(t){return `<div class="hint-bubble">${t}</div>`;}
+
+// Expose all functions called from HTML onclick attributes to global scope
+window.showHome          = showHome;
+window.showPracticeMenu  = showPracticeMenu;
+window.showSoarMenu      = showSoarMenu;
+window.goHome            = goHome;
+window.goToSOAR          = goToSOAR;
+window.openSoar          = openSoar;
+window.markSoar          = markSoar;
+window.unmarkSoar        = unmarkSoar;
+window.startChallenge    = startChallenge;
+window.showHint          = showHint;
+window.checkAnswer       = checkAnswer;
+window.nextQ             = nextQ;
+window.saveProgress      = saveProgress;
+window.loadProgress      = loadProgress;
+window.handleLoad        = handleLoad;
+
+updateStars();
+showScreen('homeScreen');
+
+})(); // end IIFE
+</script>
 </body>
 </html>

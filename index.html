@@ -3,20 +3,125 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-  <title>🧸 Safaan's Math Adventure · Pre-K</title>
+  <title>🏎️ Safaan's Car & Food Truck Math · Pre-K</title>
   <style>
-    /* ── RESET ── */
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;900&family=Nunito:wght@700;900&display=swap');
+
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
     html, body {
       width:100%; min-height:100vh;
       background:#1a0f2a;
-      font-family:'Segoe UI', Roboto, Arial, sans-serif;
+      font-family:'Nunito', 'Segoe UI', sans-serif;
       display:flex; align-items:flex-start; justify-content:center;
       padding: clamp(6px,2vw,20px);
+      overflow-x:hidden;
     }
 
-    /* ── OUTER WRAP ── */
+    #confettiCanvas {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      pointer-events:none; z-index:9999;
+    }
+
+    #mascot {
+      position:fixed; bottom: clamp(60px,10vh,90px); right: clamp(10px,2vw,24px);
+      font-size: clamp(2.5rem,7vw,4.5rem); z-index:200;
+      transition: transform 0.3s, filter 0.3s;
+      cursor:pointer; user-select:none;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+      animation: mascotFloat 3s ease-in-out infinite;
+    }
+    @keyframes mascotFloat { 0%,100%{transform:translateY(0) rotate(-3deg);} 50%{transform:translateY(-10px) rotate(3deg);} }
+    #mascot.happy { animation: mascotHappy 0.6s ease-in-out 3; }
+    @keyframes mascotHappy { 0%,100%{transform:scale(1) rotate(0deg);} 25%{transform:scale(1.3) rotate(-15deg);} 75%{transform:scale(1.3) rotate(15deg);} }
+    #mascot.sad { animation: mascotSad 0.5s ease-in-out 2; }
+    @keyframes mascotSad { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-8px);} 75%{transform:translateX(8px);} }
+
+    #popText {
+      position:fixed; top:30%; left:50%; transform:translate(-50%,-50%) scale(0);
+      font-family:'Baloo 2', sans-serif; font-size: clamp(3rem,12vw,7rem);
+      font-weight:900; color:white; z-index:300; pointer-events:none;
+      text-shadow: 4px 4px 0 #ff69b4, 8px 8px 0 #ffd700;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+      opacity:0; white-space:nowrap;
+    }
+    #popText.show { transform:translate(-50%,-50%) scale(1); opacity:1; }
+    #popText.hide { transform:translate(-50%,-50%) scale(0.5); opacity:0; }
+
+    #streakBadge {
+      position:fixed; top: clamp(12px,2vh,20px); right: clamp(12px,2vw,20px);
+      background:linear-gradient(135deg,#ff6b35,#ffd700);
+      color:white; font-weight:900; font-size: clamp(0.9rem,3vw,1.4rem);
+      padding: clamp(6px,1.2vh,12px) clamp(10px,2vw,18px);
+      border-radius:50px; border: 3px solid white;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+      z-index:200; transition: transform 0.3s;
+      display:none;
+    }
+    #streakBadge.fire { animation: streakPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes streakPop { 0%{transform:scale(1);} 50%{transform:scale(1.4);} 100%{transform:scale(1);} }
+
+    #milestoneOverlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.8);
+      display:none; align-items:center; justify-content:center;
+      z-index:500; flex-direction:column; gap:20px; text-align:center;
+    }
+    #milestoneOverlay.show { display:flex; animation:fadeIn 0.4s; }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+    .milestone-card {
+      background:linear-gradient(135deg,#4a2a6a,#2a1a3a);
+      border: 5px solid #ffd700; border-radius:40px;
+      padding: clamp(24px,5vh,48px) clamp(28px,6vw,56px);
+      max-width:90vw; animation:bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes bounceIn { 0%{transform:scale(0.3);} 100%{transform:scale(1);} }
+    .milestone-emoji { font-size: clamp(3rem,12vw,7rem); display:block; animation:spin 1s linear infinite; }
+    @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+    .milestone-title { font-family:'Baloo 2',sans-serif; font-size: clamp(1.6rem,7vw,3.5rem); color:#ffd700; font-weight:900; text-shadow:2px 2px 0 #ff69b4; }
+    .milestone-sub { font-size: clamp(1rem,4vw,1.8rem); color:white; margin-top:8px; }
+    .milestone-close { background:#ffd700; color:#2a1a3a; border:none; border-radius:50px; padding:14px 32px; font-size: clamp(1rem,4vw,1.6rem); font-weight:900; cursor:pointer; box-shadow:0 5px 0 #b36500; font-family:'Nunito',sans-serif; }
+
+    .trophy-shelf {
+      background:linear-gradient(180deg,#2d1a4a,#1a0f2a);
+      border-radius: clamp(16px,4vw,40px);
+      padding: clamp(12px,2.5vh,24px);
+      border: 3px solid #6b4f9f;
+      margin-top: clamp(12px,2.5vh,24px);
+    }
+    .trophy-shelf-title { font-size: clamp(0.9rem,3.5vw,1.6rem); color:#ffd700; font-weight:900; margin-bottom:12px; font-family:'Baloo 2',sans-serif; }
+    .trophy-row { display:flex; flex-wrap:wrap; gap: clamp(6px,1.5vw,14px); }
+    .trophy-item {
+      background:rgba(255,255,255,0.1);
+      border-radius: clamp(12px,3vw,24px);
+      padding: clamp(8px,1.8vh,16px) clamp(10px,2.5vw,20px);
+      text-align:center; border: 2px solid rgba(255,255,255,0.2);
+      min-width: clamp(64px,15vw,100px);
+      transition: transform 0.2s;
+    }
+    .trophy-item.earned { border-color:#ffd700; background:rgba(255,215,0,0.15); animation:trophyGlow 2s ease-in-out infinite; }
+    @keyframes trophyGlow { 0%,100%{box-shadow:0 0 8px rgba(255,215,0,0.3);} 50%{box-shadow:0 0 20px rgba(255,215,0,0.7);} }
+    .trophy-icon { font-size: clamp(1.4rem,5vw,2.8rem); display:block; }
+    .trophy-name { font-size: clamp(0.55rem,1.8vw,0.85rem); color:#ffe5b4; margin-top:3px; font-weight:700; }
+    .trophy-stars { font-size: clamp(0.6rem,2vw,0.9rem); color:#ffd700; }
+
+    #dailyBonus {
+      background:linear-gradient(135deg,#ff6b9d,#c44dff);
+      border-radius:30px; padding: clamp(14px,3vh,28px);
+      border: 4px solid #ffd700; text-align:center;
+      margin-bottom: clamp(12px,2.5vh,24px);
+      animation: dailyPulse 2s ease-in-out infinite;
+    }
+    @keyframes dailyPulse { 0%,100%{box-shadow:0 0 15px rgba(255,107,157,0.5);} 50%{box-shadow:0 0 35px rgba(255,107,157,0.9);} }
+    .daily-title { font-family:'Baloo 2',sans-serif; font-size: clamp(1rem,4vw,1.8rem); color:#ffd700; font-weight:900; }
+    .daily-claim { background:#ffd700; color:#2a1a3a; border:none; border-radius:50px; padding: clamp(8px,2vh,16px) clamp(14px,3.5vw,28px); font-size: clamp(0.9rem,3.5vw,1.5rem); font-weight:900; cursor:pointer; box-shadow:0 5px 0 #b36500; font-family:'Nunito',sans-serif; margin-top:8px; }
+
+    .lv-btn.locked { opacity:0.45; position:relative; overflow:hidden; }
+    .lv-btn.locked::after { content:'🔒'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size: clamp(1.2rem,5vw,2.5rem); }
+    .lv-btn.unlock-anim { animation:unlockFlash 0.8s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes unlockFlash { 0%{transform:scale(0.8);background:#ffd700;} 50%{transform:scale(1.2);} 100%{transform:scale(1);} }
+    .lv-btn.shimmer { background:linear-gradient(90deg,#6b4f9f,#c084fc,#6b4f9f); background-size:200%; animation:shimmerMove 2s linear infinite; }
+    @keyframes shimmerMove { 0%{background-position:0%;} 100%{background-position:200%;} }
+
     .wrap {
       width:min(1300px,100%);
       background:#2a1a3a;
@@ -28,7 +133,6 @@
       border: clamp(2px,0.4vw,4px) solid #ffe5b4;
     }
 
-    /* ── TOP BAR ── */
     .topbar {
       background:#4a2a6a; border: clamp(2px,0.5vw,5px) solid #ffb3d9;
       border-radius: clamp(25px,5vw,55px);
@@ -39,6 +143,7 @@
       box-shadow: 0 clamp(5px,1vw,10px) 0 #2a1a3a;
     }
     .topbar-title {
+      font-family:'Baloo 2',sans-serif;
       font-size: clamp(1.2rem,4vw,2.4rem);
       font-weight:900; color:#ffe5b4;
       text-shadow: 2px 2px 0 #ff69b4, 4px 4px 0 #ffaa33;
@@ -53,6 +158,7 @@
       box-shadow: 0 clamp(4px,0.8vw,7px) 0 #b1741e;
       cursor:pointer; font-weight:900;
       min-height: clamp(38px,7vw,60px);
+      font-family:'Nunito',sans-serif;
     }
     .tb-lbl {
       font-size: clamp(0.9rem,3vw,1.5rem);
@@ -61,7 +167,6 @@
       border: clamp(2px,0.4vw,4px) solid #ffb3d9; font-weight:900; white-space:nowrap;
     }
 
-    /* ── QUICK NAV (bottom sticky) ── */
     .quick-nav {
       display:flex; gap: clamp(6px,1.5vw,12px);
       background:#1a0f2a; border-top: 2px solid #6b4f9f;
@@ -74,15 +179,13 @@
       flex:1; border:none; border-radius: clamp(20px,4vw,40px);
       padding: clamp(10px,2vh,16px) clamp(6px,1.5vw,12px);
       font-weight:900; font-size: clamp(0.8rem,2.5vw,1.1rem);
-      cursor:pointer; transition:transform 0.1s;
+      cursor:pointer; transition:transform 0.1s; font-family:'Nunito',sans-serif;
     }
     .qn-btn:active { transform:translateY(3px); }
     .qn-home  { background:#ff69b4; color:white; }
     .qn-soar  { background:#9ae6b4; color:#1a2e22; }
     .qn-math  { background:#c4a5ff; color:#1e1133; }
-    .qn-challenge { background:#ffd700; color:#2a1a3a; }
 
-    /* ── LAYOUT ── */
     .main-layout { display:flex; flex-direction:row; gap: clamp(8px,1.5vw,20px); }
     .content-area {
       flex:1; min-width:0;
@@ -103,7 +206,7 @@
       border-radius: clamp(12px,3vw,24px);
       box-shadow: 0 clamp(4px,0.8vh,7px) 0 rgba(0,0,0,0.4);
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      cursor:pointer; font-weight:900; padding: clamp(4px,0.8vh,8px); font-family:inherit;
+      cursor:pointer; font-weight:900; padding: clamp(4px,0.8vh,8px); font-family:'Nunito',sans-serif;
     }
     .action-btn:active:not(:disabled) { transform:translateY(clamp(3px,0.6vh,5px)); box-shadow:0 1px 0 rgba(0,0,0,0.4); }
     .action-btn:disabled { opacity:0.4; cursor:default; }
@@ -115,13 +218,12 @@
     .action-icon { font-size: clamp(1.1rem,3.5vw,2rem); }
     .action-text { font-size: clamp(0.55rem,1.6vw,0.9rem); text-align:center; }
 
-    /* ── SCREENS ── */
     .screen { display:none; }
     .screen.active { display:block; }
 
-    /* ── HOME ── */
     .home-hero { text-align:center; margin-bottom: clamp(12px,2.5vh,28px); }
     .home-hero h1 {
+      font-family:'Baloo 2',sans-serif;
       font-size: clamp(1.8rem,7vw,4.5rem); font-weight:900; color:#ffe5b4;
       text-shadow: 3px 3px 0 #ff69b4, 5px 5px 0 #ffaa33;
     }
@@ -132,6 +234,7 @@
       color:white; border: clamp(2px,0.4vw,4px) solid #ffb3d9; margin-top:8px;
     }
     .section-header {
+      font-family:'Baloo 2',sans-serif;
       font-size: clamp(1.1rem,4vw,2rem); font-weight:900; color:#ffe5b4;
       background:#4a2a6a; display:inline-block;
       padding: clamp(7px,1.5vw,14px) clamp(12px,3vw,28px);
@@ -155,13 +258,14 @@
       padding: clamp(10px,2vh,22px) clamp(8px,2vw,16px);
       text-align:center; border: clamp(3px,0.6vw,6px) solid white;
       box-shadow: 0 clamp(5px,1.2vh,12px) 0 #b36582; cursor:pointer;
-      transition:transform 0.1s;
+      transition:transform 0.1s, box-shadow 0.1s;
     }
+    .menu-card:hover { transform:translateY(-3px); box-shadow: 0 clamp(8px,1.8vh,18px) 0 #b36582; }
     .menu-card:active { transform:translateY(clamp(4px,1vh,7px)); box-shadow:0 clamp(3px,0.6vh,5px) 0 #b36582; }
     .menu-card.soar-card { background:#d4f5e2; box-shadow:0 clamp(7px,1.5vh,16px) 0 #2d5a3a; }
     .menu-card.challenge-card { background:#fff3cd; box-shadow:0 clamp(7px,1.5vh,16px) 0 #a06000; }
     .mc-icon { font-size: clamp(1.8rem,6vw,3.5rem); }
-    .mc-name { font-size: clamp(0.9rem,3.2vw,1.8rem); font-weight:900; color:#2a1a3a; margin: clamp(2px,0.5vh,6px) 0; }
+    .mc-name { font-family:'Baloo 2',sans-serif; font-size: clamp(0.9rem,3.2vw,1.8rem); font-weight:900; color:#2a1a3a; margin: clamp(2px,0.5vh,6px) 0; }
     .mc-desc { font-size: clamp(0.7rem,2.2vw,1.1rem); color:#4a2a6a; }
     .mc-badge {
       font-size: clamp(0.65rem,2vw,1rem); background:#ff69b4; color:white;
@@ -172,7 +276,6 @@
     .mc-badge.soar { background:#2d5a3a; border-color:#9ae6b4; color:#9ae6b4; }
     .mc-badge.challenge { background:#e6a000; border-color:#fff; color:#fff; }
 
-    /* ── PROGRESS ── */
     .progress-chart {
       background:#fff0f5; border-radius: clamp(16px,4vw,50px);
       padding: clamp(12px,2.5vh,26px); border: clamp(2px,0.5vw,5px) solid white;
@@ -183,7 +286,7 @@
       border-radius: clamp(15px,4vw,35px); border: clamp(2px,0.4vw,4px) solid white;
       margin: clamp(7px,1.5vh,16px) 0; overflow:hidden;
     }
-    .progress-bar-fill { height:100%; background:linear-gradient(90deg,#ffb703,#ff69b4); border-radius:inherit; transition:width 0.5s; }
+    .progress-bar-fill { height:100%; background:linear-gradient(90deg,#ffb703,#ff69b4); border-radius:inherit; transition:width 0.8s cubic-bezier(0.34,1.56,0.64,1); }
     .progress-stats { display:flex; flex-wrap:wrap; gap: clamp(4px,1vw,12px); }
     .progress-stats span {
       font-size: clamp(0.7rem,2.5vw,1.4rem); background:white;
@@ -191,12 +294,11 @@
       border-radius: clamp(16px,4vw,45px); box-shadow:0 2px 0 #ccc;
     }
 
-    /* ── LEVELS ── */
     .levels-wrap {
       background:#ffe5b4; border-radius: clamp(20px,5vw,70px);
       padding: clamp(14px,3vh,32px); border: clamp(3px,0.6vw,7px) solid white;
     }
-    .levels-title { font-size: clamp(1.2rem,5vw,3rem); color:#ff1493; text-shadow:1px 1px 0 #ffd700; margin-bottom: clamp(10px,2vh,24px); font-weight:900; }
+    .levels-title { font-family:'Baloo 2',sans-serif; font-size: clamp(1.2rem,5vw,3rem); color:#ff1493; text-shadow:1px 1px 0 #ffd700; margin-bottom: clamp(10px,2vh,24px); font-weight:900; }
     .levels-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100px,100%), 1fr)); gap: clamp(7px,1.5vw,20px); }
     .lv-btn {
       background:#6b4f9f; border: clamp(2px,0.5vw,5px) solid white;
@@ -205,13 +307,14 @@
       font-size: clamp(0.75rem,3vw,1.8rem); font-weight:900; color:white;
       box-shadow:0 clamp(5px,1.2vh,12px) 0 #2a1a3a; cursor:pointer;
       display:flex; flex-direction:column; align-items:center; gap:4px;
+      font-family:'Nunito',sans-serif; transition:transform 0.15s;
     }
-    .lv-btn:active { transform:translateY(5px); box-shadow:0 2px 0 #2a1a3a; }
+    .lv-btn:active:not(.locked) { transform:translateY(5px); box-shadow:0 2px 0 #2a1a3a; }
+    .lv-btn:hover:not(.locked) { transform:translateY(-3px); }
     .lv-btn.soar { background:#1a4a2a; border-color:#9ae6b4; }
     .lv-icon { font-size: clamp(1.4rem,6vw,4rem); }
     .lv-score { font-size: clamp(0.65rem,2.5vw,1.4rem); background:rgba(0,0,0,0.2); border-radius:20px; padding:2px 8px; }
 
-    /* ── QUIZ HEAD ── */
     .quiz-head {
       background:#ffe5b4; border-radius: clamp(16px,4vw,60px);
       padding: clamp(10px,2.5vh,26px); border: clamp(2px,0.5vw,5px) solid #ff69b4;
@@ -225,16 +328,31 @@
       margin: clamp(5px,1.2vh,16px) 0; flex-wrap:wrap;
     }
     .qs-label { font-size: clamp(0.65rem,2.5vw,1.3rem); }
-    .qs-val { font-size: clamp(1.1rem,4.5vw,3.5rem); font-weight:900; color:#2a1a3a; }
+    .qs-val { font-size: clamp(1.1rem,4.5vw,3.5rem); font-weight:900; color:#2a1a3a; transition:transform 0.3s; }
+    .qs-val.bump { animation:scoreBump 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes scoreBump { 0%{transform:scale(1);} 50%{transform:scale(1.5);color:#ff69b4;} 100%{transform:scale(1);} }
     .prog-bar { height: clamp(13px,2.5vh,30px); background:#bbb; border-radius: clamp(15px,4vw,35px); border: clamp(1px,0.2vw,3px) solid white; overflow:hidden; }
-    .prog-fill { background:linear-gradient(90deg,#ffd700,#ff69b4); height:100%; border-radius:inherit; transition:width 0.3s; }
+    .prog-fill { background:linear-gradient(90deg,#ffd700,#ff69b4); height:100%; border-radius:inherit; transition:width 0.5s cubic-bezier(0.34,1.56,0.64,1); }
 
-    /* ── QUESTION CARD ── */
+    .streak-row {
+      display:flex; gap:4px; margin-top:8px; justify-content:center;
+    }
+    .streak-dot {
+      width: clamp(10px,2.5vw,18px); height: clamp(10px,2.5vw,18px);
+      border-radius:50%; background:#ddd; border:2px solid white;
+      transition:background 0.3s, transform 0.3s;
+    }
+    .streak-dot.lit { background:#ffd700; transform:scale(1.2); box-shadow:0 0 8px #ffd700; }
+    .streak-dot.fire { background:linear-gradient(135deg,#ff6b35,#ffd700); animation:dotFire 0.5s ease-in-out; }
+    @keyframes dotFire { 0%{transform:scale(1);} 50%{transform:scale(1.5);} 100%{transform:scale(1.2);} }
+
     .q-card {
       background:#fff5e6; border-radius: clamp(16px,5vw,70px);
       padding: clamp(14px,3.5vh,32px); border: clamp(2px,0.5vw,7px) solid #ffb3d9;
       box-shadow:0 clamp(7px,1.5vh,18px) 0 #a04b6d; margin-bottom: clamp(10px,2vh,26px);
+      animation:cardSlideIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
     }
+    @keyframes cardSlideIn { from{opacity:0;transform:scale(0.9) translateY(20px);} to{opacity:1;transform:scale(1) translateY(0);} }
     .soar-q-card { background:#d4f5e2; border-color:#9ae6b4; box-shadow:0 clamp(7px,1.5vh,18px) 0 #2d5a3a; }
     .q-type-badge {
       font-size: clamp(0.75rem,3vw,1.8rem); background:#ff69b4;
@@ -243,39 +361,47 @@
     }
     .q-type-badge.soar { background:#2d5a3a; color:#9ae6b4; border-color:#9ae6b4; }
     .q-type-badge.challenge { background:#e6a000; color:white; }
-    .q-text { font-size: clamp(1.1rem,4.5vw,2.6rem); font-weight:800; color:#2a1a3a; margin: clamp(9px,2.5vh,26px) 0; line-height:1.4; }
+    .q-text { font-family:'Baloo 2',sans-serif; font-size: clamp(1.1rem,4.5vw,2.6rem); font-weight:800; color:#2a1a3a; margin: clamp(9px,2.5vh,26px) 0; line-height:1.4; }
     .object-row { display:flex; flex-wrap:wrap; justify-content:center; gap: clamp(4px,1.2vw,20px); margin: clamp(9px,2.5vh,30px) 0; }
-    .count-object { font-size: clamp(1.8rem,8vw,5.5rem); filter:drop-shadow(2px 3px 0 rgba(0,0,0,0.25)); }
-    .big-number { font-size: clamp(3.5rem,16vw,11rem); line-height:1; color:#ff1493; text-shadow:3px 3px 0 #ffd700; text-align:center; }
+    .count-object { font-size: clamp(1.8rem,8vw,5.5rem); filter:drop-shadow(2px 3px 0 rgba(0,0,0,0.25)); transition:transform 0.2s; }
+    .count-object:hover { transform:scale(1.2) rotate(10deg); }
+    .big-number { font-family:'Baloo 2',sans-serif; font-size: clamp(3.5rem,16vw,11rem); line-height:1; color:#ff1493; text-shadow:3px 3px 0 #ffd700; text-align:center; }
     .big-answer-buttons { display:flex; flex-wrap:wrap; justify-content:center; gap: clamp(9px,2.5vw,26px); margin: clamp(9px,2.5vh,30px) 0; }
     .answer-btn {
       width: clamp(55px,17vw,150px); height: clamp(55px,17vw,150px);
       border-radius:50%; background:#6b4f9f;
       border: clamp(3px,0.8vw,9px) solid white;
+      font-family:'Baloo 2',sans-serif;
       font-size: clamp(1.3rem,6.5vw,5.5rem); font-weight:900; color:white;
       box-shadow:0 clamp(5px,1.5vh,15px) 0 #2a1a3a; cursor:pointer;
+      transition:transform 0.15s;
     }
+    .answer-btn:hover:not(:disabled) { transform:scale(1.1); }
     .answer-btn:active:not(:disabled) { transform:translateY(clamp(4px,1.2vh,10px)); box-shadow:0 1px 0 #2a1a3a; }
-    .answer-btn.correct { background:#4caf50; }
-    .answer-btn.wrong { background:#f44336; }
+    .answer-btn.correct { background:#4caf50; animation:correctPop 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    .answer-btn.wrong { background:#f44336; animation:wrongShake 0.4s; }
+    @keyframes correctPop { 0%{transform:scale(1);} 50%{transform:scale(1.3);} 100%{transform:scale(1);} }
+    @keyframes wrongShake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-10px);} 75%{transform:translateX(10px);} }
     .options.two-col { display:grid; grid-template-columns:1fr 1fr; gap: clamp(8px,2vw,26px); margin: clamp(8px,2vh,26px) 0; }
     .opt-btn {
       padding: clamp(9px,2.5vh,36px) clamp(5px,1.5vw,18px);
       font-size: clamp(0.9rem,4.5vw,2.8rem); border-radius: clamp(16px,6vw,70px);
       background:#6fc2d6; border: clamp(2px,0.5vw,7px) solid white;
       box-shadow:0 clamp(5px,1.2vh,14px) 0 #218294; color:white; cursor:pointer; font-weight:700;
+      font-family:'Nunito',sans-serif; transition:transform 0.15s;
     }
-    .opt-btn.correct { background:#4caf50; }
-    .opt-btn.wrong { background:#f44336; }
+    .opt-btn:hover:not(:disabled) { transform:scale(1.05); }
+    .opt-btn:active:not(:disabled) { transform:translateY(5px); box-shadow:0 1px 0 #218294; }
+    .opt-btn.correct { background:#4caf50; animation:correctPop 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    .opt-btn.wrong { background:#f44336; animation:wrongShake 0.4s; }
     .pattern-row { display:flex; flex-wrap:wrap; justify-content:center; gap: clamp(3px,0.8vw,14px); margin: clamp(6px,1.8vh,18px) 0; font-size: clamp(1.4rem,6.5vw,3.8rem); }
 
-    /* ── SOAR ACTIVITY CARD ── */
     .soar-activity-card {
       background:#d4f5e2; border-radius: clamp(16px,5vw,70px);
       padding: clamp(14px,3.5vh,32px); border: clamp(2px,0.5vw,7px) solid #9ae6b4;
       box-shadow:0 clamp(7px,1.5vh,18px) 0 #2d5a3a; margin-bottom: clamp(10px,2vh,26px);
     }
-    .soar-activity-title { font-size: clamp(1.2rem,5vw,2.8rem); font-weight:900; color:#1a4a2a; margin-bottom: clamp(7px,1.5vh,16px); }
+    .soar-activity-title { font-family:'Baloo 2',sans-serif; font-size: clamp(1.2rem,5vw,2.8rem); font-weight:900; color:#1a4a2a; margin-bottom: clamp(7px,1.5vh,16px); }
     .soar-illustration {
       background:#1a2e22; border-radius: clamp(12px,3vw,40px);
       padding: clamp(12px,3vh,28px); font-size: clamp(1.2rem,5vw,2.4rem);
@@ -290,22 +416,21 @@
       color:#1a2e22; font-weight:600;
     }
     .soar-talk { background:#2d5a3a; border-radius: clamp(16px,4vw,50px) clamp(16px,4vw,50px) clamp(16px,4vw,50px) 5px; padding: clamp(10px,2.5vh,22px); color:#9ae6b4; font-size: clamp(0.85rem,3.5vw,1.6rem); margin: clamp(8px,2vh,18px) 0; font-style:italic; }
-    .done-btn { background:#4caf50; color:white; border:3px solid white; border-radius: clamp(20px,5vw,50px); padding: clamp(9px,2vh,20px) clamp(16px,4vw,36px); font-size: clamp(0.9rem,3.5vw,1.6rem); font-weight:900; cursor:pointer; box-shadow:0 5px 0 #2d5a3a; margin-top: clamp(8px,2vh,18px); }
+    .done-btn { background:#4caf50; color:white; border:3px solid white; border-radius: clamp(20px,5vw,50px); padding: clamp(9px,2vh,20px) clamp(16px,4vw,36px); font-size: clamp(0.9rem,3.5vw,1.6rem); font-weight:900; cursor:pointer; box-shadow:0 5px 0 #2d5a3a; margin-top: clamp(8px,2vh,18px); font-family:'Nunito',sans-serif; }
     .undone-btn { background:#ffd700; color:#2a1a3a; }
     .nrich-link { display:inline-flex; align-items:center; gap:7px; background:linear-gradient(135deg,#ff9fcf,#c77dff); color:white; border-radius: clamp(20px,5vw,50px); padding: clamp(8px,1.8vh,16px) clamp(14px,3.5vw,30px); font-size: clamp(0.8rem,3vw,1.4rem); font-weight:900; text-decoration:none; margin: clamp(7px,1.5vh,14px) 4px; }
 
-    /* ── FEEDBACK & HINT ── */
     .hint-box {
       background:#ffe68f; border: clamp(3px,0.7vw,7px) solid #ffa500;
       border-radius: clamp(16px,5vw,80px); padding: clamp(7px,2vh,30px);
       font-size: clamp(0.9rem,4vw,2.4rem); margin-top: clamp(7px,1.8vh,18px);
     }
     .feedback { font-size: clamp(0.9rem,4vw,2.6rem); padding: clamp(7px,2vh,30px); border-radius: clamp(16px,6vw,80px); margin-top: clamp(7px,1.8vh,18px); display:none; }
-    .feedback.show { display:block; }
+    .feedback.show { display:block; animation:feedbackPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes feedbackPop { from{transform:scale(0.8);opacity:0;} to{transform:scale(1);opacity:1;} }
     .feedback.ok  { background:#d4edda; color:#155724; border: clamp(2px,0.5vw,5px) solid #4caf50; }
     .feedback.bad { background:#f8d7da; color:#721c24; border: clamp(2px,0.5vw,5px) solid #f44336; }
 
-    /* ── RESULT ── */
     .result-card {
       background:#ffe5b4; border-radius: clamp(24px,7vw,80px);
       padding: clamp(16px,4vh,44px); border: clamp(4px,0.8vw,9px) solid #ff69b4;
@@ -314,12 +439,16 @@
     @keyframes pulse { 0%,100%{ box-shadow:0 0 10px #ffd700; } 50%{ box-shadow:0 0 30px #ff69b4; } }
     .result-emoji { font-size: clamp(3rem,13vw,11rem); display:block; animation:bounce 1s infinite; }
     @keyframes bounce { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
-    .result-title { font-size: clamp(1.4rem,6vw,4.5rem); font-weight:900; color:#ff1493; text-shadow:2px 2px 0 #ffd700; }
+    .result-title { font-family:'Baloo 2',sans-serif; font-size: clamp(1.4rem,6vw,4.5rem); font-weight:900; color:#ff1493; text-shadow:2px 2px 0 #ffd700; }
     .result-stars { font-size: clamp(1.8rem,7vw,5.5rem); margin: clamp(8px,1.8vh,20px) 0; }
+    .result-stars.animate span { display:inline-block; animation:starDrop 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .result-stars.animate span:nth-child(2) { animation-delay:0.15s; }
+    .result-stars.animate span:nth-child(3) { animation-delay:0.3s; }
+    @keyframes starDrop { from{transform:scale(0) rotate(-180deg);opacity:0;} to{transform:scale(1) rotate(0deg);opacity:1;} }
     .res-btns { display:flex; justify-content:center; gap: clamp(7px,1.8vw,22px); margin-top: clamp(14px,2.5vh,28px); flex-wrap:wrap; }
-    .res-btn { border-radius: clamp(25px,7vw,70px); padding: clamp(8px,2vh,18px) clamp(14px,3.5vw,28px); font-size: clamp(0.9rem,3.5vw,1.8rem); border: clamp(2px,0.5vw,5px) solid white; cursor:pointer; font-weight:900; min-height: clamp(38px,7.5vh,65px); }
+    .res-btn { border-radius: clamp(25px,7vw,70px); padding: clamp(8px,2vh,18px) clamp(14px,3.5vw,28px); font-size: clamp(0.9rem,3.5vw,1.8rem); border: clamp(2px,0.5vw,5px) solid white; cursor:pointer; font-weight:900; min-height: clamp(38px,7.5vh,65px); font-family:'Nunito',sans-serif; transition:transform 0.15s; }
+    .res-btn:hover { transform:scale(1.05); }
 
-    /* ── RESPONSIVE ── */
     @media (max-width:600px) {
       .main-layout { flex-direction:column-reverse; }
       .button-area { width:100%; flex-direction:row; flex-wrap:wrap; justify-content:center; }
@@ -353,10 +482,23 @@
   </style>
 </head>
 <body>
+<canvas id="confettiCanvas"></canvas>
+<div id="mascot" title="Click me!">🐻</div>
+<div id="streakBadge">🔥 3 in a row!</div>
+<div id="popText">WOW!</div>
+
+<div id="milestoneOverlay">
+  <div class="milestone-card">
+    <span class="milestone-emoji" id="milestoneEmoji">🏆</span>
+    <div class="milestone-title" id="milestoneTitle">Amazing!</div>
+    <div class="milestone-sub" id="milestoneSub">You earned a new trophy!</div>
+    <button class="milestone-close" onclick="closeMilestone()">Yay! 🎉</button>
+  </div>
+</div>
+
 <div class="wrap">
-  <!-- TOP BAR -->
   <div class="topbar">
-    <div class="topbar-title">🧸 Safaan's Math</div>
+    <div class="topbar-title">🏎️🍔 Safaan's Car & Food Truck Math</div>
     <div class="topbar-btns">
       <button class="tb-btn" onclick="saveProgress()">💾 Save</button>
       <button class="tb-btn" onclick="document.getElementById('loadFile').click()">📂 Load</button>
@@ -366,89 +508,93 @@
   </div>
 
   <div class="main-layout">
-    <!-- CONTENT -->
     <div class="content-area" id="scrollArea">
 
-      <!-- HOME -->
+      <!-- HOME (unlocked) -->
       <div class="screen active" id="homeScreen">
+        <div id="dailyBonusDiv"></div>
         <div class="home-hero">
-          <h1>🧮 10 → 20 Adventure</h1>
-          <p>Let's count higher, Safaan! 🌟</p>
+          <h1>🚗 10 → 20 with Cars & Trucks</h1>
+          <p>Count Lamborghinis, eat from food trucks! 🌮</p>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(12px,3vw,24px); margin-bottom:16px;">
           <div class="menu-card" style="min-height:clamp(140px,25vw,200px);" onclick="showPracticeMenu()">
-            <div class="mc-icon">🎮✏️</div>
+            <div class="mc-icon">🏎️✏️</div>
             <div class="mc-name">Practice Maths</div>
-            <div class="mc-desc">games &amp; challenges</div>
+            <div class="mc-desc">Ferrari, Audi, BMW counting!</div>
             <div class="mc-badge">PLAY</div>
           </div>
           <div class="menu-card soar-card" style="min-height:clamp(140px,25vw,200px);" onclick="openSoarMenu()">
-            <div class="mc-icon">🦅✨</div>
+            <div class="mc-icon">🍔🦅</div>
             <div class="mc-name">SOAR Adventures</div>
-            <div class="mc-desc">hands-on activities</div>
+            <div class="mc-desc">food truck & car activities</div>
             <div class="mc-badge soar">EXPLORE</div>
           </div>
         </div>
 
         <div class="progress-chart" id="progressChart"></div>
+        <div class="trophy-shelf">
+          <div class="trophy-shelf-title">🏆 Trophy Shelf</div>
+          <div class="trophy-row" id="trophyRow"></div>
+        </div>
       </div>
 
-      <!-- PRACTICE MENU SCREEN -->
+      <!-- PRACTICE MENU (always unlocked) -->
       <div class="screen" id="practiceMenuScreen">
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
           <button class="res-btn" style="background:#ff69b4;color:white;" onclick="showHome()">🏠 Home</button>
           <button class="res-btn" style="background:#9ae6b4;color:#1a2e22;" onclick="openSoarMenu()">🦅 SOAR</button>
         </div>
         <div class="home-hero" style="padding:clamp(12px,3vh,20px);margin-bottom:16px;">
-          <h1 style="font-size:clamp(1.3rem,5vw,2rem);">🎮 Practice Maths</h1>
+          <h1 style="font-size:clamp(1.3rem,5vw,2rem);">🎮 Maths with Cars & Food</h1>
         </div>
 
-        <div class="section-header">🎮 Math Games</div>
+        <div class="section-header">🏎️ Car Counting</div>
         <div class="menu-grid">
           <div class="menu-card" onclick="openCategory('counting')">
             <div class="mc-icon">🔟➡️2️⃣0️⃣</div>
-            <div class="mc-name">Counting</div>
-            <div class="mc-desc">count 10 to 20!</div>
+            <div class="mc-name">Counting Cars</div>
+            <div class="mc-desc">Ferrari, Mustang, BMW</div>
             <div class="mc-badge">5 levels</div>
           </div>
           <div class="menu-card" onclick="openCategory('numbers')">
             <div class="mc-icon">🔢✨</div>
             <div class="mc-name">Numbers</div>
-            <div class="mc-desc">find the number</div>
+            <div class="mc-desc">find the number of trucks</div>
             <div class="mc-badge">5 levels</div>
           </div>
           <div class="menu-card" onclick="openCategory('shapes')">
             <div class="mc-icon">🔴🔺⭐</div>
-            <div class="mc-name">Shapes</div>
-            <div class="mc-desc">circle, star, heart</div>
+            <div class="mc-name">Car Shapes</div>
+            <div class="mc-desc">circle (wheel), star</div>
             <div class="mc-badge">5 levels</div>
           </div>
           <div class="menu-card" onclick="openCategory('patterns')">
             <div class="mc-icon">🎨🔁</div>
-            <div class="mc-name">Patterns</div>
-            <div class="mc-desc">what comes next?</div>
+            <div class="mc-name">Truck Patterns</div>
+            <div class="mc-desc">burger, fries, ?</div>
             <div class="mc-badge">5 levels</div>
           </div>
         </div>
 
-        <div class="section-header">🌟 Extra Challenges</div>
+        <div class="section-header">🍟 Food Truck Challenges</div>
         <div class="menu-grid">
           <div class="menu-card challenge-card" onclick="openCategory('compare')">
             <div class="mc-icon">⚖️</div>
-            <div class="mc-name">More or Less?</div>
-            <div class="mc-desc">which number is bigger?</div>
+            <div class="mc-name">More Tacos?</div>
+            <div class="mc-desc">which truck has more?</div>
             <div class="mc-badge challenge">5 levels</div>
           </div>
           <div class="menu-card challenge-card" onclick="openCategory('missing')">
             <div class="mc-icon">❓🔢</div>
-            <div class="mc-name">Missing Number</div>
+            <div class="mc-name">Missing Menu</div>
             <div class="mc-desc">what number is hiding?</div>
             <div class="mc-badge challenge">5 levels</div>
           </div>
           <div class="menu-card challenge-card" onclick="openCategory('add_simple')">
             <div class="mc-icon">➕🧸</div>
-            <div class="mc-name">Adding Fun</div>
+            <div class="mc-name">Add Burgers</div>
             <div class="mc-desc">add small numbers!</div>
             <div class="mc-badge challenge">5 levels</div>
           </div>
@@ -458,7 +604,7 @@
       <!-- LEVELS -->
       <div class="screen" id="levelsScreen">
         <div class="levels-wrap">
-          <div class="levels-title" id="levelsTitle">pick a level!</div>
+          <div class="levels-title" id="levelsTitle">pick a car level!</div>
           <div class="levels-grid" id="levelsGrid"></div>
           <div style="margin-top:clamp(12px,3vh,26px); text-align:center;">
             <button class="res-btn" style="background:#b39ddb;color:#2a1a3a;" onclick="showHome()">🏠 Home</button>
@@ -503,6 +649,7 @@
             <div class="qs-item"><div class="qs-label">👍</div><div class="qs-val" id="qsAcc">0%</div></div>
           </div>
           <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+          <div class="streak-row" id="streakDots"></div>
         </div>
         <div class="q-card" id="qCard"></div>
         <div class="hint-box" id="hintBox" style="display:none;"></div>
@@ -528,7 +675,7 @@
           </div>
         </div>
       </div>
-    </div><!-- end content-area -->
+    </div>
 
     <!-- SIDE BUTTONS -->
     <div class="button-area">
@@ -548,40 +695,187 @@
         <span class="action-icon">▶️</span><span class="action-text">Next</span>
       </button>
     </div>
-  </div><!-- end main-layout -->
+  </div>
 
-  <!-- QUICK NAV -->
   <div class="quick-nav">
     <button class="qn-btn qn-home" onclick="showHome()">🏠 Home</button>
     <button class="qn-btn qn-math" onclick="showPracticeMenu()">🎮 Maths</button>
     <button class="qn-btn qn-soar" onclick="openSoarMenu()">🦅 SOAR</button>
   </div>
-</div><!-- end wrap -->
+</div>
 
 <script>
 (function(){
-  // ── SPEECH ──
-  function speak(text){
-    if(!window.speechSynthesis)return;
-    try{ window.speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.rate=0.8; u.pitch=1.2; window.speechSynthesis.speak(u); }catch(e){}
-  }
-
-  // ── UTILS ──
+  function speak(text){ if(!window.speechSynthesis)return; try{ window.speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.rate=0.8; u.pitch=1.2; window.speechSynthesis.speak(u); }catch(e){} }
   function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
   function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-  // ── CATEGORIES ──
-  const CATS={
-    counting:  {label:'Counting',  levels:5, icon:'🔟'},
-    numbers:   {label:'Numbers',   levels:5, icon:'🔢'},
-    shapes:    {label:'Shapes',    levels:5, icon:'🔴'},
-    patterns:  {label:'Patterns',  levels:5, icon:'🎨'},
-    compare:   {label:'More or Less', levels:5, icon:'⚖️'},
-    missing:   {label:'Missing Number', levels:5, icon:'❓'},
-    add_simple:{label:'Adding Fun', levels:5, icon:'➕'},
+  const canvas=document.getElementById('confettiCanvas');
+  const ctx=canvas.getContext('2d');
+  let confettiParticles=[];
+  function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resizeCanvas(); window.addEventListener('resize',resizeCanvas);
+  function launchConfetti(x,y,count){
+    const colors=['#ff69b4','#ffd700','#4caf50','#00bcd4','#ff6b35','#c84fff'];
+    for(let i=0;i<count;i++){
+      confettiParticles.push({
+        x: x||canvas.width/2, y: y||canvas.height/3,
+        vx:(Math.random()-0.5)*14, vy:(Math.random()*-12)-4,
+        color:colors[Math.floor(Math.random()*colors.length)],
+        size:Math.random()*10+6, gravity:0.5, alpha:1,
+        shape:Math.random()<0.5?'circle':'rect',
+        rot:Math.random()*360, rotv:(Math.random()-0.5)*10
+      });
+    }
+    if(!confettiRunning) runConfetti();
+  }
+  let confettiRunning=false;
+  function runConfetti(){
+    confettiRunning=true;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    confettiParticles=confettiParticles.filter(p=>p.alpha>0.05);
+    confettiParticles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.vy+=p.gravity;
+      p.vx*=0.99; p.alpha-=0.012; p.rot+=p.rotv;
+      ctx.save(); ctx.globalAlpha=p.alpha; ctx.fillStyle=p.color;
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+      if(p.shape==='circle'){ctx.beginPath();ctx.arc(0,0,p.size/2,0,Math.PI*2);ctx.fill();}
+      else{ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2);}
+      ctx.restore();
+    });
+    if(confettiParticles.length>0) requestAnimationFrame(runConfetti);
+    else{confettiRunning=false;ctx.clearRect(0,0,canvas.width,canvas.height);}
+  }
+
+  const mascot=document.getElementById('mascot');
+  mascot.addEventListener('click',()=>{speak('Keep going, Safaan! You are amazing!'); mascot.classList.remove('happy','sad'); void mascot.offsetWidth; mascot.classList.add('happy');});
+  function mascotReact(good){
+    mascot.classList.remove('happy','sad'); void mascot.offsetWidth;
+    mascot.textContent=good?'🐻':'🙈';
+    mascot.classList.add(good?'happy':'sad');
+    setTimeout(()=>{mascot.textContent='🐻';mascot.classList.remove('happy','sad');},1500);
+  }
+
+  const popText=document.getElementById('popText');
+  const popWords=['WOW!','YES!','BOOM!','YAY!','GREAT!','🌟 SUPER!','👏 NICE!','🔥 HOT!'];
+  function showPop(text,color){
+    popText.textContent=text||popWords[rnd(0,popWords.length-1)];
+    popText.style.color=color||'#ffd700';
+    popText.classList.remove('hide'); void popText.offsetWidth;
+    popText.classList.add('show');
+    setTimeout(()=>{popText.classList.replace('show','hide');},900);
+  }
+
+  let currentStreak=0;
+  const streakBadge=document.getElementById('streakBadge');
+  function updateStreakBadge(){
+    if(currentStreak>=2){
+      streakBadge.style.display='block';
+      streakBadge.textContent='🔥 '+currentStreak+' in a row!';
+      streakBadge.classList.remove('fire'); void streakBadge.offsetWidth;
+      streakBadge.classList.add('fire');
+    } else {
+      streakBadge.style.display='none';
+    }
+  }
+  function buildStreakDots(){
+    const row=document.getElementById('streakDots'); row.innerHTML='';
+    for(let i=0;i<5;i++){ const d=document.createElement('div'); d.className='streak-dot'; d.id='dot_'+i; row.appendChild(d); }
+  }
+  function lightStreakDot(idx){ const d=document.getElementById('dot_'+idx); if(d){d.classList.add('lit');setTimeout(()=>d.classList.add('fire'),100);} }
+
+  let pendingMilestones=[];
+  function showMilestone(emoji,title,sub){
+    pendingMilestones.push({emoji,title,sub});
+    if(document.getElementById('milestoneOverlay').classList.contains('show'))return;
+    displayNextMilestone();
+  }
+  function displayNextMilestone(){
+    if(!pendingMilestones.length)return;
+    const m=pendingMilestones.shift();
+    document.getElementById('milestoneEmoji').textContent=m.emoji;
+    document.getElementById('milestoneTitle').textContent=m.title;
+    document.getElementById('milestoneSub').textContent=m.sub;
+    document.getElementById('milestoneOverlay').classList.add('show');
+    launchConfetti(null,null,120);
+    speak(m.title+'. '+m.sub);
+  }
+  window.closeMilestone=function(){
+    document.getElementById('milestoneOverlay').classList.remove('show');
+    setTimeout(displayNextMilestone,500);
   };
 
-  // ── PROGRESS ──
+  const TROPHIES=[
+    {id:'first_star',   icon:'⭐', name:'First Star!',       check:p=>getTotalStars(p)>=1},
+    {id:'five_stars',   icon:'🌟', name:'5 Stars',           check:p=>getTotalStars(p)>=5},
+    {id:'ten_stars',    icon:'💫', name:'10 Stars',          check:p=>getTotalStars(p)>=10},
+    {id:'twenty_stars', icon:'🚀', name:'20 Stars!',         check:p=>getTotalStars(p)>=20},
+    {id:'counting_done',icon:'🔟', name:'Counting Pro',      check:p=>allDone(p,'counting')},
+    {id:'numbers_done', icon:'🔢', name:'Number Wizard',     check:p=>allDone(p,'numbers')},
+    {id:'shapes_done',  icon:'🔺', name:'Shape Master',      check:p=>allDone(p,'shapes')},
+    {id:'patterns_done',icon:'🎨', name:'Pattern King',      check:p=>allDone(p,'patterns')},
+    {id:'three_cats',   icon:'🏅', name:'Triple Champion',   check:p=>Object.keys(CATS).filter(c=>allDone(p,c)).length>=3},
+    {id:'perfect_level',icon:'💎', name:'Perfect Level',     check:p=>hasPerfect(p)},
+    {id:'soar_3',       icon:'🦅', name:'Explorer',          check:p=>Object.values(p.soar||{}).filter(Boolean).length>=3},
+    {id:'soar_all',     icon:'🌿', name:'SOAR Master',       check:p=>Object.values(p.soar||{}).filter(Boolean).length>=13},
+  ];
+  function getTotalStars(p){let s=0;Object.keys(CATS).forEach(c=>{for(let l=1;l<=5;l++)s+=p[c]?.[l]?.stars||0;});return s+(p.bonusStars||0);}
+  function allDone(p,cat){for(let l=1;l<=5;l++){if(!p[cat]?.[l]?.done)return false;}return true;}
+  function hasPerfect(p){for(const c of Object.keys(CATS)){for(let l=1;l<=5;l++){if(p[c]?.[l]?.stars===3)return true;}}return false;}
+
+  function checkTrophies(prevP,newP){
+    TROPHIES.forEach(t=>{
+      if(!prevP.trophies?.[t.id] && t.check(newP)){
+        if(!newP.trophies)newP.trophies={};
+        newP.trophies[t.id]=true;
+        showMilestone(t.icon,'Trophy Unlocked!',t.name+' 🎉');
+      }
+    });
+  }
+
+  function renderTrophyShelf(){
+    const row=document.getElementById('trophyRow'); if(!row)return;
+    row.innerHTML='';
+    TROPHIES.forEach(t=>{
+      const div=document.createElement('div');
+      div.className='trophy-item'+(progress.trophies?.[t.id]?' earned':'');
+      const opacity=progress.trophies?.[t.id]?'1':'0.3';
+      div.innerHTML=`<span class="trophy-icon" style="opacity:${opacity}">${progress.trophies?.[t.id]?t.icon:'🔒'}</span><div class="trophy-name">${t.name}</div>`;
+      row.appendChild(div);
+    });
+  }
+
+  function checkDailyBonus(){
+    const today=new Date().toDateString();
+    if(progress.lastBonus===today){document.getElementById('dailyBonusDiv').innerHTML='';return;}
+    document.getElementById('dailyBonusDiv').innerHTML=`
+      <div id="dailyBonus">
+        <div class="daily-title">🍔 Daily Food Truck Bonus! +3 ⭐</div>
+        <button class="daily-claim" onclick="claimDaily()">Claim Bonus! 🎉</button>
+      </div>`;
+  }
+  window.claimDaily=function(){
+    const today=new Date().toDateString();
+    progress.lastBonus=today;
+    if(!progress.bonusStars)progress.bonusStars=0;
+    progress.bonusStars+=3;
+    localStorage.setItem('safaan_math_v2',JSON.stringify(progress));
+    document.getElementById('dailyBonusDiv').innerHTML='<div style="text-align:center;font-size:clamp(1rem,4vw,1.8rem);color:#ffd700;padding:14px;">🍔 Bonus claimed! +3 ⭐</div>';
+    launchConfetti(null,null,80); showPop('🍔 +3 Stars!','#ffd700');
+    mascotReact(true); speak('Daily bonus claimed! Three bonus stars for Safaan!');
+    updateLbl();
+  };
+
+  const CATS={
+    counting:  {label:'Car Counting',  levels:5, icon:'🏎️'},
+    numbers:   {label:'Numbers',   levels:5, icon:'🔢'},
+    shapes:    {label:'Car Shapes',    levels:5, icon:'🔴'},
+    patterns:  {label:'Truck Patterns',  levels:5, icon:'🍔'},
+    compare:   {label:'More or Less?', levels:5, icon:'⚖️'},
+    missing:   {label:'Missing Menu', levels:5, icon:'❓'},
+    add_simple:{label:'Add Burgers', levels:5, icon:'➕'},
+  };
+
   let progress={};
   try{progress=JSON.parse(localStorage.getItem('safaan_math_v2'))||{};}catch(e){}
   function initProgress(){
@@ -590,6 +884,7 @@
       for(let l=1;l<=5;l++) if(!progress[c][l])progress[c][l]={done:false,stars:0};
     });
     if(!progress.soar)progress.soar={};
+    if(!progress.trophies)progress.trophies={};
   }
   initProgress();
 
@@ -613,29 +908,28 @@
   };
 
   function updateLbl(){
-    let stars=0,done=0,tot=0;
-    Object.keys(CATS).forEach(c=>{
-      for(let l=1;l<=5;l++){tot++;stars+=progress[c]?.[l]?.stars||0;if(progress[c]?.[l]?.done)done++;}
-    });
+    let stars=getTotalStars(progress);
+    let done=0,tot=0;
+    Object.keys(CATS).forEach(c=>{for(let l=1;l<=5;l++){tot++;if(progress[c]?.[l]?.done)done++;}});
     document.getElementById('saveLbl').innerHTML='⭐ '+stars+' stars';
     const ch=document.getElementById('progressChart'); if(!ch)return;
     const pct=tot?Math.round(done/tot*100):0;
     const soarDone=Object.keys(progress.soar||{}).filter(k=>progress.soar[k]).length;
-    ch.innerHTML=`<div style="font-weight:900;font-size:clamp(1rem,3.5vw,1.8rem);">📊 Safaan's journey</div>
+    ch.innerHTML=`<div style="font-weight:900;font-size:clamp(1rem,3.5vw,1.8rem);">📊 Safaan's car & truck journey</div>
       <div style="margin:clamp(4px,1.2vh,12px) 0;font-size:clamp(0.85rem,3vw,1.6rem);">⭐ ${stars} stars · 🦅 ${soarDone}/13 SOAR done</div>
       <div class="progress-bar-cont"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
       <div class="progress-stats">${Object.keys(CATS).map(c=>`<span>${CATS[c].icon} ${Object.values(progress[c]||{}).filter(p=>p.done).length}/5</span>`).join('')}</div>`;
+    renderTrophyShelf();
   }
 
   function showScreen(id){
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    // Show side action buttons only during quiz
     const ml=document.querySelector('.main-layout');
     if(ml) ml.classList.toggle('quiz-active', id==='quizScreen');
     document.getElementById('scrollArea').scrollTop=0;
   }
-  function showHome(){updateLbl();showScreen('homeScreen');}
+  function showHome(){updateLbl();checkDailyBonus();showScreen('homeScreen');}
   window.showHome=showHome;
   function showPracticeMenu(){updateLbl();showScreen('practiceMenuScreen');}
   window.showPracticeMenu=showPracticeMenu;
@@ -643,85 +937,83 @@
   window.goHome=goHome;
   window.goToLevels=function(){if(cat)openCategory(cat);else showPracticeMenu();};
 
-  // ── OPEN CATEGORY ──
+  // *** UNLOCKED: all levels accessible immediately ***
   function openCategory(c){
     cat=c;
-    document.getElementById('levelsTitle').textContent=CATS[c].label+' — pick a level, Safaan!';
+    document.getElementById('levelsTitle').textContent=CATS[c].label+' — pick a level, Safaan! (all unlocked)';
     const grid=document.getElementById('levelsGrid'); grid.innerHTML='';
-    const icons=['🔟','🌿','🍃','🌟','🏆'];
+    const icons=['🌱','🌿','🍃','🌟','🏆'];
     for(let l=1;l<=5;l++){
       const p=progress[c][l];
+      const unlocked = true; // always unlocked – Safaan can play any level
       const btn=document.createElement('button');
-      btn.className='lv-btn';
-      btn.innerHTML=`<span class="lv-icon">${icons[l-1]}</span>Level ${l}${p.stars>0?`<span class="lv-score">⭐${p.stars}</span>`:''}`;
-      btn.onclick=(ll=>()=>startLevel(ll))(l);
+      btn.className='lv-btn'+(unlocked?p.done?' shimmer':'':` locked`);
+      btn.innerHTML=`<span class="lv-icon">${unlocked?(icons[l-1]):''}</span>${'Level '+l}<span class="lv-icon">${unlocked&&p.stars>0?'⭐'.repeat(p.stars):''}</span>`;
+      if(unlocked){
+        btn.onclick=(ll=>()=>startLevel(ll))(l);
+      }
       grid.appendChild(btn);
     }
     showScreen('levelsScreen');
   }
   window.openCategory=openCategory;
 
-  // ── QUESTION GENERATORS ──
-  const emojis=['🐶','🐱','🐰','🦊','🐻','⭐','🍎','🚗','⚽','🦋','🌸','🐸'];
+  const carEmojis = ['🏎️','🚗','🚕','🚙','🚌','🚓','🏎️','🚒','🚐','🛻']; // added car vibes
+  const foodEmojis = ['🍔','🌮','🌭','🍟','🥪','🍕'];
 
   function genCounting(level){
     const ranges={1:[10,11,12],2:[12,13,14],3:[14,15,16],4:[16,17,18],5:[18,19,20]};
     const arr=ranges[level]||[10,11,12];
     return Array.from({length:5},()=>{
       const num=arr[rnd(0,arr.length-1)];
-      const em=emojis[rnd(0,emojis.length-1)];
+      const em= carEmojis[rnd(0,carEmojis.length-1)];
       let opts=[num]; while(opts.length<3){const c=num+rnd(-2,2);if(c>=10&&c<=20&&!opts.includes(c))opts.push(c);}
-      return{type:'counting',q:`How many ${em}?`,objects:Array(num).fill(em),answer:num,opts:shuffle(opts),hint:`Count carefully from 10! You have ${num}.`};
+      return{type:'counting',q:`How many ${em} cars?`,objects:Array(num).fill(em),answer:num,opts:shuffle(opts),hint:`Count the cars: you have ${num}.`};
     });
   }
-
   function genNumbers(level){
     const ranges={1:[10,11,12],2:[12,13,14],3:[14,15,16],4:[16,17,18],5:[18,19,20]};
     const arr=ranges[level]||[10,11,12];
     return Array.from({length:5},()=>{
       const num=arr[rnd(0,arr.length-1)];
       let opts=[num]; while(opts.length<3){const c=num+rnd(-2,2);if(c>=10&&c<=20&&!opts.includes(c))opts.push(c);}
-      return{type:'number',q:`What number is this?`,number:num,answer:num,opts:shuffle(opts),hint:`The number is ${num}. Say it: ${num}!`};
+      return{type:'number',q:`What number is on the food truck?`,number:num,answer:num,opts:shuffle(opts),hint:`The number is ${num}.`};
     });
   }
-
   function genShapes(level){
     const sets={1:['circle','square'],2:['circle','square','triangle'],3:['circle','square','triangle','star'],4:['circle','square','triangle','star','heart'],5:['circle','square','triangle','star','heart','diamond']};
     const list=sets[level]||sets[1];
-    const disp={circle:'🔴',square:'🟨',triangle:'🔺',star:'⭐',heart:'❤️',diamond:'💎'};
+    const disp={circle:'⚪ (wheel)',square:'🟥',triangle:'🔺',star:'⭐',heart:'❤️',diamond:'💎'};
     return Array.from({length:5},()=>{
       const sh=list[rnd(0,list.length-1)];
       const wrong=shuffle(list.filter(s=>s!==sh)).slice(0,2);
-      return{type:'shape',q:`What shape is this?`,display:disp[sh],answer:sh,opts:shuffle([sh,...wrong].slice(0,3)),hint:`It's a ${sh}! ${disp[sh]}`};
+      return{type:'shape',q:`What shape is the car part?`,display:disp[sh],answer:sh,opts:shuffle([sh,...wrong].slice(0,3)),hint:`It's a ${sh}! ${disp[sh]}`};
     });
   }
-
   function genPatterns(level){
     const pats={
-      1:[{p:['🔴','🔵'],n:'🔴'},{p:['🟡','🟢'],n:'🟡'},{p:['🍎','🍌'],n:'🍎'}],
-      2:[{p:['🔴','🔴','🔵'],n:'🔵'},{p:['⭐','⭐','🌙'],n:'⭐'}],
-      3:[{p:['🐶','🐱','🐶'],n:'🐱'},{p:['🌸','🌼','🌸'],n:'🌼'}],
-      4:[{p:['🔴','🔵','🔴','🔵'],n:'🔴'},{p:['🐶','🐱','🐶','🐱'],n:'🐶'}],
-      5:[{p:['⭐','⭐','🌙','⭐','⭐'],n:'🌙'},{p:['🔴','🔵','🟡','🔴','🔵'],n:'🟡'}]
+      1:[{p:['🍔','🍟'],n:'🍔'},{p:['🌮','🌯'],n:'🌮'}],
+      2:[{p:['🍔','🍔','🍟'],n:'🍟'},{p:['🌮','🌮','🌯'],n:'🌮'}],
+      3:[{p:['🍔','🍟','🍔'],n:'🍟'},{p:['🌮','🌯','🌮'],n:'🌯'}],
+      4:[{p:['🍔','🍟','🍔','🍟'],n:'🍔'},{p:['🚗','🚕','🚗','🚕'],n:'🚗'}],
+      5:[{p:['🍔','🍟','🌮','🍔','🍟'],n:'🌮'},{p:['🏎️','🚗','🚕','🏎️','🚗'],n:'🚕'}]
     };
     const arr=pats[level]||pats[1];
     return Array.from({length:5},()=>{
       const p=arr[rnd(0,arr.length-1)];
-      const wrong=[...new Set([p.p[0],p.p[1]||'⭐'])].filter(x=>x!==p.n);
-      return{type:'pattern',q:`What comes next?`,pattern:p.p,answer:p.n,opts:shuffle([p.n,...wrong].slice(0,3)),hint:`Say it out loud: ${p.p.join(' ')} ... ${p.n}!`};
+      const wrong=[...new Set([p.p[0],p.p[1]||'🍟'])].filter(x=>x!==p.n);
+      return{type:'pattern',q:`What food comes next?`,pattern:p.p,answer:p.n,opts:shuffle([p.n,...wrong].slice(0,3)),hint:`Pattern: ${p.p.join(' ')} ... ${p.n}!`};
     });
   }
-
   function genCompare(level){
     const ranges={1:[10,15],2:[10,16],3:[10,17],4:[10,18],5:[10,20]};
     const [lo,hi]=ranges[level]||[10,15];
     return Array.from({length:5},()=>{
       let a=rnd(lo,hi),b=rnd(lo,hi); while(a===b)b=rnd(lo,hi);
       const bigger=Math.max(a,b);
-      return{type:'compare',q:`Which number is BIGGER?`,a,b,answer:bigger,opts:shuffle([a,b,bigger+(rnd(0,1)?1:-1)].filter((v,i,arr)=>arr.indexOf(v)===i&&v>=10&&v<=20).slice(0,3)),hint:`${bigger} is bigger! ${a} vs ${b} — count up to find which is more.`};
+      return{type:'compare',q:`Which food truck has MORE burgers?`,a,b,answer:bigger,opts:shuffle([a,b,bigger+(rnd(0,1)?1:-1)].filter((v,i,arr)=>arr.indexOf(v)===i&&v>=10&&v<=20).slice(0,3)),hint:`${bigger} is bigger!`};
     });
   }
-
   function genMissing(level){
     const ranges={1:[10,12],2:[12,14],3:[14,16],4:[16,18],5:[18,20]};
     const [lo,hi]=ranges[level]||[10,12];
@@ -731,31 +1023,30 @@
       const ans=seq[hideIdx];
       let opts=[ans]; while(opts.length<3){const c=ans+rnd(-1,1);if(c>=lo&&c<=hi+1&&!opts.includes(c))opts.push(c);}
       const displayed=[...seq]; displayed[hideIdx]='❓';
-      return{type:'missing',q:`What number is hiding?`,sequence:displayed,answer:ans,opts:shuffle(opts),hint:`Count the numbers: ${seq.join(', ')}. The missing one is ${ans}!`};
+      return{type:'missing',q:`What menu number is missing?`,sequence:displayed,answer:ans,opts:shuffle(opts),hint:`Count: ${seq.join(', ')}. Missing: ${ans}.`};
     });
   }
-
   function genAddSimple(level){
     const maxA={1:2,2:3,3:4,4:5,5:6};
     const maxB={1:2,2:2,3:3,4:4,5:5};
     return Array.from({length:5},()=>{
       const a=rnd(1,maxA[level]||3), b=rnd(1,maxB[level]||2);
       const total=a+b;
-      const em=emojis[rnd(0,emojis.length-1)];
+      const em=foodEmojis[rnd(0,foodEmojis.length-1)];
       let opts=[total]; while(opts.length<3){const c=total+rnd(-1,1);if(c>=1&&c<=12&&!opts.includes(c))opts.push(c);}
-      return{type:'add',q:`${a} ${em} + ${b} ${em} = ?`,a,b,emoji:em,answer:total,opts:shuffle(opts),hint:`Put them together! ${a} and ${b} more makes ${total}.`};
+      return{type:'add',q:`${a} ${em} + ${b} ${em} = ?`,a,b,emoji:em,answer:total,opts:shuffle(opts),hint:`${a} and ${b} more makes ${total}.`};
     });
   }
-
   const genMap={counting:genCounting,numbers:genNumbers,shapes:genShapes,patterns:genPatterns,compare:genCompare,missing:genMissing,add_simple:genAddSimple};
 
-  // ── START LEVEL ──
   function startLevel(l){
     level=l; qi=0; correct=0; wrong=0; answered=false; hasMistake=false;
+    currentStreak=0;
     questions=(genMap[cat]||genCounting)(l);
     document.getElementById('quizLabel').textContent=CATS[cat].label+' · Lv'+l;
     document.getElementById('B_hint').disabled=false;
     document.getElementById('B_retry').disabled=false;
+    buildStreakDots();
     showScreen('quizScreen');
     loadQuestion();
   }
@@ -778,7 +1069,6 @@
 
   function renderQ(q){
     let html=`<div class="q-type-badge">${CATS[cat].icon} ${CATS[cat].label}</div><div class="q-text">${q.q}</div>`;
-
     if(q.type==='counting'){
       html+=`<div class="object-row">${q.objects.map(o=>`<span class="count-object">${o}</span>`).join('')}</div>`;
       html+=`<div class="big-answer-buttons">${q.opts.map(n=>`<button class="answer-btn" onclick="pickNum(${n},${q.answer})">${n}</button>`).join('')}</div>`;
@@ -801,24 +1091,43 @@
       html+=`<div style="text-align:center;font-size:clamp(2rem,8vw,4rem);margin:12px 0;">${Array(q.a).fill(q.emoji).join('')} + ${Array(q.b).fill(q.emoji).join('')}</div>`;
       html+=`<div class="big-answer-buttons">${q.opts.map(n=>`<button class="answer-btn" onclick="pickNum(${n},${q.answer})">${n}</button>`).join('')}</div>`;
     }
-
     document.getElementById('qCard').innerHTML=html;
     speak(q.q);
+  }
+
+  function handleCorrect(){
+    answered=true; correct++;
+    currentStreak++;
+    lightStreakDot(qi);
+    updateStreakBadge();
+    updateScore();
+    mascotReact(true);
+    launchConfetti(null,null,currentStreak>=3?60:30);
+    const words=currentStreak>=5?'🔥 AMAZING!!':currentStreak>=3?'🌟 ON FIRE!':currentStreak>=2?'⚡ STREAK!':'⭐ WOW!';
+    showPop(words, currentStreak>=3?'#ffd700':'#ff69b4');
+    document.getElementById('feedback').innerHTML=currentStreak>=3?`🔥 ${currentStreak} in a row, SAFAAN!`:'⭐ Amazing, Safaan!';
+    document.getElementById('feedback').className='feedback show ok';
+    document.getElementById('B_retry').disabled=true;
+    speak(currentStreak>=3?'On fire, Safaan! '+currentStreak+' in a row!':'Amazing, Safaan!');
+  }
+
+  function handleWrong(){
+    currentStreak=0;
+    updateStreakBadge();
+    mascotReact(false);
   }
 
   window.pickNum=function(num,correct_ans){
     if(answered)return;
     if(num===correct_ans){
-      answered=true; correct++;
       document.querySelectorAll('.answer-btn').forEach(b=>{ if(parseInt(b.textContent)===num)b.classList.add('correct'); });
-      document.getElementById('feedback').innerHTML='⭐ Amazing, Safaan!'; document.getElementById('feedback').className='feedback show ok';
-      document.getElementById('B_retry').disabled=true;
-      updateScore(); speak('Amazing, Safaan!');
+      handleCorrect();
     } else {
       if(!hasMistake){
         hasMistake=true;
         document.querySelectorAll('.answer-btn').forEach(b=>{ if(parseInt(b.textContent)===num)b.classList.add('wrong'); });
         document.getElementById('feedback').innerHTML='🔄 Try again, Safaan!'; document.getElementById('feedback').className='feedback show bad';
+        handleWrong();
         speak('Try again, Safaan!');
       } else {
         answered=true; wrong++;
@@ -832,20 +1141,17 @@
       }
     }
   };
-
   window.pickOpt=function(idx,opt,correct_ans){
     if(answered)return;
     const btns=document.querySelectorAll('.opt-btn');
     if(opt===correct_ans){
-      answered=true; correct++;
       btns[idx].classList.add('correct');
-      document.getElementById('feedback').innerHTML='⭐ Amazing, Safaan!'; document.getElementById('feedback').className='feedback show ok';
-      document.getElementById('B_retry').disabled=true;
-      updateScore(); speak('Amazing, Safaan!');
+      handleCorrect();
     } else {
       if(!hasMistake){
         hasMistake=true; btns[idx].classList.add('wrong');
         document.getElementById('feedback').innerHTML='🔄 Try again, Safaan!'; document.getElementById('feedback').className='feedback show bad';
+        handleWrong();
         speak('Try again, Safaan!');
       } else {
         answered=true; wrong++;
@@ -859,8 +1165,10 @@
   };
 
   function updateScore(){
-    document.getElementById('qsCorrect').textContent=correct;
-    document.getElementById('qsWrong').textContent=wrong;
+    const cv=document.getElementById('qsCorrect');
+    const wv=document.getElementById('qsWrong');
+    cv.textContent=correct; cv.classList.remove('bump'); void cv.offsetWidth; cv.classList.add('bump');
+    wv.textContent=wrong;
     const acc=(correct+wrong)>0?Math.round(correct/(correct+wrong)*100):0;
     document.getElementById('qsAcc').textContent=acc+'%';
   }
@@ -884,107 +1192,51 @@
 
   function showResult(){
     const stars=correct>=5?3:correct>=3?2:1;
+    const prevP=JSON.parse(JSON.stringify(progress));
     progress[cat][level].done=true; progress[cat][level].stars=Math.max(progress[cat][level].stars||0,stars);
+    checkTrophies(prevP,progress);
     localStorage.setItem('safaan_math_v2',JSON.stringify(progress)); updateLbl();
+
     document.getElementById('resEmoji').textContent=stars===3?'🏆':stars===2?'🌟':'⭐';
     document.getElementById('resTitle').textContent=stars===3?'SUPERSTAR, SAFAAN!':stars===2?'Great job, Safaan!':'Good try, Safaan!';
-    document.getElementById('resStars').innerHTML='⭐'.repeat(stars);
+    const starsHtml='<span>⭐</span>'.repeat(stars);
+    const starsEl=document.getElementById('resStars');
+    starsEl.className='result-stars animate';
+    starsEl.innerHTML=starsHtml;
     document.getElementById('resMsg').innerHTML=stars===3?'All 5 right! You mastered it! 🎉':`You got ${correct}/5 correct! ${stars===2?'Try again for 3 stars!':'Keep practising!'}`;
     document.getElementById('mistakeSection').innerHTML=wrong===0?'<p style="color:#4caf50;font-weight:900;margin-top:10px;">🌟 No mistakes! Perfect!</p>':'';
     document.getElementById('retryBtn').onclick=()=>startLevel(level);
     const nb=document.getElementById('nextLvBtn');
     if(level<5){nb.style.display='inline-block';nb.onclick=()=>startLevel(level+1);}else nb.style.display='none';
     showScreen('resultScreen');
+
+    if(stars===3){launchConfetti(null,null,150); showPop('🏆 PERFECT!','#ffd700');}
+    else if(stars===2){launchConfetti(null,null,80); showPop('🌟 GREAT!','#9ae6b4');}
+    else{launchConfetti(null,null,30);}
+    mascotReact(stars>=2);
     speak(stars===3?'Superstar, Safaan! Three stars!':stars===2?'Great job, Safaan! Two stars!':'Good try, Safaan!');
   }
 
-  // ── SOAR ACTIVITIES ──
   const SOAR_ACTIVITIES=[
-    {id:'beatClock',icon:'⏰',title:'Beat the Clock',aim:'Compare quantities and talk about time',
-     illustration:'🕐⭐ → 🏃 1️⃣2️⃣3️⃣',
-     steps:['Set a timer for 1 minute.','Do star jumps, hops, or claps — count how many!','Try again — can you do MORE?','Count aloud as you go!'],
-     talks:['What can you do MORE of in a minute — jumps or claps?','Can you count to 20 before the timer ends?'],
-     hint:'If an action is quick, you can do lots! Slow actions = fewer!',
-     nrich:'https://nrich.maths.org/eyfs-activities/beat-clock'},
-    {id:'canYouBuild',icon:'🏗️',title:'Can You Build This?',aim:'Explore shapes and positions',
-     illustration:'🟦🟥 → 🏠 (copy the tower!)',
-     steps:['Mum or Dad builds a simple model with 4-5 blocks.','Look very carefully!','Can YOU build the same one?','Check — is it the same? What is on TOP?'],
-     talks:['Which block is on top? Which is underneath?','What colour is the middle block?'],
-     hint:'Look at where each block goes — on top, next to, behind!',
-     nrich:'https://nrich.maths.org/eyfs-activities/can-you-build'},
-    {id:'howLongAreYou',icon:'📏',title:'How Long Are You?',aim:'Compare length using everyday things',
-     illustration:'🧍 → ✏️✏️✏️✏️ (20 pens tall!)',
-     steps:['Lie on the floor while Mum marks where your head and feet go.','Measure with pens — place them end to end, no gaps!','Count how many pens tall you are!','Try with LEGO bricks — more or fewer?'],
-     talks:['How many pens tall are you?','Why do you need MORE bricks than pens?'],
-     hint:'Shorter objects = more of them needed!',
-     nrich:'https://nrich.maths.org/eyfs-activities/how-long-are-you'},
-    {id:'makingFootprints',icon:'🦶',title:'Making Footprints',aim:'Explore faces of 3D shapes',
-     illustration:'🧊 → press into dough → square print!',
-     steps:['Get some playdough.','Press different blocks into it to make footprints!','Run your finger around the edge.','Can you find another block that makes the same footprint?'],
-     talks:['What shape does the cube make?','What shape does a tin can make?'],
-     hint:'The flat side of the block makes the print!',
-     nrich:'https://nrich.maths.org/eyfs-activities/making-footprints'},
-    {id:'longCreatures',icon:'🐛',title:'Long Creatures',aim:'Compare lengths',
-     illustration:'🐍📏 → longer · shorter · longest',
-     steps:['Use playdough or linking cubes.','Make a long snake or worm!','Now make another one — longer or shorter?','Line them up to compare!'],
-     talks:['Which creature is longest? How do you know?','How can you make yours even longer?'],
-     hint:'Lay creatures side by side, from one end, to compare!',
-     nrich:'https://nrich.maths.org/eyfs-activities/long-creatures'},
-    {id:'packing',icon:'📦',title:'Packing',aim:'Sort and classify objects',
-     illustration:'🐶🐱 | 🚗🚕 | 🧊🧊 (sorted!)',
-     steps:['Get some boxes or trays.','Choose toys — animals, cars, or blocks.','Sort them into boxes by type!','How many in each box? Which box has the most?'],
-     talks:['How did you decide which box each thing goes in?','Could you sort them a different way — by colour?'],
-     hint:'Things that are the SAME kind go together!',
-     nrich:'https://nrich.maths.org/eyfs-activities/packing'},
-    {id:'tubesTunnels',icon:'🧻',title:'Tubes and Tunnels',aim:'Explore size, length, position',
-     illustration:'📦🧻🚗 (car goes through tunnel!)',
-     steps:['Find different tubes — toilet rolls, wrapping paper tubes.','Can you roll them? Blow through them?','Make a tunnel for toy cars!','Which tube is longest? Widest?'],
-     talks:['Which tube lets the biggest toy through?','Can you make a tunnel that goes round a corner?'],
-     hint:'Wider tubes let bigger things through!',
-     nrich:'https://nrich.maths.org/eyfs-activities/tubes-and-tunnels'},
-    {id:'dice',icon:'🎲',title:'Dice Adventure',aim:'Match numerals to amounts',
-     illustration:'🎲 roll → 🧸🧸🧸 (take 3 teddies!)',
-     steps:['Get a big dice and some small toys.','Roll the dice and count the dots!','Take THAT MANY toys!','Roll again — did you get more or fewer?'],
-     talks:['What number did you roll? Can you write it?','Can you count all your toys?'],
-     hint:'Count the dots on the dice carefully — one at a time!',
-     nrich:'https://nrich.maths.org/eyfs-activities/dice'},
-    {id:'mudKitchen',icon:'🍲',title:'Mud Kitchen',aim:'Explore capacity, size, weight',
-     illustration:'🥘🌊 (fill the pot!)',
-     steps:['Get pots, pans, spoons, and sand or mud (or water!).','Make mud pies, soups, and cakes!','Fill different containers — which holds MORE?','Use big spoons and little spoons.'],
-     talks:['Which pan is biggest? Which holds the most?','Is the pot full or empty? How do you know?'],
-     hint:'Bigger containers hold MORE!',
-     nrich:'https://nrich.maths.org/eyfs-activities/mud-kitchen'},
-    {id:'patternMaking',icon:'🎨',title:'Pattern Making',aim:'Recognise and extend patterns',
-     illustration:'🔴🔵🔴🔵 → next is 🔴',
-     steps:['Use coloured cubes, beads, or toys.','Make a pattern: red, blue, red, blue...','Say it out loud!','Can you make it longer? A DIFFERENT pattern?'],
-     talks:['What is the RULE of your pattern?','Can you make a sound pattern — clap, stomp, clap, stomp?'],
-     hint:'Patterns repeat! What comes next?',
-     nrich:'https://nrich.maths.org/eyfs-activities/pattern-making'},
-    {id:'cooking',icon:'🥄',title:'Cooking Together',aim:'Measure and count ingredients',
-     illustration:'🥣 1 cup flour, 2 spoons sugar',
-     steps:['Find a simple recipe — like playdough or cookies!','Count the cups of flour, spoonfuls of sugar.','Mix it all together!','Talk as you go: "I need ONE MORE cup!"'],
-     talks:['How many cups of flour do we need?','What if we add TOO MUCH water?'],
-     hint:'Read the recipe together — count each spoonful!',
-     nrich:'https://nrich.maths.org/eyfs-activities/cooking-children'},
-    {id:'numberBook',icon:'📘',title:'Number Book',aim:'Collect groups and count',
-     illustration:'4 leaves 🍁🍁🍁🍁 · 4 stones 🪨🪨🪨🪨',
-     steps:['Choose a number — like 4!','Go on a hunt — find 4 leaves, 4 stones, 4 toys.','Stick them in a book or take photos!','Write the number 4 on each page!'],
-     talks:['Do you have 4 of everything?','Can you make a page for the number 10?'],
-     hint:'Count each thing carefully — touch and say the number!',
-     nrich:'https://nrich.maths.org/eyfs-activities/number-book'},
-    {id:'smallWorld',icon:'🐏',title:'Small World Play',aim:'Use language of position and size',
-     illustration:'🐄🐑 | 🐖 (fields with fences)',
-     steps:['Get farm animals, fences, and small boxes.','Build fields and pens!','Put cows in one field, sheep in another.','Talk about it: "The pig is NEXT TO the trough!"'],
-     talks:['How many cows fit in this field?','Which animal has the BIGGEST field? Why?'],
-     hint:'Bigger animals might need bigger fields!',
-     nrich:'https://nrich.maths.org/eyfs-activities/small-world-play'},
+    {id:'beatClock',icon:'⏰',title:'Beat the Clock',aim:'Compare quantities and talk about time',illustration:'🕐🏎️ → 🏃 1️⃣2️⃣3️⃣',steps:['Set a timer for 1 minute.','Do car jumps, hops, or claps — count how many!','Try again — can you do MORE?','Count aloud as you go!'],talks:['What can you do MORE of in a minute — jumps or claps?','Can you count to 20 before the timer ends?'],hint:'If an action is quick, you can do lots! Slow actions = fewer!',nrich:'https://nrich.maths.org/eyfs-activities/beat-clock'},
+    {id:'canYouBuild',icon:'🏗️',title:'Can You Build This?',aim:'Explore shapes and positions',illustration:'🚗🚕 → 🏎️ (copy the car!)',steps:['Mum or Dad builds a simple model with 4-5 blocks.','Look very carefully!','Can YOU build the same one?','Check — is it the same? What is on TOP?'],talks:['Which block is on top? Which is underneath?','What colour is the middle block?'],hint:'Look at where each block goes — on top, next to, behind!',nrich:'https://nrich.maths.org/eyfs-activities/can-you-build'},
+    {id:'howLongAreYou',icon:'📏',title:'How Long Are You?',aim:'Compare length using everyday things',illustration:'🧍 → 🏎️🏎️🏎️ (20 cars long!)',steps:['Lie on the floor while Mum marks where your head and feet go.','Measure with toy cars — place them end to end, no gaps!','Count how many cars tall you are!','Try with LEGO bricks — more or fewer?'],talks:['How many cars tall are you?','Why do you need MORE bricks than cars?'],hint:'Shorter objects = more of them needed!',nrich:'https://nrich.maths.org/eyfs-activities/how-long-are-you'},
+    {id:'makingFootprints',icon:'🦶',title:'Making Footprints',aim:'Explore faces of 3D shapes',illustration:'🧊 → press into dough → square print!',steps:['Get some playdough.','Press different blocks into it to make footprints!','Run your finger around the edge.','Can you find another block that makes the same footprint?'],talks:['What shape does the cube make?','What shape does a tin can make?'],hint:'The flat side of the block makes the print!',nrich:'https://nrich.maths.org/eyfs-activities/making-footprints'},
+    {id:'longCreatures',icon:'🐛',title:'Long Creatures',aim:'Compare lengths',illustration:'🐍📏 → longer · shorter · longest',steps:['Use playdough or linking cubes.','Make a long snake or worm!','Now make another one — longer or shorter?','Line them up to compare!'],talks:['Which creature is longest? How do you know?','How can you make yours even longer?'],hint:'Lay creatures side by side, from one end, to compare!',nrich:'https://nrich.maths.org/eyfs-activities/long-creatures'},
+    {id:'packing',icon:'📦',title:'Packing',aim:'Sort and classify objects',illustration:'🏎️🚗 | 🍔🌮 | 🧊🧊 (sorted!)',steps:['Get some boxes or trays.','Choose toys — cars, food, or blocks.','Sort them into boxes by type!','How many in each box? Which box has the most?'],talks:['How did you decide which box each thing goes in?','Could you sort them a different way — by colour?'],hint:'Things that are the SAME kind go together!',nrich:'https://nrich.maths.org/eyfs-activities/packing'},
+    {id:'tubesTunnels',icon:'🧻',title:'Tubes and Tunnels',aim:'Explore size, length, position',illustration:'📦🧻🚗 (car goes through tunnel!)',steps:['Find different tubes — toilet rolls, wrapping paper tubes.','Can you roll them? Blow through them?','Make a tunnel for toy cars!','Which tube is longest? Widest?'],talks:['Which tube lets the biggest toy through?','Can you make a tunnel that goes round a corner?'],hint:'Wider tubes let bigger things through!',nrich:'https://nrich.maths.org/eyfs-activities/tubes-and-tunnels'},
+    {id:'dice',icon:'🎲',title:'Dice Adventure',aim:'Match numerals to amounts',illustration:'🎲 roll → 🏎️🏎️🏎️ (take 3 cars!)',steps:['Get a big dice and some small toy cars.','Roll the dice and count the dots!','Take THAT MANY cars!','Roll again — did you get more or fewer?'],talks:['What number did you roll? Can you write it?','Can you count all your cars?'],hint:'Count the dots on the dice carefully — one at a time!',nrich:'https://nrich.maths.org/eyfs-activities/dice'},
+    {id:'mudKitchen',icon:'🍲',title:'Mud Kitchen',aim:'Explore capacity, size, weight',illustration:'🥘🌊 (fill the pot!)',steps:['Get pots, pans, spoons, and sand or mud (or water!).','Make mud pies, soups, and cakes!','Fill different containers — which holds MORE?','Use big spoons and little spoons.'],talks:['Which pan is biggest? Which holds the most?','Is the pot full or empty? How do you know?'],hint:'Bigger containers hold MORE!',nrich:'https://nrich.maths.org/eyfs-activities/mud-kitchen'},
+    {id:'patternMaking',icon:'🎨',title:'Pattern Making',aim:'Recognise and extend patterns',illustration:'🏎️🚗🏎️🚗 → next is 🏎️',steps:['Use coloured cars or food toys.','Make a pattern: car, truck, car, truck...','Say it out loud!','Can you make it longer? A DIFFERENT pattern?'],talks:['What is the RULE of your pattern?','Can you make a sound pattern — vroom, beep, vroom, beep?'],hint:'Patterns repeat! What comes next?',nrich:'https://nrich.maths.org/eyfs-activities/pattern-making'},
+    {id:'cooking',icon:'🥄',title:'Cooking Together',aim:'Measure and count ingredients',illustration:'🥣 1 cup flour, 2 spoons sugar',steps:['Find a simple recipe — like playdough or cookies!','Count the cups of flour, spoonfuls of sugar.','Mix it all together!','Talk as you go: "I need ONE MORE cup!"'],talks:['How many cups of flour do we need?','What if we add TOO MUCH water?'],hint:'Read the recipe together — count each spoonful!',nrich:'https://nrich.maths.org/eyfs-activities/cooking-children'},
+    {id:'numberBook',icon:'📘',title:'Number Book',aim:'Collect groups and count',illustration:'4 cars 🏎️🏎️🏎️🏎️ · 4 burgers 🍔🍔🍔🍔',steps:['Choose a number — like 4!','Go on a hunt — find 4 cars, 4 leaves, 4 toys.','Stick them in a book or take photos!','Write the number 4 on each page!'],talks:['Do you have 4 of everything?','Can you make a page for the number 10?'],hint:'Count each thing carefully — touch and say the number!',nrich:'https://nrich.maths.org/eyfs-activities/number-book'},
+    {id:'smallWorld',icon:'🐏',title:'Small World Play',aim:'Use language of position and size',illustration:'🏎️🚗 | 🚜 (parking lot)',steps:['Get cars, trucks, and small boxes.','Build parking lots and roads!','Park cars in one lot, trucks in another.','Talk about it: "The Lamborghini is NEXT TO the food truck!"'],talks:['How many cars fit in this parking lot?','Which vehicle has the BIGGEST space? Why?'],hint:'Bigger vehicles might need bigger parking!',nrich:'https://nrich.maths.org/eyfs-activities/small-world-play'},
   ];
 
   let soarProgress=progress.soar||{};
 
   function openSoarMenu(){
     const grid=document.getElementById('soarMenuGrid'); grid.innerHTML='';
-    const icons=['⏰','🏗️','📏','🦶','🐛','📦','🧻','🎲','🍲','🎨','🥄','📘','🐏'];
     SOAR_ACTIVITIES.forEach((act,idx)=>{
       const btn=document.createElement('button');
       btn.className='lv-btn soar';
@@ -1026,15 +1278,17 @@
       </div>`;
     showScreen('soarActivityScreen');
   }
-
   window.toggleSoarHint=function(idx){
     const el=document.getElementById('soarHint_'+idx);
     if(el)el.style.display=el.style.display==='none'?'block':'none';
   };
   window.markSoar=function(id,idx){
+    const prevP=JSON.parse(JSON.stringify(progress));
     soarProgress[id]=true; progress.soar=soarProgress;
+    checkTrophies(prevP,progress);
     localStorage.setItem('safaan_math_v2',JSON.stringify(progress));
-    alert('🌟 Well done, Safaan! Activity complete!');
+    launchConfetti(null,null,80); showPop('✅ DONE!','#9ae6b4');
+    speak('Well done, Safaan! Activity complete!');
     showSoarActivity(idx);
   };
   window.unmarkSoar=function(id,idx){
@@ -1044,6 +1298,7 @@
   };
 
   updateLbl();
+  checkDailyBonus();
 })();
 </script>
 </body>
